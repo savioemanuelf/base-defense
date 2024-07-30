@@ -7,10 +7,13 @@ class Base {
    private:
     sf::RectangleShape shape;
     sf::Vector2f positions;
+    
     int maxHealth;
     int currentHealth;
     bool destroyed;
 
+    sf::Text healthText;
+    sf::Font font;
     sf::RectangleShape healthBar;  
     sf::RectangleShape healthBarOutline; // implementado para o jogador ter noção do quanto de vida já perdeu
 
@@ -36,6 +39,8 @@ class Base {
     sf::Vector2f getPos() { return this->positions; }
     void setPos(sf::Vector2f pos) { this->positions = pos; }
 
+    sf::Text getHealthText() { return this->healthText; }
+    void setHealthText(sf::Text text) { this->healthText = text;}
 
     int getMaxHealth() { return this->maxHealth; }
 };

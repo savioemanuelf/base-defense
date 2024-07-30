@@ -23,18 +23,33 @@ Base::Base(sf::Window& window)
     shape.setOutlineColor(sf::Color::Green);
 
     // lifebar
-    float barHeight = 12;  // altura da lifebar
+    float barHeight = 14;  // altura da lifebar
     healthBar.setSize(sf::Vector2f(width, barHeight));
     healthBar.setFillColor(sf::Color::Red);
 
-    healthBar.setPosition(positions.x, positions.y + height + 5);  // largura inicial que será ajustada dinamicamente
+    healthBar.setPosition(positions.x, windowSize.y - barHeight - 10);  // largura inicial que será ajustada dinamicamente
 
     // outline da health bar, implementado para que o jogador tenha noção de quanto de vida já perdeu
     healthBarOutline.setSize(sf::Vector2f(width, barHeight));
     healthBarOutline.setFillColor(sf::Color::Transparent);
     healthBarOutline.setOutlineThickness(2);
     healthBarOutline.setOutlineColor(sf::Color::White);
-    healthBarOutline.setPosition(positions.x, positions.y + height + 5);  // largura inicial que será ajustada dinamicamente
+    healthBarOutline.setPosition(positions.x, windowSize.y - barHeight - 10);  // largura inicial que será ajustada dinamicamente
+
+    if (!font.loadFromFile("Assets/arial.ttf")) {
+        std::cerr << "Erro ao carregar a fonte" << std::endl;
+    } else {
+        healthText.setFont(font);
+        healthText.setCharacterSize(14);
+        healthText.setFillColor(sf::Color::White);
+        healthText.setString(std::to_string(currentHealth) + "/" +
+                             std::to_string(maxHealth));
+        sf::FloatRect textRect = healthText.getLocalBounds();
+        healthText.setOrigin(textRect.width / 2, textRect.height / 2);
+        healthText.setPosition(
+            positions.x + width / 2,
+            windowSize.y - (barHeight / 2) - 10);  // Centraliza verticalmente com a healthBar
+    }
 }
 
 Base::~Base() {
@@ -43,12 +58,13 @@ Base::~Base() {
 
 void Base::showBase(sf::RenderWindow& window) const {
     window.draw(this->shape);
-    window.draw(this -> healthBarOutline);
-    window.draw(this -> healthBar);
+    window.draw(this->healthBarOutline);
+    window.draw(this->healthBar);
+    window.draw(this->healthText);
 }
 
 void Base::damage(int damage) {
-    this -> setHealth(this->getHealth() - damage);
+    this->setHealth(this->getHealth() - damage);
 
     if (currentHealth < 0) {
         this->setHealth(0);
@@ -61,6 +77,9 @@ void Base::damage(int damage) {
     
     float healthPercentage = static_cast<float>(currentHealth) / maxHealth;
     healthBar.setSize(sf::Vector2f((shape.getSize().x * healthPercentage), healthBar.getSize().y));
+
+    healthText.setString(std::to_string(currentHealth) + "/" +
+                         std::to_string(maxHealth));
 }
 
 bool Base::checkCollision(const sf::Vector2f& position,
@@ -71,6 +90,15 @@ bool Base::checkCollision(const sf::Vector2f& position,
 
 void Base::updateWindowSize(sf::RenderWindow& window) {
     sf::Vector2u windowSize = window.getSize();
-    healthBar.setPosition(shape.getPosition().x, windowSize.y - healthBar.getSize().y - 10);
-    healthBarOutline.setPosition(shape.getPosition().x, windowSize.y - healthBarOutline.getSize().y - 10);
+    float barHeight = healthBar.getSize().y;
+    float barYPosition = windowSize.y - barHeight - 10;  // posição y da healthbar
+
+    healthBar.setPosition(shape.getPosition().x, barYPosition);
+    healthBarOutline.setPosition(shape.getPosition().x, barYPosition);
+
+    sf::FloatRect textRect = healthText.getLocalBounds();
+    float textHeight = textRect.height; // altura do texto da vida
+    float textYPosition = barYPosition + (barHeight / 2) - (textHeight / 2) + textRect.top; 
+
+    healthText.setPosition(shape.getPosition().x + shape.getSize().x / 2, textYPosition);
 }
