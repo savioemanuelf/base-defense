@@ -75,11 +75,6 @@ int main() {
     ammoText.setCharacterSize(12);
     ammoText.setFillColor(sf::Color::White);
 
-    sf::Text baseHpText;
-    baseHpText.setFont(font);
-    baseHpText.setCharacterSize(18);
-    baseHpText.setFillColor(sf::Color::Blue);
-
     sf::Clock clock;
     while (window.isOpen()) {
         sf::Event event;
@@ -124,6 +119,7 @@ int main() {
                         window.close();
                     }
                 }
+                base.updateWindowSize(window);
             }
 
             if (event.type == sf::Event::KeyPressed &&
@@ -185,13 +181,10 @@ int main() {
 
             hpText.setString("HP: " + std::to_string(heroi.getHP()));
             ammoText.setString("Ammo: " + std::to_string(heroi.getMunicao()));
-            baseHpText.setString("Base: " + std::to_string(base.getHealth()) +
-                                 "/" + std::to_string(base.getMaxHealth()));
 
             sf::Vector2f heroiPos = heroi.getPosition();
             hpText.setPosition(heroiPos.x, heroiPos.y - 30);
             ammoText.setPosition(heroiPos.x, heroiPos.y - 60);
-            baseHpText.setPosition(base.getPos().x, base.getPos().y + 10);
 
             window.clear(sf::Color::Black);
             base.showBase(window);
@@ -201,7 +194,6 @@ int main() {
             }
             window.draw(hpText);
             window.draw(ammoText);
-            window.draw(baseHpText);
             window.display();
         }
     }

@@ -11,8 +11,8 @@ class Base {
     int currentHealth;
     bool destroyed;
 
-    sf::Text healthText;  // implementar hp da base dentro da própria classe
-    sf::Font font;
+    sf::RectangleShape healthBar;  
+    sf::RectangleShape healthBarOutline; // implementado para o jogador ter noção do quanto de vida já perdeu
 
    public:
     Base(sf::Window& window);
@@ -22,6 +22,8 @@ class Base {
     void damage(int damage);
     bool checkCollision(const sf::Vector2f& position,
                         const sf::Vector2f& size) const;
+    
+    void updateWindowSize(sf::RenderWindow& window); // para posicionar a lifebar na parte inferior da janela dinamicamente
 
     // GETTERS AND SETTERS
 
@@ -33,6 +35,7 @@ class Base {
 
     sf::Vector2f getPos() { return this->positions; }
     void setPos(sf::Vector2f pos) { this->positions = pos; }
+
 
     int getMaxHealth() { return this->maxHealth; }
 };
