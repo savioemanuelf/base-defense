@@ -2,10 +2,8 @@
 #include <cmath>
 #include <iostream>
 #include <vector>
-#include "Headers/Heroi.h"
-#include "Headers/Projectile.h"
-#include "Headers/Base.h"
 
+#include "Headers/Base.h"
 #include "Headers/Heroi.h"
 #include "Headers/Projectile.h"
 
@@ -100,19 +98,23 @@ int main() {
 
         // verificação de colisão com a base
         for (auto it = projectiles.begin(); it != projectiles.end();) {
-            sf::FloatRect projectileBounds(it->getPosition(), sf::Vector2f(25, 25)); // corrigir para tamanho do projétil (está em 25x25)
+            sf::FloatRect projectileBounds(
+                it->getPosition(),
+                sf::Vector2f(
+                    25,
+                    25));  // corrigir para tamanho do projétil (está em 25x25)
             if (base.checkCollision(it->getPosition(), sf::Vector2f(25, 25))) {
-                base.damage(10); // aplicar dano à base
-                it = projectiles.erase(it); // remover projétil da lista
+                base.damage(10);             // aplicar dano à base
+                it = projectiles.erase(it);  // remover projétil da lista
             } else {
                 ++it;
             }
         }
 
-
         hpText.setString("HP: " + std::to_string(heroi.getHP()));
         ammoText.setString("Ammo: " + std::to_string(heroi.getMunicao()));
-        baseHpText.setString("Base: " + std::to_string(base.getHealth()) + "/" + std::to_string(base.getMaxHealth()));
+        baseHpText.setString("Base: " + std::to_string(base.getHealth()) + "/" +
+                             std::to_string(base.getMaxHealth()));
 
         sf::Vector2f heroiPos = heroi.getPosition();
         hpText.setPosition(heroiPos.x, heroiPos.y - 30);
