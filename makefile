@@ -1,18 +1,23 @@
-CXX = g++
-CXXFLAGS = -std=c++11
-LDFLAGS = -lsfml-graphics -lsfml-window -lsfml-system
-TARGET = meuJogo
+HEAD_DIR = Headers
+IMPL_DIR = Implementations
+OBJ_DIR = Objects
 
-SRCS = main.cpp heroi.cpp projectile.cpp
-OBJS = $(SRCS:.cpp=.o)
+EXEC = programa
+SFML = -lsfml-graphics -lsfml-window -lsfml-system
 
-all: $(TARGET)
+SRCS = main.cpp $(IMPL_DIR)/heroi.cpp $(IMPL_DIR)/Enemy.cpp $(IMPL_DIR)/projectile.cpp $(IMPL_DIR)/Base.cpp
+OBJS = $(SRCS:$(IMPL_DIR)/%.cpp=$(OBJ_DIR)/%.o)
 
-$(TARGET): $(OBJS)
-	$(CXX) $(OBJS) -o $(TARGET) $(LDFLAGS)
+all: $(EXEC)
+	./$(EXEC)
 
-%.o: %.cpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+$(EXEC): $(OBJS)
+	g++ -o $(EXEC) $(OBJS) $(SFML)
+
+$(OBJ_DIR)/%.o: $(IMPL_DIR)/%.cpp
+	g++ -c $< -o $@
 
 clean:
-	rm -f $(OBJS) $(TARGET)
+	rm -rf $(OBJ_DIR)/*.o $(EXEC)
+
+.PHONY: all clean

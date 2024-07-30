@@ -1,4 +1,4 @@
-#include "Projectile.h"
+#include "../Headers/Projectile.h"
 
 Projectile::Projectile(sf::Texture& texture, sf::Vector2f position, sf::Vector2f direction, float speed) : direction(direction), speed(speed) {
     sprite.setTexture(texture);

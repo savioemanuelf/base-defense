@@ -1,4 +1,4 @@
-#include "Base.h"
+#include "../Headers/Base.h"
 #include <SFML/Graphics.hpp>
 
 Base::Base(sf::Window& window) : maxHealth(100), currentHealth(maxHealth), destroyed(false) {

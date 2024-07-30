@@ -1,26 +1,30 @@
 #include <SFML/Graphics.hpp>
-#include <iostream>
 #include <cmath>
+#include <iostream>
 #include <vector>
 #include "Headers/Heroi.h"
 #include "Headers/Projectile.h"
 #include "Headers/Base.h"
 
+#include "Headers/Heroi.h"
+#include "Headers/Projectile.h"
+
 int main() {
     bool isFullscreen = true;
-    sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "Hero Game", sf::Style::Fullscreen);
+    sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "Hero Game",
+                            sf::Style::Fullscreen);
 
     Heroi heroi;
     Base base(window);
 
     sf::Texture projectileTexture;
-    if(!projectileTexture.loadFromFile("images/projetil.png")){
+    if (!projectileTexture.loadFromFile("Assets/Texture/projetil.png")) {
         std::cerr << "Erro ao abrir a textura do projétil" << std::endl;
         return -1;
     }
 
     sf::Font font;
-    if (!font.loadFromFile("arial.ttf")) {
+    if (!font.loadFromFile("Assets/arial.ttf")) {
         std::cerr << "Erro ao abrir a fonte" << std::endl;
         return -1;
     }
@@ -48,24 +52,33 @@ int main() {
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed)
+            if (event.type == sf::Event::Closed) window.close();
+
+            if (event.type == sf::Event::KeyPressed &&
+                sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
                 window.close();
 
-            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::F11) {
+            if (event.type == sf::Event::KeyPressed &&
+                event.key.code == sf::Keyboard::F11) {
                 isFullscreen = !isFullscreen;
                 window.close();
                 if (isFullscreen) {
-                    window.create(sf::VideoMode::getDesktopMode(), "Hero Game", sf::Style::Fullscreen);
+                    window.create(sf::VideoMode::getDesktopMode(), "Hero Game",
+                                  sf::Style::Fullscreen);
                 } else {
-                    window.create(sf::VideoMode(800, 600), "Hero Game", sf::Style::Default);
+                    window.create(sf::VideoMode(800, 600), "Hero Game",
+                                  sf::Style::Default);
                 }
             }
 
-            if(event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Right){
-                targetPosition = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+            if (event.type == sf::Event::MouseButtonPressed &&
+                event.mouseButton.button == sf::Mouse::Right) {
+                targetPosition =
+                    window.mapPixelToCoords(sf::Mouse::getPosition(window));
             }
 
-            if(event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Q){
+            if (event.type == sf::Event::KeyPressed &&
+                event.key.code == sf::Keyboard::Q) {
                 heroi.atirar(projectiles, projectileTexture);
             }
         }
@@ -74,13 +87,14 @@ int main() {
         float dt = deltaTime.asSeconds();
 
         sf::Vector2f direction = targetPosition - heroi.getPosition();
-        float distance = std::sqrt(direction.x * direction.x + direction.y * direction.y);
-        if(distance > 1.0f){
+        float distance =
+            std::sqrt(direction.x * direction.x + direction.y * direction.y);
+        if (distance > 1.0f) {
             direction /= distance;
             heroi.andar(direction * heroiSpeed * dt);
         }
-        
-        for(auto& projectile : projectiles){
+
+        for (auto& projectile : projectiles) {
             projectile.update(dt);
         }
 
@@ -95,11 +109,11 @@ int main() {
             }
         }
 
+
         hpText.setString("HP: " + std::to_string(heroi.getHP()));
         ammoText.setString("Ammo: " + std::to_string(heroi.getMunicao()));
         baseHpText.setString("Base: " + std::to_string(base.getHealth()) + "/" + std::to_string(base.getMaxHealth()));
 
-        
         sf::Vector2f heroiPos = heroi.getPosition();
         hpText.setPosition(heroiPos.x, heroiPos.y - 30);
         ammoText.setPosition(heroiPos.x, heroiPos.y - 60);
@@ -108,7 +122,7 @@ int main() {
         window.clear(sf::Color::Black);
         base.showBase(window);
         heroi.draw(window);
-        for(auto& projectile : projectiles){
+        for (auto& projectile : projectiles) {
             projectile.draw(window);
         }
         window.draw(hpText);
