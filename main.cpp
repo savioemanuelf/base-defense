@@ -9,6 +9,7 @@
 
 int main() {
     bool isFullscreen = true;
+    bool menu = true;
     sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "Hero Game",
                             sf::Style::Fullscreen);
 
@@ -30,6 +31,39 @@ int main() {
     float heroiSpeed = 200.0f;
     sf::Vector2f targetPosition = heroi.getPosition();
     std::vector<Projectile> projectiles;
+
+    // Menu Texts
+    sf::Text gameName("Base Defense", font), play("Jogar", font),
+        exit("Sair", font);
+
+    // Title
+    gameName.setCharacterSize(100);
+    gameName.setOutlineThickness(2);
+    gameName.setFillColor(sf::Color(166, 166, 166));
+    gameName.setOutlineColor(sf::Color::White);
+    gameName.setPosition(
+        (window.getSize().x - gameName.getGlobalBounds().width) / 2, 50);
+    // Play
+    play.setCharacterSize(50);
+    play.setOutlineThickness(2);
+    play.setFillColor(sf::Color(166, 166, 166));
+    play.setOutlineColor(sf::Color::White);
+    play.setPosition((window.getSize().x - play.getGlobalBounds().width) / 2,
+                     280);
+
+    // Exit
+    exit.setCharacterSize(50);
+    exit.setOutlineThickness(2);
+    exit.setFillColor(sf::Color(166, 166, 166));
+    exit.setOutlineColor(sf::Color::White);
+    exit.setPosition((window.getSize().x - exit.getGlobalBounds().width) / 2,
+                     400);
+
+    // Cursor
+    sf::Cursor cursor;
+    if (!cursor.loadFromSystem(sf::Cursor::Hand)) {
+        return -1;
+    }
 
     sf::Text hpText;
     hpText.setFont(font);
@@ -69,10 +103,27 @@ int main() {
                 }
             }
 
-            if (event.type == sf::Event::MouseButtonPressed &&
-                event.mouseButton.button == sf::Mouse::Right) {
-                targetPosition =
-                    window.mapPixelToCoords(sf::Mouse::getPosition(window));
+            if (event.type == sf::Event::MouseButtonPressed) {
+                // Right click
+                if (event.mouseButton.button == sf::Mouse::Right) {
+                    targetPosition =
+                        window.mapPixelToCoords(sf::Mouse::getPosition(window));
+                }
+                // Left click
+                if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+                    // On play Button
+                    if (play.getGlobalBounds().contains(
+                            static_cast<sf::Vector2f>(
+                                sf::Mouse::getPosition(window)))) {
+                        menu = false;
+                    }
+                    // On exit Button
+                    if (exit.getGlobalBounds().contains(
+                            static_cast<sf::Vector2f>(
+                                sf::Mouse::getPosition(window)))) {
+                        window.close();
+                    }
+                }
             }
 
             if (event.type == sf::Event::KeyPressed &&
@@ -81,56 +132,78 @@ int main() {
             }
         }
 
-        sf::Time deltaTime = clock.restart();
-        float dt = deltaTime.asSeconds();
+        if (menu) {
+            // Update
 
-        sf::Vector2f direction = targetPosition - heroi.getPosition();
-        float distance =
-            std::sqrt(direction.x * direction.x + direction.y * direction.y);
-        if (distance > 1.0f) {
-            direction /= distance;
-            heroi.andar(direction * heroiSpeed * dt);
-        }
-
-        for (auto& projectile : projectiles) {
-            projectile.update(dt);
-        }
-
-        // verificação de colisão com a base
-        for (auto it = projectiles.begin(); it != projectiles.end();) {
-            sf::FloatRect projectileBounds(
-                it->getPosition(),
-                sf::Vector2f(
-                    25,
-                    25));  // corrigir para tamanho do projétil (está em 25x25)
-            if (base.checkCollision(it->getPosition(), sf::Vector2f(25, 25))) {
-                base.damage(10);             // aplicar dano à base
-                it = projectiles.erase(it);  // remover projétil da lista
+            // Cursor change on hover buttons
+            if (play.getGlobalBounds().contains(static_cast<sf::Vector2f>(
+                    sf::Mouse::getPosition(window))) ||
+                exit.getGlobalBounds().contains(static_cast<sf::Vector2f>(
+                    sf::Mouse::getPosition(window)))) {
+                window.setMouseCursor(cursor);
             } else {
-                ++it;
+                window.setMouseCursor(sf::Cursor());
             }
+
+            // Render
+            window.clear();
+            window.draw(gameName);
+            window.draw(play);
+            window.draw(exit);
+            window.display();
+        } else {
+            sf::Time deltaTime = clock.restart();
+            float dt = deltaTime.asSeconds();
+
+            sf::Vector2f direction = targetPosition - heroi.getPosition();
+            float distance = std::sqrt(direction.x * direction.x +
+                                       direction.y * direction.y);
+            if (distance > 1.0f) {
+                direction /= distance;
+                heroi.andar(direction * heroiSpeed * dt);
+            }
+
+            for (auto& projectile : projectiles) {
+                projectile.update(dt);
+            }
+
+            // verificação de colisão com a base
+            for (auto it = projectiles.begin(); it != projectiles.end();) {
+                sf::FloatRect projectileBounds(
+                    it->getPosition(),
+                    sf::Vector2f(25,
+                                 25));  // corrigir para tamanho do projétil
+                                        // (está em 25x25)
+                if (base.checkCollision(it->getPosition(),
+                                        sf::Vector2f(25, 25))) {
+                    base.damage(10);             // aplicar dano à base
+                    it = projectiles.erase(it);  // remover projétil da lista
+                } else {
+                    ++it;
+                }
+            }
+
+            hpText.setString("HP: " + std::to_string(heroi.getHP()));
+            ammoText.setString("Ammo: " + std::to_string(heroi.getMunicao()));
+            baseHpText.setString("Base: " + std::to_string(base.getHealth()) +
+                                 "/" + std::to_string(base.getMaxHealth()));
+
+            sf::Vector2f heroiPos = heroi.getPosition();
+            hpText.setPosition(heroiPos.x, heroiPos.y - 30);
+            ammoText.setPosition(heroiPos.x, heroiPos.y - 60);
+            baseHpText.setPosition(base.getPos().x, base.getPos().y + 10);
+
+            window.clear(sf::Color::Black);
+            base.showBase(window);
+            heroi.draw(window);
+            for (auto& projectile : projectiles) {
+                projectile.draw(window);
+            }
+            window.draw(hpText);
+            window.draw(ammoText);
+            window.draw(baseHpText);
+            window.display();
         }
-
-        hpText.setString("HP: " + std::to_string(heroi.getHP()));
-        ammoText.setString("Ammo: " + std::to_string(heroi.getMunicao()));
-        baseHpText.setString("Base: " + std::to_string(base.getHealth()) + "/" +
-                             std::to_string(base.getMaxHealth()));
-
-        sf::Vector2f heroiPos = heroi.getPosition();
-        hpText.setPosition(heroiPos.x, heroiPos.y - 30);
-        ammoText.setPosition(heroiPos.x, heroiPos.y - 60);
-        baseHpText.setPosition(base.getPos().x, base.getPos().y + 10);
-
-        window.clear(sf::Color::Black);
-        base.showBase(window);
-        heroi.draw(window);
-        for (auto& projectile : projectiles) {
-            projectile.draw(window);
-        }
-        window.draw(hpText);
-        window.draw(ammoText);
-        window.draw(baseHpText);
-        window.display();
     }
 
     return 0;
