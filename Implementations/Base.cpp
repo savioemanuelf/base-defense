@@ -23,9 +23,9 @@ Base::Base(sf::Window& window)
     shape.setOutlineColor(sf::Color::Green);
 
     // lifebar
-    float barHeight = 14;  // altura da lifebar
+    float barHeight = 16;  // altura da lifebar
     healthBar.setSize(sf::Vector2f(width, barHeight));
-    healthBar.setFillColor(sf::Color::Red);
+    healthBar.setFillColor(sf::Color(0, 160, 0));
 
     healthBar.setPosition(positions.x, windowSize.y - barHeight - 10);  // largura inicial que será ajustada dinamicamente
 
@@ -42,6 +42,7 @@ Base::Base(sf::Window& window)
         healthText.setFont(font);
         healthText.setCharacterSize(14);
         healthText.setFillColor(sf::Color::White);
+        healthText.Bold;
         healthText.setString(std::to_string(currentHealth) + "/" +
                              std::to_string(maxHealth));
         sf::FloatRect textRect = healthText.getLocalBounds();
