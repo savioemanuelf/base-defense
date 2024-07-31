@@ -3,7 +3,6 @@
 
 #include <SFML/Graphics.hpp>
 #include <vector>
-
 #include "Projectile.h"
 
 class Heroi {
@@ -16,8 +15,7 @@ class Heroi {
    public:
     Heroi();
     void andar(sf::Vector2f direction);
-    void atirar(std::vector<Projectile>& projectiles,
-                sf::Texture& projectileTexture);
+    void atirar(std::vector<Projectile>& projectiles, sf::Texture& projectileTexture, sf::Vector2f target);
     void dano_tomado(int dano);
     void draw(sf::RenderWindow& window);
 

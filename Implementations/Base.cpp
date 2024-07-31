@@ -85,7 +85,7 @@ void Base::damage(int damage) {
 bool Base::checkCollision(const sf::Vector2f& position,
                           const sf::Vector2f& size) const {
     sf::FloatRect projectileRect(position, size);
-    return shape.getGlobalBounds().intersects(projectileRect);
+    return shape.getGlobalBounds().intersects(projectileRect); //Mudar para o projétil inimigo apenas
 }
 
 void Base::updateWindowSize(sf::RenderWindow& window) {

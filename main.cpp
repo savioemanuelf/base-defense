@@ -124,7 +124,8 @@ int main() {
 
             if (event.type == sf::Event::KeyPressed &&
                 event.key.code == sf::Keyboard::Q) {
-                heroi.atirar(projectiles, projectileTexture);
+                sf::Vector2f mousePosition = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+                heroi.atirar(projectiles, projectileTexture, mousePosition);
             }
         }
 
