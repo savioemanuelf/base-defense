@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "Headers/Base.h"
+#include "Headers/Enemy.h"
 #include "Headers/Heroi.h"
 #include "Headers/Projectile.h"
 
@@ -31,6 +32,8 @@ int main() {
     float heroiSpeed = 200.0f;
     sf::Vector2f targetPosition = heroi.getPosition();
     std::vector<Projectile> projectiles;
+
+    // std::vector<std::unique_ptr<Enemy>> enemies;
 
     // Menu Texts
     sf::Text gameName("Base Defense", font), play("Jogar", font),
@@ -124,7 +127,8 @@ int main() {
 
             if (event.type == sf::Event::KeyPressed &&
                 event.key.code == sf::Keyboard::Q) {
-                sf::Vector2f mousePosition = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+                sf::Vector2f mousePosition =
+                    window.mapPixelToCoords(sf::Mouse::getPosition(window));
                 heroi.atirar(projectiles, projectileTexture, mousePosition);
             }
         }
@@ -149,6 +153,20 @@ int main() {
             window.draw(exit);
             window.display();
         } else {
+            // if (spawnClock.getElapsedTime().asSeconds() >= 5) {
+            //     enemies.push_back(std::make_unique<Enemy>());
+            //     spawnClock.restart();
+            // }
+
+            // for (auto it = enemies.begin(); it != enemies.end();) {
+            //     if ((*it)->isDead()) {
+            //         it = enemies.erase(it);
+            //     } else {
+            //         (*it)->move(window, heroi.getPosition());
+            //         ++it;
+            //     }
+            // }
+
             sf::Time deltaTime = clock.restart();
             float dt = deltaTime.asSeconds();
 
@@ -193,6 +211,9 @@ int main() {
             for (auto& projectile : projectiles) {
                 projectile.draw(window);
             }
+            // for (const auto& enemy : enemies) {
+            //     enemy->draw(window);
+            // }
             window.draw(hpText);
             window.draw(ammoText);
             window.display();

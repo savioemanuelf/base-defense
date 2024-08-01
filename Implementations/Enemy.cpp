@@ -38,7 +38,7 @@ sf::Vector2f Enemy::randomPositionOutside() {
     return sf::Vector2f(x, y);
 }
 
-Enemy::Enemy() : speed(1.f), dead(false), size(50) {
+Enemy::Enemy() : speed(0.005f), dead(false), size(50) {
     // Size Origin Position Color
     rect.setSize(sf::Vector2f(size, size));
     rect.setOrigin(size / 2.f, size / 2.f);
