@@ -1,5 +1,7 @@
 #include <SFML/Graphics.hpp>
 
+#include "Projectile.h"
+
 class Enemy {
    private:
     // Attributes
@@ -17,6 +19,7 @@ class Enemy {
     // Functions
     void draw(sf::RenderWindow& window);
     void move(sf::RenderWindow& window, sf::Vector2f player_position);
+    bool checkHit(std::vector<Projectile> projectiles);
     // Getters
     bool isDead();
     float shootTime();

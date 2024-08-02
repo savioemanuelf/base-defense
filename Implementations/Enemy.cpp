@@ -38,7 +38,7 @@ sf::Vector2f Enemy::randomPositionOutside() {
     return sf::Vector2f(x, y);
 }
 
-Enemy::Enemy() : speed(0.005f), dead(false), size(50) {
+Enemy::Enemy() : speed(1.0f), dead(false), size(50) {
     // Size Origin Position Color
     rect.setSize(sf::Vector2f(size, size));
     rect.setOrigin(size / 2.f, size / 2.f);
@@ -75,6 +75,15 @@ void Enemy::move(sf::RenderWindow& window, sf::Vector2f player_position) {
 
         rect.setPosition(x, y);
     }
+}
+
+bool Enemy::checkHit(std::vector<Projectile> projectiles) {
+    for (auto&& projectile : projectiles) {
+        if (projectile.getBounds().intersects(rect.getGlobalBounds())) {
+            return true;
+        }
+    }
+    return false;
 }
 
 bool Enemy::isDead() { return this->dead; }

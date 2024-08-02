@@ -12,6 +12,7 @@
 int main() {
     bool isFullscreen = true;
     sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "Base Defense", sf::Style::Fullscreen);
+    window.setFramerateLimit(60);
 
     Heroi heroi;
     Base base(window);
@@ -129,7 +130,7 @@ int main() {
             }
 
             for (auto it = enemies.begin(); it != enemies.end(); it++) {
-                if ((*it)->shootTime() >= 3) {
+                if ((*it)->shootTime() >= 4) {
                     sf::Vector2f position = (*it)->getPosition();
                     sf::Vector2f direction =
                         window.mapPixelToCoords(static_cast<sf::Vector2i>(heroi.getPosition())) - position;
@@ -139,7 +140,7 @@ int main() {
             }
 
             for (auto it = enemies.begin(); it != enemies.end();) {
-                if ((*it)->isDead()) {
+                if ((*it)->checkHit(projectiles)) {
                     it = enemies.erase(it);
                 } else {
                     (*it)->move(window, heroi.getPosition());
@@ -170,7 +171,7 @@ int main() {
                 // corrigir para tamanho do projétil (está em 25x25)
                 sf::FloatRect enemyProjectileBounds(it->getPosition(), sf::Vector2f(25, 25));
                 if (base.checkCollision(it->getPosition(), sf::Vector2f(25, 25))) {
-                    base.damage(10);             // aplicar dano à base
+                    base.damage(10);                    // aplicar dano à base
                     it = enemiesProjectiles.erase(it);  // remover projétil da lista
                 } else {
                     ++it;
