@@ -19,6 +19,8 @@ class Heroi {
     void atirar(std::vector<Projectile>& projectiles, sf::Texture& projectileTexture, sf::Vector2f target);
     void dano_tomado(int dano);
     void draw(sf::RenderWindow& window);
+    void rotate(sf::Vector2f direction);
+    
 
     int getHP() const;
     int getMunicao() const;
