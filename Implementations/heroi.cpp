@@ -1,6 +1,7 @@
 #include "../Headers/Heroi.h"
 #include <cmath>
 #include <iostream>
+#include <SFML/Graphics.hpp>
 
 Heroi::Heroi() : HP(100), Municao(50) {
     if (!texture.loadFromFile("Assets/Texture/personagem.png")) {
@@ -8,8 +9,29 @@ Heroi::Heroi() : HP(100), Municao(50) {
     }
     sprite.setTexture(texture);
     sprite.setPosition(400, 300);   // Centro da janela
-    sprite.setScale(0.08f, 0.08f);  // Escala dependendo do tomanaho da imagem
+    sprite.setScale(0.3f, 0.3f);  // Escala dependendo do tomanaho da imagem
     sprite.setOrigin(sprite.getGlobalBounds().width / 2, sprite.getGlobalBounds().height / 2);  // Origem no centro da imagem
+
+    if (!font.loadFromFile("Assets/arial.ttf")) { // Local da fonte
+        std::cerr << "Erro ao carregar a fonte" << std::endl;
+    }
+    
+    hpText.setFont(font);
+    hpText.setCharacterSize(12);
+    hpText.setFillColor(sf::Color::Red);
+    ammoText.setFont(font);
+    ammoText.setCharacterSize(12);
+    ammoText.setFillColor(sf::Color::White);
+    hpText.setPosition(10, 10);
+    ammoText.setPosition(10, 30);
+}
+
+void Heroi::draw(sf::RenderWindow& window) {
+    window.draw(sprite);
+    hpText.setString("HP: " + std::to_string(HP));
+    ammoText.setString("Ammo: " + std::to_string(Municao));
+    window.draw(hpText);
+    window.draw(ammoText);
 }
 
 void Heroi::andar(sf::Vector2f direction) {  // Direção x e y
@@ -30,7 +52,6 @@ void Heroi::dano_tomado(int dano) {
     HP -= dano;
     if (HP < 0) {
         HP = 0;
-        
     }
 }
 
@@ -38,8 +59,6 @@ void Heroi::rotate(sf::Vector2f direction) {
     float angle = std::atan2(direction.y, direction.x) * 180 / 3.14159265; //Calcula com base na tangente e gira o herói
     sprite.setRotation(angle);
 }
-
-void Heroi::draw(sf::RenderWindow& window) { window.draw(sprite); }
 
 int Heroi::getHP() const { return HP; }
 
