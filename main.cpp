@@ -166,12 +166,12 @@ int main() {
             }
 
             // verificação de colisão com a base
-            for (auto it = projectiles.begin(); it != projectiles.end();) {
+            for (auto it = enemiesProjectiles.begin(); it != enemiesProjectiles.end();) {
                 // corrigir para tamanho do projétil (está em 25x25)
-                sf::FloatRect projectileBounds(it->getPosition(), sf::Vector2f(25, 25));
+                sf::FloatRect enemyProjectileBounds(it->getPosition(), sf::Vector2f(25, 25));
                 if (base.checkCollision(it->getPosition(), sf::Vector2f(25, 25))) {
                     base.damage(10);             // aplicar dano à base
-                    it = projectiles.erase(it);  // remover projétil da lista
+                    it = enemiesProjectiles.erase(it);  // remover projétil da lista
                 } else {
                     ++it;
                 }
