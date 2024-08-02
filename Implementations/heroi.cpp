@@ -28,8 +28,8 @@ Heroi::Heroi() : HP(100), Municao(50) {
 
 void Heroi::draw(sf::RenderWindow& window) {
     window.draw(sprite);
-    hpText.setString("HP: " + std::to_string(HP));
-    ammoText.setString("Ammo: " + std::to_string(Municao));
+    hpText.setString("HP: " + std::to_string(HP)); //Atualizar sempre na tela
+    ammoText.setString("Ammo: " + std::to_string(Municao)); //Atualizar sempre na tela
     window.draw(hpText);
     window.draw(ammoText);
 }
@@ -57,7 +57,17 @@ void Heroi::dano_tomado(int dano) {
 
 void Heroi::rotate(sf::Vector2f direction) {
     float angle = std::atan2(direction.y, direction.x) * 180 / 3.14159265; //Calcula com base na tangente e gira o herói
-    sprite.setRotation(angle);
+    float rotationSpeed = 0.9f; //Velocidade da rotação
+    if(std::abs(angle - currentAngle) > rotationSpeed) {
+        if (angle > currentAngle) {
+            currentAngle += rotationSpeed;
+        } else {
+            currentAngle -= rotationSpeed;
+        }
+    } else {
+        currentAngle = angle;
+    }
+    sprite.setRotation(currentAngle);
 }
 
 int Heroi::getHP() const { return HP; }

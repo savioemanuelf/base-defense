@@ -15,14 +15,15 @@ class Heroi {
     sf::Font font;
     sf::Text hpText;
     sf::Text ammoText;
-
+    float currentAngle;
+    void rotate(sf::Vector2f direction);
+    
    public:
     Heroi();
     void andar(sf::Vector2f direction);
     void atirar(std::vector<Projectile>& projectiles, sf::Texture& projectileTexture, sf::Vector2f target);
     void dano_tomado(int dano);
     void draw(sf::RenderWindow& window);
-    void rotate(sf::Vector2f direction);
     
 
     int getHP() const;
