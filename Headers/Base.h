@@ -7,6 +7,7 @@
 
 class Base {
    private:
+    // Attributes
     sf::RectangleShape shape;
     sf::Vector2f positions;
 
@@ -15,30 +16,26 @@ class Base {
     bool destroyed;
 
     Bar* baseHealthBar;  // implementado para o jogador ter noção do quanto de vida já perdeu
-
    public:
+    // Constructor
     Base(sf::Window& window);
+    // Destructor
     ~Base();
-
+    // Functions
     void showBase(sf::RenderWindow& window) const;
     void damage(int damage);
     bool checkCollision(const sf::Vector2f& position, const sf::Vector2f& size) const;
     void initializeHealthBar(sf::Window& window);
-
-    // GETTERS AND SETTERS
-
+    // GETTERS
     bool isDestroyed() { return this->destroyed; }
-    void setDestroyed(bool destroyed) { this->destroyed = destroyed; }
-
     int getHealth() { return this->currentHealth; }
-    void setHealth(int health) { this->currentHealth = health; }
-
     sf::Vector2f getPos() { return this->positions; }
-    void setPos(sf::Vector2f pos) { this->positions = pos; }
-
     int getMaxHealth() { return this->maxHealth; }
-
     Bar getBaseHealthBar() { return *this->baseHealthBar;}
+    // Setters
+    void setDestroyed(bool destroyed) { this->destroyed = destroyed; }
+    void setHealth(int health) { this->currentHealth = health; }
+    void setPos(sf::Vector2f pos) { this->positions = pos; }
     void setBaseHealthBar(Bar bar) { *this->baseHealthBar = bar;}
 };
 
