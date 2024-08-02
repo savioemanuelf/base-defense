@@ -10,7 +10,9 @@ Heroi::Heroi() : HP(100), Municao(50) {
     sprite.setTexture(texture);
     sprite.setPosition(400, 300);   // Centro da janela
     sprite.setScale(0.3f, 0.3f);  // Escala dependendo do tomanaho da imagem
-    sprite.setOrigin(sprite.getGlobalBounds().width / 2, sprite.getGlobalBounds().height / 2);  // Origem no centro da imagem
+
+    sf::FloatRect bounds = sprite.getGlobalBounds();
+    sprite.setOrigin(bounds.width / 2, bounds.height / 2);  // Origem no centro da imagem
 
     if (!font.loadFromFile("Assets/arial.ttf")) { // Local da fonte
         std::cerr << "Erro ao carregar a fonte" << std::endl;
@@ -57,17 +59,27 @@ void Heroi::dano_tomado(int dano) {
 
 void Heroi::rotate(sf::Vector2f direction) {
     float angle = std::atan2(direction.y, direction.x) * 180 / 3.14159265; //Calcula com base na tangente e gira o herói
-    float rotationSpeed = 0.9f; //Velocidade da rotação
-    if(std::abs(angle - currentAngle) > rotationSpeed) {
-        if (angle > currentAngle) {
-            currentAngle += rotationSpeed;
-        } else {
-            currentAngle -= rotationSpeed;
-        }
-    } else {
-        currentAngle = angle;
+    float currentAngle = sprite.getRotation(); //Pega a rotação atual
+    float deltaAngle = angle - currentAngle;
+
+    if(deltaAngle > 180.0f) {
+        deltaAngle -= 360.0f;
+    } else if(deltaAngle < -180.0f) {
+        deltaAngle += 360.0f;
     }
-    sprite.setRotation(currentAngle);
+
+
+    float rotationSpeed = 0.2f; //Velocidade da rotação
+    if(std::abs(deltaAngle) > rotationSpeed) {
+        if(deltaAngle > 0){
+            sprite.setRotation(currentAngle + rotationSpeed);
+        }
+        else{
+            sprite.setRotation(currentAngle - rotationSpeed);
+        }
+    }else{
+        sprite.setRotation(angle); //Rotação final
+    }
 }
 
 int Heroi::getHP() const { return HP; }
