@@ -6,13 +6,12 @@
 #include "Headers/Base.h"
 #include "Headers/Enemy.h"
 #include "Headers/Heroi.h"
+#include "Headers/Menu.h"
 #include "Headers/Projectile.h"
 
 int main() {
     bool isFullscreen = true;
-    bool menu = true;
-    sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "Hero Game",
-                            sf::Style::Fullscreen);
+    sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "Hero Game", sf::Style::Fullscreen);
 
     Heroi heroi;
     Base base(window);
@@ -29,40 +28,17 @@ int main() {
         return -1;
     }
 
+    // Menu
+    Menu menu(font);
+
     float heroiSpeed = 200.0f;
     sf::Vector2f targetPosition = heroi.getPosition();
     std::vector<Projectile> projectiles;
 
+    // INIMIGOS DESATIVADOS POR ENQUANTO
     // std::vector<std::unique_ptr<Enemy>> enemies;
 
-    // Menu Texts
-    sf::Text gameName("Base Defense", font), play("Jogar", font),
-        exit("Sair", font);
-
-    // Title
-    gameName.setCharacterSize(100);
-    gameName.setOutlineThickness(2);
-    gameName.setFillColor(sf::Color(166, 166, 166));
-    gameName.setOutlineColor(sf::Color::White);
-    gameName.setPosition(
-        (window.getSize().x - gameName.getGlobalBounds().width) / 2, 50);
-    // Play
-    play.setCharacterSize(50);
-    play.setOutlineThickness(2);
-    play.setFillColor(sf::Color(166, 166, 166));
-    play.setOutlineColor(sf::Color::White);
-    play.setPosition((window.getSize().x - play.getGlobalBounds().width) / 2,
-                     280);
-
-    // Exit
-    exit.setCharacterSize(50);
-    exit.setOutlineThickness(2);
-    exit.setFillColor(sf::Color(166, 166, 166));
-    exit.setOutlineColor(sf::Color::White);
-    exit.setPosition((window.getSize().x - exit.getGlobalBounds().width) / 2,
-                     400);
-
-    // Cursor
+    // Hand Cursor
     sf::Cursor cursor;
     if (!cursor.loadFromSystem(sf::Cursor::Hand)) {
         return -1;
@@ -79,68 +55,73 @@ int main() {
     ammoText.setFillColor(sf::Color::White);
 
     sf::Clock clock;
+
+    // INIMIGOS DESATIVADOS POR ENQUANTO
+    // sf::Clock spawnClock;
+
+    // Event Polling
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed) window.close();
-
-            if (event.type == sf::Event::KeyPressed &&
-                sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
-                window.close();
-
-            if (event.type == sf::Event::KeyPressed &&
-                event.key.code == sf::Keyboard::F11) {
-                isFullscreen = !isFullscreen;
-                window.close();
-                if (isFullscreen) {
-                    window.create(sf::VideoMode::getDesktopMode(), "Hero Game",
-                                  sf::Style::Fullscreen);
-                } else {
-                    window.create(sf::VideoMode(800, 600), "Hero Game",
-                                  sf::Style::Default);
-                }
-            }
-
-            if (event.type == sf::Event::MouseButtonPressed) {
-                // Right click
-                if (event.mouseButton.button == sf::Mouse::Right) {
-                    targetPosition =
-                        window.mapPixelToCoords(sf::Mouse::getPosition(window));
-                }
-                // Left click
-                if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-                    // On play Button
-                    if (play.getGlobalBounds().contains(
-                            static_cast<sf::Vector2f>(
-                                sf::Mouse::getPosition(window)))) {
-                        menu = false;
+            switch (event.type) {
+                // Window Close
+                case sf::Event::Closed:
+                    window.close();
+                    break;
+                // Keyboard Pressed
+                case sf::Event::KeyPressed:
+                    switch (event.key.code) {
+                        // Escape Key
+                        case sf::Keyboard::Escape:
+                            window.close();
+                            break;
+                        // F11 Key
+                        case sf::Keyboard::F11:
+                            isFullscreen = !isFullscreen;
+                            window.close();
+                            if (isFullscreen) {
+                                window.create(sf::VideoMode::getDesktopMode(), "Hero Game ", sf::Style::Fullscreen);
+                            } else {
+                                window.create(sf::VideoMode(800, 600), "Hero Game", sf::Style::Default);
+                            }
+                            break;
+                        // Q Key
+                        case sf::Keyboard::Q:
+                            sf::Vector2f mousePosition = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+                            heroi.atirar(projectiles, projectileTexture, mousePosition);
+                            break;
                     }
-                    // On exit Button
-                    if (exit.getGlobalBounds().contains(
-                            static_cast<sf::Vector2f>(
-                                sf::Mouse::getPosition(window)))) {
-                        window.close();
+                    break;
+                // Mouse Pressed
+                case sf::Event::MouseButtonPressed:
+                    base.updateWindowSize(window);
+                    switch (event.mouseButton.button) {
+                        // Left Click
+                        case sf::Mouse::Left:
+                            // On Play Button
+                            if (menu.getPlayBounds().contains(
+                                    static_cast<sf::Vector2f>(sf::Mouse::getPosition(window)))) {
+                                menu.setInvisible();
+                            }
+                            // On Exit Button
+                            if (menu.getExitBounds().contains(
+                                    static_cast<sf::Vector2f>(sf::Mouse::getPosition(window)))) {
+                                window.close();
+                            }
+                            break;
+                        // Right Click
+                        case sf::Mouse::Right:
+                            targetPosition = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+                            break;
                     }
-                }
-                base.updateWindowSize(window);
-            }
-
-            if (event.type == sf::Event::KeyPressed &&
-                event.key.code == sf::Keyboard::Q) {
-                sf::Vector2f mousePosition =
-                    window.mapPixelToCoords(sf::Mouse::getPosition(window));
-                heroi.atirar(projectiles, projectileTexture, mousePosition);
+                    break;
             }
         }
 
-        if (menu) {
+        if (menu.isVisible()) {
             // Update
-
-            // Cursor change on hover buttons
-            if (play.getGlobalBounds().contains(static_cast<sf::Vector2f>(
-                    sf::Mouse::getPosition(window))) ||
-                exit.getGlobalBounds().contains(static_cast<sf::Vector2f>(
-                    sf::Mouse::getPosition(window)))) {
+            if (menu.getPlayBounds().contains(static_cast<sf::Vector2f>(sf::Mouse::getPosition(window))) ||
+                menu.getExitBounds().contains(static_cast<sf::Vector2f>(sf::Mouse::getPosition(window)))) {
                 window.setMouseCursor(cursor);
             } else {
                 window.setMouseCursor(sf::Cursor());
@@ -148,16 +129,14 @@ int main() {
 
             // Render
             window.clear();
-            window.draw(gameName);
-            window.draw(play);
-            window.draw(exit);
+            menu.draw(window);
             window.display();
         } else {
+            // INIMIGOS DESATIVADOS POR ENQUANTO
             // if (spawnClock.getElapsedTime().asSeconds() >= 5) {
             //     enemies.push_back(std::make_unique<Enemy>());
             //     spawnClock.restart();
             // }
-
             // for (auto it = enemies.begin(); it != enemies.end();) {
             //     if ((*it)->isDead()) {
             //         it = enemies.erase(it);
@@ -171,8 +150,7 @@ int main() {
             float dt = deltaTime.asSeconds();
 
             sf::Vector2f direction = targetPosition - heroi.getPosition();
-            float distance = std::sqrt(direction.x * direction.x +
-                                       direction.y * direction.y);
+            float distance = std::sqrt(direction.x * direction.x + direction.y * direction.y);
             if (distance > 1.0f) {
                 direction /= distance;
                 heroi.andar(direction * heroiSpeed * dt);
@@ -184,13 +162,9 @@ int main() {
 
             // verificação de colisão com a base
             for (auto it = projectiles.begin(); it != projectiles.end();) {
-                sf::FloatRect projectileBounds(
-                    it->getPosition(),
-                    sf::Vector2f(25,
-                                 25));  // corrigir para tamanho do projétil
-                                        // (está em 25x25)
-                if (base.checkCollision(it->getPosition(),
-                                        sf::Vector2f(25, 25))) {
+                // corrigir para tamanho do projétil (está em 25x25)
+                sf::FloatRect projectileBounds(it->getPosition(), sf::Vector2f(25, 25));
+                if (base.checkCollision(it->getPosition(), sf::Vector2f(25, 25))) {
                     base.damage(10);             // aplicar dano à base
                     it = projectiles.erase(it);  // remover projétil da lista
                 } else {
@@ -211,6 +185,7 @@ int main() {
             for (auto& projectile : projectiles) {
                 projectile.draw(window);
             }
+            // INIMIGOS DESATIVADOS POR ENQUANTO
             // for (const auto& enemy : enemies) {
             //     enemy->draw(window);
             // }
