@@ -12,6 +12,9 @@ class Heroi {
     int Municao;
     sf::Texture texture;
     sf::Sprite sprite;
+    sf::Font font;
+    sf::Text hpText;
+    sf::Text ammoText;
 
    public:
     Heroi();
