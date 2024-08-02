@@ -62,8 +62,7 @@ void Enemy::move(sf::RenderWindow& window, sf::Vector2f player_position) {
         float direction_y = player_position.y - y;
 
         // Distance Normalized
-        float distance =
-            std::sqrt(direction_x * direction_x + direction_y * direction_y);
+        float distance = std::sqrt(direction_x * direction_x + direction_y * direction_y);
         if (distance > 0) {
             direction_x /= distance;
             direction_y /= distance;

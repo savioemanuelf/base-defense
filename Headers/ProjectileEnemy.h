@@ -4,7 +4,7 @@
 #include <SFML/Graphics.hpp>
 
 class ProjectileEnemy {
-public:
+   public:
     ProjectileEnemy(sf::Texture& texture, sf::Vector2f position, sf::Vector2f direction, float speed);
     ~ProjectileEnemy();
     void update(float dT);
@@ -13,7 +13,7 @@ public:
     sf::Vector2f getPosition() const;
     sf::FloatRect getBounds();
 
-private:
+   private:
     sf::Sprite e_sprite;
     sf::Vector2f e_direction;
     float e_velocity;

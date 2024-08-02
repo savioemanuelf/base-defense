@@ -1,6 +1,7 @@
 #include "../Headers/ProjectileEnemy.h"
 
-ProjectileEnemy::ProjectileEnemy(sf::Texture& texture, sf::Vector2f position, sf::Vector2f direction, float speed) : e_direction(direction), e_velocity(speed) {
+ProjectileEnemy::ProjectileEnemy(sf::Texture& texture, sf::Vector2f position, sf::Vector2f direction, float speed)
+    : e_direction(direction), e_velocity(speed) {
     e_sprite.setTexture(texture);
     e_sprite.setPosition(position);
     e_sprite.setScale(0.5f, 0.5f);
@@ -16,10 +17,6 @@ void ProjectileEnemy::shoot(sf::Texture& projectilTextureEnemy) {
     e_velocity = speed;
 }
 
-void ProjectileEnemy::update(float dT) {
-    e_sprite.move(e_direction * e_velocity * dT);
-}
+void ProjectileEnemy::update(float dT) { e_sprite.move(e_direction * e_velocity * dT); }
 
-void ProjectileEnemy::draw(sf::RenderWindow& window) {
-    window.draw(e_sprite);
-}
+void ProjectileEnemy::draw(sf::RenderWindow& window) { window.draw(e_sprite); }

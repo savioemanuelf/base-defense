@@ -15,7 +15,7 @@ void Heroi::andar(sf::Vector2f direction) {  // Direção x e y
     sprite.move(direction);
 }
 
-void Heroi::atirar(std::vector<Projectile>& projectiles,sf::Texture& projectileTexture, sf::Vector2f target) {
+void Heroi::atirar(std::vector<Projectile>& projectiles, sf::Texture& projectileTexture, sf::Vector2f target) {
     if (Municao > 0) {
         Municao--;
         sf::Vector2f position = sprite.getPosition();
