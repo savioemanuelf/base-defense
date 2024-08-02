@@ -14,8 +14,11 @@ class Menu {
     Menu(sf::Font font);
     // Functions
     void draw(sf::RenderWindow& window);
+    void resize(sf::RenderWindow& window);
+    // Getters
     bool isVisible();
-    sf::FloatRect getPlayBounds();
     sf::FloatRect getExitBounds();
+    sf::FloatRect getPlayBounds();
+    // Setters
     void setInvisible();
 };

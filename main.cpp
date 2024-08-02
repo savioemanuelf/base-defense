@@ -73,6 +73,7 @@ int main() {
                             } else {
                                 window.create(sf::VideoMode(800, 600), "Base Defense", sf::Style::Default);
                             }
+                            menu.resize(window);
                             break;
                         // Q Key
                         case sf::Keyboard::Q:
@@ -108,7 +109,7 @@ int main() {
         }
         // Update
         if (menu.isVisible()) {
-            // Update
+                        // Update
             if (menu.getPlayBounds().contains(static_cast<sf::Vector2f>(sf::Mouse::getPosition(window))) ||
                 menu.getExitBounds().contains(static_cast<sf::Vector2f>(sf::Mouse::getPosition(window)))) {
                 window.setMouseCursor(cursor);
