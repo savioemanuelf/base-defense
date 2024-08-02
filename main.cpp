@@ -10,43 +10,42 @@
 #include "Headers/Projectile.h"
 
 int main() {
+    // Window
     bool isFullscreen = true;
     sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "Base Defense", sf::Style::Fullscreen);
     window.setFramerateLimit(60);
 
-    Heroi heroi;
-    Base base(window);
-
+    // Assets Loading
     sf::Texture projectileTexture;
     if (!projectileTexture.loadFromFile("Assets/Texture/projetil.png")) {
         std::cerr << "Erro ao abrir a textura do projétil" << std::endl;
         return -1;
     }
-
     sf::Font font;
     if (!font.loadFromFile("Assets/arial.ttf")) {
         std::cerr << "Erro ao abrir a fonte" << std::endl;
+        return -1;
+    }
+    sf::Cursor cursor;
+    if (!cursor.loadFromSystem(sf::Cursor::Hand)) {
         return -1;
     }
 
     // Menu
     Menu menu(font);
 
-    float heroiSpeed = 200.0f;
-    sf::Vector2f targetPosition = heroi.getPosition();
+    // Base
+    Base base(window);
 
+    // Hero
+    Heroi heroi(font);
     std::vector<Projectile> projectiles;
 
     // Enemy
     std::vector<std::unique_ptr<Enemy>> enemies;
     std::vector<Projectile> enemiesProjectiles;
 
-    // Hand Cursor
-    sf::Cursor cursor;
-    if (!cursor.loadFromSystem(sf::Cursor::Hand)) {
-        return -1;
-    }
-
+    // Clocks
     sf::Clock clock, spawnClock;
 
     // Event Polling
@@ -101,13 +100,13 @@ int main() {
                             break;
                         // Right Click
                         case sf::Mouse::Right:
-                            targetPosition = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+                            heroi.setTargetPosition(window.mapPixelToCoords(sf::Mouse::getPosition(window)));
                             break;
                     }
                     break;
             }
         }
-
+        // Update
         if (menu.isVisible()) {
             // Update
             if (menu.getPlayBounds().contains(static_cast<sf::Vector2f>(sf::Mouse::getPosition(window))) ||
@@ -124,11 +123,13 @@ int main() {
         } else {
             window.setMouseCursor(sf::Cursor());
 
+            // Enemy Spawning
             if (spawnClock.getElapsedTime().asSeconds() >= 5) {
                 enemies.push_back(std::make_unique<Enemy>());
                 spawnClock.restart();
             }
 
+            // Enemy Shooting
             for (auto it = enemies.begin(); it != enemies.end(); it++) {
                 if ((*it)->shootTime() >= 4) {
                     sf::Vector2f position = (*it)->getPosition();
@@ -139,6 +140,7 @@ int main() {
                 }
             }
 
+            // Enemy Dying
             for (auto it = enemies.begin(); it != enemies.end();) {
                 if ((*it)->checkHit(projectiles)) {
                     it = enemies.erase(it);
@@ -148,25 +150,29 @@ int main() {
                 }
             }
 
+            // Frame Time
             sf::Time deltaTime = clock.restart();
             float dt = deltaTime.asSeconds();
 
-            sf::Vector2f direction = targetPosition - heroi.getPosition();
+            // Hero Moving
+            sf::Vector2f direction = heroi.getTargetPosition() - heroi.getPosition();
             float distance = std::sqrt(direction.x * direction.x + direction.y * direction.y);
             if (distance > 1.0f) {
                 direction /= distance;
-                heroi.andar(direction * heroiSpeed * dt);
+                heroi.andar(direction * dt);
             }
 
+            // Hero Projectiles Moving
             for (auto& projectile : projectiles) {
                 projectile.update(dt);
             }
 
+            // Enemy Projectiles Moving
             for (auto& projectile : enemiesProjectiles) {
                 projectile.update(dt);
             }
 
-            // verificação de colisão com a base
+            // Base Collision
             for (auto it = enemiesProjectiles.begin(); it != enemiesProjectiles.end();) {
                 // corrigir para tamanho do projétil (está em 25x25)
                 sf::FloatRect enemyProjectileBounds(it->getPosition(), sf::Vector2f(25, 25));
@@ -178,6 +184,7 @@ int main() {
                 }
             }
 
+            // Render
             window.clear(sf::Color::Black);
             base.showBase(window);
             heroi.draw(window);
