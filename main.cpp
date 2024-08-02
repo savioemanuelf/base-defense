@@ -11,7 +11,7 @@
 
 int main() {
     bool isFullscreen = true;
-    sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "Hero Game", sf::Style::Fullscreen);
+    sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "Base Defense", sf::Style::Fullscreen);
 
     Heroi heroi;
     Base base(window);
@@ -33,10 +33,12 @@ int main() {
 
     float heroiSpeed = 200.0f;
     sf::Vector2f targetPosition = heroi.getPosition();
+
     std::vector<Projectile> projectiles;
 
-    // INIMIGOS DESATIVADOS POR ENQUANTO
-    // std::vector<std::unique_ptr<Enemy>> enemies;
+    // Enemy
+    std::vector<std::unique_ptr<Enemy>> enemies;
+    std::vector<Projectile> enemiesProjectiles;
 
     // Hand Cursor
     sf::Cursor cursor;
@@ -44,11 +46,7 @@ int main() {
         return -1;
     }
 
-
-    sf::Clock clock;
-
-    // INIMIGOS DESATIVADOS POR ENQUANTO
-    // sf::Clock spawnClock;
+    sf::Clock clock, spawnClock;
 
     // Event Polling
     while (window.isOpen()) {
@@ -71,9 +69,9 @@ int main() {
                             isFullscreen = !isFullscreen;
                             window.close();
                             if (isFullscreen) {
-                                window.create(sf::VideoMode::getDesktopMode(), "Hero Game ", sf::Style::Fullscreen);
+                                window.create(sf::VideoMode::getDesktopMode(), "Base Defense", sf::Style::Fullscreen);
                             } else {
-                                window.create(sf::VideoMode(800, 600), "Hero Game", sf::Style::Default);
+                                window.create(sf::VideoMode(800, 600), "Base Defense", sf::Style::Default);
                             }
                             break;
                         // Q Key
@@ -123,19 +121,31 @@ int main() {
             menu.draw(window);
             window.display();
         } else {
-            // INIMIGOS DESATIVADOS POR ENQUANTO
-            /*if (spawnClock.getElapsedTime().asSeconds() >= 5) {
-                 enemies.push_back(std::make_unique<Enemy>());
-                 spawnClock.restart();
-             }
-             for (auto it = enemies.begin(); it != enemies.end();) {
+            window.setMouseCursor(sf::Cursor());
+
+            if (spawnClock.getElapsedTime().asSeconds() >= 5) {
+                enemies.push_back(std::make_unique<Enemy>());
+                spawnClock.restart();
+            }
+
+            for (auto it = enemies.begin(); it != enemies.end(); it++) {
+                if ((*it)->shootTime() >= 3) {
+                    sf::Vector2f position = (*it)->getPosition();
+                    sf::Vector2f direction =
+                        window.mapPixelToCoords(static_cast<sf::Vector2i>(heroi.getPosition())) - position;
+                    enemiesProjectiles.emplace_back(projectileTexture, position, direction);
+                    (*it)->resetShootTime();
+                }
+            }
+
+            for (auto it = enemies.begin(); it != enemies.end();) {
                 if ((*it)->isDead()) {
                     it = enemies.erase(it);
                 } else {
-                     (*it)->move(window, heroi.getPosition());
-                     ++it;
-                 }
-             }*/
+                    (*it)->move(window, heroi.getPosition());
+                    ++it;
+                }
+            }
 
             sf::Time deltaTime = clock.restart();
             float dt = deltaTime.asSeconds();
@@ -151,6 +161,10 @@ int main() {
                 projectile.update(dt);
             }
 
+            for (auto& projectile : enemiesProjectiles) {
+                projectile.update(dt);
+            }
+
             // verificação de colisão com a base
             for (auto it = projectiles.begin(); it != projectiles.end();) {
                 // corrigir para tamanho do projétil (está em 25x25)
@@ -163,18 +177,18 @@ int main() {
                 }
             }
 
-
             window.clear(sf::Color::Black);
             base.showBase(window);
             heroi.draw(window);
             for (auto& projectile : projectiles) {
                 projectile.draw(window);
             }
-            // INIMIGOS DESATIVADOS POR ENQUANTO
-            // for (const auto& enemy : enemies) {
-            //     enemy->draw(window);
-            // }
-
+            for (auto& projectile : enemiesProjectiles) {
+                projectile.draw(window);
+            }
+            for (const auto& enemy : enemies) {
+                enemy->draw(window);
+            }
             window.display();
         }
     }

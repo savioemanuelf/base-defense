@@ -44,6 +44,7 @@ Enemy::Enemy() : speed(0.005f), dead(false), size(50) {
     rect.setOrigin(size / 2.f, size / 2.f);
     rect.setPosition(randomPositionOutside());
     rect.setFillColor(sf::Color::Red);
+    shootClock.restart();
 }
 
 void Enemy::draw(sf::RenderWindow& window) { window.draw(rect); }
@@ -76,4 +77,10 @@ void Enemy::move(sf::RenderWindow& window, sf::Vector2f player_position) {
     }
 }
 
-bool Enemy::isDead() { return dead; }
+bool Enemy::isDead() { return this->dead; }
+
+float Enemy::shootTime() { return this->shootClock.getElapsedTime().asSeconds(); }
+
+void Enemy::resetShootTime() { this->shootClock.restart(); }
+
+sf::Vector2f Enemy::getPosition() { return rect.getPosition(); }
