@@ -36,6 +36,7 @@ int main() {
 
     // Base
     Base base(window);
+    base.initializeHealthBar(window);
 
     // Hero
     Heroi heroi(font);
@@ -84,7 +85,6 @@ int main() {
                     break;
                 // Mouse Pressed
                 case sf::Event::MouseButtonPressed:
-                    base.updateWindowSize(window);
                     switch (event.mouseButton.button) {
                         // Left Click
                         case sf::Mouse::Left:
@@ -188,6 +188,7 @@ int main() {
             // Render
             window.clear(sf::Color::Black);
             base.showBase(window);
+            base.getBaseHealthBar().showBar(window);
             heroi.draw(window);
             for (auto& projectile : projectiles) {
                 projectile.draw(window);
