@@ -9,10 +9,10 @@ Heroi::Heroi() : HP(100), Municao(50) {
     }
     sprite.setTexture(texture);
     sprite.setPosition(400, 300);   // Centro da janela
-    sprite.setScale(0.2f, 0.2f);  // Escala dependendo do tomanaho da imagem
+    sprite.setScale(0.3f, 0.3f);  // Escala dependendo do tomanaho da imagem
     sprite.setOrigin(sprite.getGlobalBounds().width / 2, sprite.getGlobalBounds().height / 2);  // Origem no centro da imagem
 
-    if (!font.loadFromFile("Assets/arial.ttf")) { // Replace "path/to/font.ttf" with the actual path to your font file
+    if (!font.loadFromFile("Assets/arial.ttf")) { // Local da fonte
         std::cerr << "Erro ao carregar a fonte" << std::endl;
     }
     
