@@ -133,18 +133,18 @@ int main() {
             window.display();
         } else {
             // INIMIGOS DESATIVADOS POR ENQUANTO
-            // if (spawnClock.getElapsedTime().asSeconds() >= 5) {
-            //     enemies.push_back(std::make_unique<Enemy>());
-            //     spawnClock.restart();
-            // }
-            // for (auto it = enemies.begin(); it != enemies.end();) {
-            //     if ((*it)->isDead()) {
-            //         it = enemies.erase(it);
-            //     } else {
-            //         (*it)->move(window, heroi.getPosition());
-            //         ++it;
-            //     }
-            // }
+            /*if (spawnClock.getElapsedTime().asSeconds() >= 5) {
+                 enemies.push_back(std::make_unique<Enemy>());
+                 spawnClock.restart();
+             }
+             for (auto it = enemies.begin(); it != enemies.end();) {
+                if ((*it)->isDead()) {
+                    it = enemies.erase(it);
+                } else {
+                     (*it)->move(window, heroi.getPosition());
+                     ++it;
+                 }
+             }*/
 
             sf::Time deltaTime = clock.restart();
             float dt = deltaTime.asSeconds();

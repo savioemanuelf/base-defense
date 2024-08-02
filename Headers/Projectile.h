@@ -9,6 +9,7 @@ class Projectile {
     void update(float dt);
     void draw(sf::RenderWindow& window);
     sf::Vector2f getPosition() const;
+    void rotacao(sf::Vector2f direction);
 
    private:
     sf::Sprite sprite;

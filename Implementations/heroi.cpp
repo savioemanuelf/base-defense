@@ -1,5 +1,5 @@
 #include "../Headers/Heroi.h"
-
+#include <cmath>
 #include <iostream>
 
 Heroi::Heroi() : HP(100), Municao(50) {
@@ -9,10 +9,12 @@ Heroi::Heroi() : HP(100), Municao(50) {
     sprite.setTexture(texture);
     sprite.setPosition(400, 300);   // Centro da janela
     sprite.setScale(0.08f, 0.08f);  // Escala dependendo do tomanaho da imagem
+    sprite.setOrigin(sprite.getGlobalBounds().width / 2, sprite.getGlobalBounds().height / 2);  // Origem no centro da imagem
 }
 
 void Heroi::andar(sf::Vector2f direction) {  // Direção x e y
     sprite.move(direction);
+    rotate(direction);
 }
 
 void Heroi::atirar(std::vector<Projectile>& projectiles, sf::Texture& projectileTexture, sf::Vector2f target) {
@@ -28,8 +30,13 @@ void Heroi::dano_tomado(int dano) {
     HP -= dano;
     if (HP < 0) {
         HP = 0;
-        // Morte do Herói:
+        
     }
+}
+
+void Heroi::rotate(sf::Vector2f direction) {
+    float angle = std::atan2(direction.y, direction.x) * 180 / 3.14159265; //Calcula com base na tangente e gira o herói
+    sprite.setRotation(angle);
 }
 
 void Heroi::draw(sf::RenderWindow& window) { window.draw(sprite); }
