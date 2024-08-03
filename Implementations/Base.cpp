@@ -51,21 +51,20 @@ void Base::showBase(sf::RenderWindow& window) const {
 
 void Base::damage(int damage) {
     setHealth(this->getHealth() - damage);
-    
-    if(baseHealthBar) {
-        baseHealthBar->updateBar(this->getHealth()); // -> deve ser utilizado porque retorna um ponteiro
-    }
 
-    if (currentHealth < 0) {
+    if (getHealth() < 0) {
         this->setHealth(0);
-    }
-
-    if (currentHealth == 0) {
+    } 
+    if (getHealth() == 0) {
         this->setDestroyed(true);
         this->shape.setOutlineColor(sf::Color::Red);
-        if(baseHealthBar) {
-            baseHealthBar->updateBar(this->getHealth());
-        }
+        baseHealthBar->updateBar(this->getHealth(), sf::Color::Red);
+    } else if( getHealth() <= 10) {
+        baseHealthBar->updateBar(this->getHealth(), sf::Color::Red);
+    } else if (getHealth() <= 50) {
+        baseHealthBar->updateBar(this->getHealth(), sf::Color(255, 200, 0));
+    } else {
+        baseHealthBar->updateBar(this->getHealth(), sf::Color(0, 160, 0)); // -> deve ser utilizado porque retorna um ponteiro
     }
 }
 

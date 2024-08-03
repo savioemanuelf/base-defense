@@ -24,7 +24,7 @@ class Bar {
     ~Bar();
     // Functions
     void showBar(sf::RenderWindow& window);
-    void updateBar(int currentContent);
+    void updateBar(int currentContent, sf::Color color);
     // Getters
     sf::Text getTextContent() { return this->textContent; }
     sf::RectangleShape getBar() { return this->bar; }

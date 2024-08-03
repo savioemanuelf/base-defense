@@ -30,13 +30,13 @@ Bar::Bar(sf::Vector2f positions, sf::Vector2f size, sf::Color backgroundColor, s
         textContent.setFont(font);
         textContent.setCharacterSize(14);
         textContent.setFillColor(sf::Color::White);
-        textContent.Bold;
+        textContent.setOutlineThickness(1);
         textContent.setString(std::to_string(this->getCurrentContent()) + "/" + std::to_string(this->getMaxContent()));
         sf::FloatRect textRect = textContent.getLocalBounds();
         textContent.setOrigin(textRect.width / 2, textRect.height / 2);
         textContent.setPosition(
             (positions.x + size.x / 2), 
-            (positions.y + size.y / 2 - textRect.height /4));  // centraliza o texto dentro da barra
+            (positions.y + size.y / 2 - textRect.height /4) + 1);  // centraliza o texto dentro da barra com +1 por causa da outline do texto
     }
 }
 
@@ -50,12 +50,19 @@ void Bar::showBar(sf::RenderWindow& window) {
     window.draw(this->getTextContent());
 }
 
-void Bar::updateBar(int currentContent) {
+void Bar::updateBar(int currentContent, sf::Color color) {
     // ajusta a barra com base no conteúdo atual
     this->currentContent = currentContent;
     float x = (currentContent / static_cast<float>(this->maxContent)) * this->outlineBar.getSize().x;
     float y = this->bar.getSize().y;
     this->bar.setSize(sf::Vector2f(x, y));
+
+    this->bar.setFillColor(color); 
+
+    if(currentContent == 0) {
+        this->outlineBar.setOutlineColor(color);
+        this->textContent.setFillColor(color);
+    } 
 
     textContent.setString(std::to_string(currentContent) + "/" + std::to_string(this->getMaxContent()));
 }
