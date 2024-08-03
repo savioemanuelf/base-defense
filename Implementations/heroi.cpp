@@ -9,6 +9,14 @@ Heroi::Heroi(sf::Font font) : HP(100), Municao(50), speed(200.0f) {
     if (!texture.loadFromFile("Assets/Texture/personagem.png")) {
         std::cerr << "Erro ao carregar a imagem" << std::endl;
     }
+    // Sound
+    if (!fireBallBuffer.loadFromFile("Assets/SFX/fireball.wav")) {
+        std::cerr << "Erro ao carregar o som da bola de fogo" << std::endl;
+    }
+    int maxSounds = 25;
+    for (int i = 0; i < maxSounds; ++i) {
+        fireBallSounds.emplace_back(fireBallBuffer);
+    }
 
     // Setting Up Sprite
     sprite.setTexture(texture);
@@ -40,10 +48,19 @@ void Heroi::andar(sf::Vector2f direction) {  // Direção x e y
     sprite.move(direction * speed);
     rotate(direction);
 }
+void Heroi::playFireballSound() {
+    for (auto& sound : fireBallSounds) {
+        if (sound.getStatus() != sf::Sound::Playing) {
+            sound.play();
+            break;
+        }
+    }
+}
 
 void Heroi::atirar(std::vector<Projectile>& projectiles, sf::Texture& projectileTexture, sf::Vector2f target) {
     if (Municao > 0) {
         Municao--;
+        playFireballSound();
         sf::Vector2f position = sprite.getPosition();
         sf::Vector2f direction = target - position;
         projectiles.emplace_back(projectileTexture, position, direction);

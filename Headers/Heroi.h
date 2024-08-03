@@ -2,6 +2,7 @@
 #define HEROI_H
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <vector>
 
 #include "Projectile.h"
@@ -19,6 +20,9 @@ class Heroi {
     sf::Text hpText;
     sf::Text ammoText;
     float currentAngle;
+    void playFireballSound();
+    sf::SoundBuffer fireBallBuffer;
+    std::vector<sf::Sound> fireBallSounds;
     // Functions
     void rotate(sf::Vector2f direction);
 
