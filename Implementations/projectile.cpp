@@ -5,7 +5,7 @@
 Projectile::Projectile(sf::Texture& texture, sf::Vector2f position, sf::Vector2f direction) : speed(300.0f) {
     sprite.setTexture(texture);
     sprite.setPosition(position);
-    sprite.setScale(0.05f, 0.05f);  // Tamanho de acordo com a imagem
+    sprite.setScale(0.07f, 0.07f);  // Tamanho de acordo com a imagem
     direction /= std::sqrt(direction.x * direction.x + direction.y * direction.y);
     velocity = speed * direction;
     sprite.setOrigin(sprite.getGlobalBounds().width / 2,
