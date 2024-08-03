@@ -154,6 +154,16 @@ int main() {
             // Frame Time
             sf::Time deltaTime = clock.restart();
             float dt = deltaTime.asSeconds();
+            static float timePerFrame = 0;
+            timePerFrame += deltaTime.asSeconds();
+
+            // Base Health Regen
+            if (timePerFrame >= 3.0f) {
+                if (base.getHealth() + 1 <= base.getMaxHealth()) {
+                    base.damage(-1);
+                }
+                timePerFrame = 0;
+            }
 
             // Hero Moving
             sf::Vector2f direction = heroi.getTargetPosition() - heroi.getPosition();
