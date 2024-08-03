@@ -31,12 +31,12 @@ class Base {
     int getHealth() { return this->currentHealth; }
     sf::Vector2f getPos() { return this->positions; }
     int getMaxHealth() { return this->maxHealth; }
-    Bar getBaseHealthBar() { return *this->baseHealthBar;}
+    Bar getBaseHealthBar() { return *this->baseHealthBar; }
     // Setters
     void setDestroyed(bool destroyed) { this->destroyed = destroyed; }
     void setHealth(int health) { this->currentHealth = health; }
     void setPos(sf::Vector2f pos) { this->positions = pos; }
-    void setBaseHealthBar(Bar bar) { *this->baseHealthBar = bar;}
+    void setBaseHealthBar(Bar bar) { *this->baseHealthBar = bar; }
 };
 
 #endif  // BASE_H

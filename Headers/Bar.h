@@ -18,23 +18,24 @@ class Bar {
    public:
     // Constructor
     Bar();
-    Bar(sf::Vector2f positions, sf::Vector2f size, sf::Color backgroundColor, sf::Color color, sf::Color outlineColor, int thickness, int currentContent, int maxContent);
+    Bar(sf::Vector2f positions, sf::Vector2f size, sf::Color backgroundColor, sf::Color color, sf::Color outlineColor,
+        int thickness, int currentContent, int maxContent);
     // Destructor
     ~Bar();
     // Functions
     void showBar(sf::RenderWindow& window);
     void updateBar(int currentContent);
-    // Getters 
-    sf::Text getTextContent() { return this->textContent;}
-    sf::RectangleShape getBar() { return this-> bar;}
-    sf::RectangleShape getOutlineBar() { return this->outlineBar;}
-    int getMaxContent() { return this->maxContent;}
-    int getCurrentContent() { return this->currentContent;}
+    // Getters
+    sf::Text getTextContent() { return this->textContent; }
+    sf::RectangleShape getBar() { return this->bar; }
+    sf::RectangleShape getOutlineBar() { return this->outlineBar; }
+    int getMaxContent() { return this->maxContent; }
+    int getCurrentContent() { return this->currentContent; }
     // Setters
-    void setTextContent(sf::Text content) { this->textContent = content;}
-    void setBar(sf::RectangleShape newbar) { this->bar = newbar;} 
-    void setOutlineBar(sf::RectangleShape outline) { this->outlineBar = outline;} 
-    void setMaxContent(int newContent) { this->maxContent = newContent;}
-    void setCurrentContent(int newContent) { this->currentContent = newContent;}
+    void setTextContent(sf::Text content) { this->textContent = content; }
+    void setBar(sf::RectangleShape newbar) { this->bar = newbar; }
+    void setOutlineBar(sf::RectangleShape outline) { this->outlineBar = outline; }
+    void setMaxContent(int newContent) { this->maxContent = newContent; }
+    void setCurrentContent(int newContent) { this->currentContent = newContent; }
 };
-#endif // BAR_H
+#endif  // BAR_H

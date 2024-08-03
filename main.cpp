@@ -109,7 +109,7 @@ int main() {
         }
         // Update
         if (menu.isVisible()) {
-                        // Update
+            // Update
             if (menu.getPlayBounds().contains(static_cast<sf::Vector2f>(sf::Mouse::getPosition(window))) ||
                 menu.getExitBounds().contains(static_cast<sf::Vector2f>(sf::Mouse::getPosition(window)))) {
                 window.setMouseCursor(cursor);
