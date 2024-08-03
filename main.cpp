@@ -159,7 +159,7 @@ int main() {
 
             // Base Health Regen
             if (timePerFrame >= 3.0f) {
-                if (base.getHealth() + 1 <= base.getMaxHealth()) {
+                if (base.getHealth() + 1 <= base.getMaxHealth() && !base.isDestroyed()) {
                     base.damage(-1);
                 }
                 timePerFrame = 0;
@@ -184,12 +184,12 @@ int main() {
             }
 
             // Base Collision
-            for (auto it = enemiesProjectiles.begin(); it != enemiesProjectiles.end();) {
+            for (auto it = projectiles.begin(); it != projectiles.end();) {
                 // corrigir para tamanho do projétil (está em 25x25)
                 sf::FloatRect enemyProjectileBounds(it->getPosition(), sf::Vector2f(25, 25));
                 if (base.checkCollision(it->getPosition(), sf::Vector2f(25, 25))) {
                     base.damage(10);                    // aplicar dano à base
-                    it = enemiesProjectiles.erase(it);  // remover projétil da lista
+                    it = projectiles.erase(it);  // remover projétil da lista
                 } else {
                     ++it;
                 }
