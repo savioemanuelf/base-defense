@@ -154,16 +154,9 @@ int main() {
             // Frame Time
             sf::Time deltaTime = clock.restart();
             float dt = deltaTime.asSeconds();
-            static float timePerFrame = 0;
-            timePerFrame += deltaTime.asSeconds();
 
             // Base Health Regen
-            if (timePerFrame >= 3.0f) {
-                if (base.getHealth() + 1 <= base.getMaxHealth() && !base.isDestroyed()) {
-                    base.damage(-1);
-                }
-                timePerFrame = 0;
-            }
+            base.baseRegen(1);
 
             // Hero Moving
             sf::Vector2f direction = heroi.getTargetPosition() - heroi.getPosition();
@@ -198,7 +191,6 @@ int main() {
             // Render
             window.clear(sf::Color::Black);
             base.showBase(window);
-            base.getBaseHealthBar().showBar(window);
             heroi.draw(window);
             for (auto& projectile : projectiles) {
                 projectile.draw(window);
@@ -209,6 +201,7 @@ int main() {
             for (const auto& enemy : enemies) {
                 enemy->draw(window);
             }
+            base.getBaseHealthBar().showBar(window);
             window.display();
         }
     }

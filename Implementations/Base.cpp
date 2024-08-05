@@ -68,6 +68,29 @@ void Base::damage(int damage) {
     }
 }
 
+void Base::baseRegen(int regen) {
+    sf::Color color;
+    sf::Time deltaTime = regenClock.restart();
+    static float timePerFrame = 0;
+    timePerFrame += deltaTime.asSeconds();
+    // Set da cor da barra de vida para a regeneração
+    if( getHealth() <= 10) {
+        color = sf::Color::Red;
+    } else if (getHealth() <= 50) {
+        color =  sf::Color(255, 200, 0);
+    } else {
+        color =  sf::Color(0, 160, 0);
+    }
+    if (timePerFrame >= 3.0f) {
+        if (this->getHealth() + regen <= this->getMaxHealth() && !(this->isDestroyed())) {
+            this->baseHealthBar->updateBar(this->getHealth(), color); // realizar última alteração da barra de vida
+            this->setHealth(this->getHealth() + regen);
+            this->baseHealthBar->updateBar(this->getHealth(), color); // alterar pós cura
+        }
+        timePerFrame = 0;
+    }
+}
+
 bool Base::checkCollision(const sf::Vector2f& position, const sf::Vector2f& size) const {
     sf::FloatRect projectileRect(position, size);
     return shape.getGlobalBounds().intersects(projectileRect); 

@@ -10,12 +10,12 @@ class Base {
     // Attributes
     sf::RectangleShape shape;
     sf::Vector2f positions;
-
     int maxHealth;
     int currentHealth;
     bool destroyed;
 
-    Bar* baseHealthBar;  // implementado para o jogador ter noção do quanto de vida já perdeu
+    Bar* baseHealthBar;  
+    sf::Clock regenClock;
    public:
     // Constructor
     Base(sf::Window& window);
@@ -26,6 +26,7 @@ class Base {
     void damage(int damage);
     bool checkCollision(const sf::Vector2f& position, const sf::Vector2f& size) const;
     void initializeHealthBar(sf::Window& window);
+    void baseRegen(int regen);
     // GETTERS
     bool isDestroyed() { return this->destroyed; }
     int getHealth() { return this->currentHealth; }
