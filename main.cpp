@@ -17,20 +17,20 @@ int main() {
 
     // Assets Loading
     sf::Texture projectileTexture;
-    if (!projectileTexture.loadFromFile("Assets/Texture/projetil.png")) {
+    if (!projectileTexture.loadFromFile("Assets/Texture/Projectiles/projetil.png")) {
         std::cerr << "Erro ao abrir a textura do projétil" << std::endl;
         return -1;
     }
     
     sf::Texture backgroundTexture;
-    if (!backgroundTexture.loadFromFile("Assets/Texture/background.jpg")) {
+    if (!backgroundTexture.loadFromFile("Assets/Texture/Backgrounds/background.jpg")) {
         std::cerr << "Erro ao abrir a textura de fundo" << std::endl;
         return -1;
     }
     sf::Sprite backgroundSprite(backgroundTexture);
 
     sf::Font font;
-    if (!font.loadFromFile("Assets/arial.ttf")) {
+    if (!font.loadFromFile("Assets/Fonts/arial.ttf")) {
         std::cerr << "Erro ao abrir a fonte" << std::endl;
         return -1;
     }

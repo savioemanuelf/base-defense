@@ -24,7 +24,7 @@ Bar::Bar(sf::Vector2f positions, sf::Vector2f size, sf::Color backgroundColor, s
     this->setMaxContent(maxContent);
     this->setCurrentContent(maxContent);
 
-    if (!font.loadFromFile("Assets/arial.ttf")) {
+    if (!font.loadFromFile("Assets/Fonts/arial.ttf")) {
         std::cerr << "Erro ao carregar a fonte" << std::endl;
     } else {
         textContent.setFont(font);
