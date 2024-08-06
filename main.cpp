@@ -21,6 +21,14 @@ int main() {
         std::cerr << "Erro ao abrir a textura do projétil" << std::endl;
         return -1;
     }
+    
+    sf::Texture backgroundTexture;
+    if (!backgroundTexture.loadFromFile("Assets/Texture/background.jpg")) {
+        std::cerr << "Erro ao abrir a textura de fundo" << std::endl;
+        return -1;
+    }
+    sf::Sprite backgroundSprite(backgroundTexture);
+
     sf::Font font;
     if (!font.loadFromFile("Assets/arial.ttf")) {
         std::cerr << "Erro ao abrir a fonte" << std::endl;
@@ -188,8 +196,15 @@ int main() {
                 }
             }
 
+            // Background sprite resize
+            sf::Vector2u windowSize = window.getSize();
+            backgroundSprite.setScale(
+                static_cast<float>(windowSize.x) / backgroundTexture.getSize().x,
+                static_cast<float>(windowSize.y) / backgroundTexture.getSize().y
+            );
             // Render
             window.clear(sf::Color::Black);
+            window.draw(backgroundSprite);
             base.showBase(window);
             heroi.draw(window);
             for (auto& projectile : projectiles) {
