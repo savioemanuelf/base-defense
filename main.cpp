@@ -49,6 +49,7 @@ int main() {
     // Hero
     Heroi heroi(font);
     std::vector<Projectile> projectiles;
+    sf::Vector2f targetPosition = heroi.getPosition();
 
     // Enemy
     std::vector<std::unique_ptr<Enemy>> enemies;
@@ -82,6 +83,7 @@ int main() {
                             } else {
                                 window.create(sf::VideoMode(800, 600), "Base Defense", sf::Style::Default);
                             }
+                            window.setFramerateLimit(60);
                             menu.resize(window);
                             break;
                         // Q Key
@@ -109,7 +111,7 @@ int main() {
                             break;
                         // Right Click
                         case sf::Mouse::Right:
-                            heroi.setTargetPosition(window.mapPixelToCoords(sf::Mouse::getPosition(window)));
+                            targetPosition = window.mapPixelToCoords(sf::Mouse::getPosition(window));
                             break;
                     }
                     break;
@@ -166,12 +168,16 @@ int main() {
             // Base Health Regen
             base.baseRegen(1);
 
+            //Hero rotate
+            sf::Vector2f mousePostion = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+            heroi.rotate(mousePostion);
+
             // Hero Moving
-            sf::Vector2f direction = heroi.getTargetPosition() - heroi.getPosition();
+            sf::Vector2f direction = targetPosition - heroi.getPosition();
             float distance = std::sqrt(direction.x * direction.x + direction.y * direction.y);
             if (distance > 1.0f) {
                 direction /= distance;
-                heroi.andar(direction * dt);
+                heroi.andar(direction * 200.0f * dt);
             }
 
             // Hero Projectiles Moving

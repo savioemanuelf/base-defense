@@ -44,9 +44,8 @@ void Heroi::draw(sf::RenderWindow& window) {
     window.draw(ammoText);
 }
 
-void Heroi::andar(sf::Vector2f direction) {  // Direção x e y
-    sprite.move(direction * speed);
-    rotate(direction);
+void Heroi::andar(const sf::Vector2f& direction) {  // Direção x e y
+    sprite.move(direction);
 }
 void Heroi::playFireballSound() {
     for (auto& sound : fireBallSounds) {
@@ -74,28 +73,10 @@ void Heroi::dano_tomado(int dano) {
     }
 }
 
-void Heroi::rotate(sf::Vector2f direction) {
-    float angle =
-        std::atan2(direction.y, direction.x) * 180 / 3.14159265;  // Calcula com base na tangente e gira o herói
-    float currentAngle = sprite.getRotation();                    // Pega a rotação atual
-    float deltaAngle = angle - currentAngle;
-
-    if (deltaAngle > 180.0f) {
-        deltaAngle -= 360.0f;
-    } else if (deltaAngle < -180.0f) {
-        deltaAngle += 360.0f;
-    }
-
-    float rotationSpeed = 4.0f;  // Velocidade da rotação
-    if (std::abs(deltaAngle) > rotationSpeed) {
-        if (deltaAngle > 0) {
-            sprite.setRotation(currentAngle + rotationSpeed);
-        } else {
-            sprite.setRotation(currentAngle - rotationSpeed);
-        }
-    } else {
-        sprite.setRotation(angle);  // Rotação final
-    }
+void Heroi::rotate(const sf::Vector2f& targetPosition) {
+    sf::Vector2f direction = targetPosition - sprite.getPosition();
+    float angle = std::atan2(direction.y, direction.x) * 180 / 3.14159265;
+    sprite.setRotation(angle);
 }
 
 int Heroi::getHP() const { return HP; }
