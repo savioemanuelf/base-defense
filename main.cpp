@@ -22,7 +22,20 @@ int main() {
         std::cerr << "Erro ao abrir a textura do projétil" << std::endl;
         return -1;
     }
-    
+    sf::Texture lifePotionTexture;
+    if(!lifePotionTexture.loadFromFile("Assets/Texture/Drops/life-potion.png")) {
+        std::cerr << "Erro ao carregar textura da poção de vida" << std::endl;
+        return -1;
+    }
+    sf::Sprite lifePotionSprite(lifePotionTexture);
+
+    sf::Texture manaPotionTexture;
+    if(!manaPotionTexture.loadFromFile("Assets/Texture/Drops/mana-potion.png")) {
+        std::cerr << "Erro ao carregar textura da poção de mana" << std::endl;
+        return -1;
+    }
+    sf::Sprite manaPotionSprite(manaPotionTexture);
+
     sf::Texture backgroundTexture;
     if (!backgroundTexture.loadFromFile("Assets/Texture/Backgrounds/background.jpg")) {
         std::cerr << "Erro ao abrir a textura de fundo" << std::endl;
@@ -55,6 +68,9 @@ int main() {
     // Enemy
     std::vector<std::unique_ptr<Enemy>> enemies;
     std::vector<Projectile> enemiesProjectiles;
+
+    // Drops
+    std::vector<Drop> drops;
 
     // Clocks
     sf::Clock clock, spawnClock;
@@ -151,13 +167,43 @@ int main() {
                     (*it)->resetShootTime();
                 }
             }
-
+            
             // Enemy Dying
             for (auto it = enemies.begin(); it != enemies.end();) {
                 if ((*it)->checkHit(projectiles)) {
-                    it = enemies.erase(it);
+                    // Drop items when the enemy dies
+                    if (rand() % 2 == 1) { // if rand % 2 == 1, it will drop something
+                        if (rand() % 2 == 1) { // if rand % 2 == 1, the drop will be mana, otherwise, it will be life
+                            Drop drop(manaPotionSprite, (*it)->getPosition(), &heroi, DropType::manaPotion);
+                            drops.push_back(drop);
+                        } else {
+                            Drop drop(lifePotionSprite, (*it)->getPosition(), &heroi, DropType::lifePotion);
+                            drops.push_back(drop);
+                        }  
+                    }
+                    it = enemies.erase(it); // Remove enemy from the list
                 } else {
                     (*it)->move(window, heroi.getPosition());
+                    ++it;
+                }
+            }
+
+            // Drop collect and mana Update
+            for (auto it = drops.begin(); it != drops.end();) {
+                if (it->checkCollision(heroi.getSprite())) {
+                    if (it->getDropType() == DropType::manaPotion) {
+                        if (heroi.getMunicao() + 5 <= 50) {
+                            heroi.setMunicao(heroi.getMunicao() + 5); // Add 5 mana
+                        } else {
+                            heroi.setMunicao(50);
+                        }
+                    } else {
+                        if (heroi.getHP() < 100) {
+                            heroi.setHP(heroi.getHP() + 1); // Add 1 HP
+                        }
+                    }
+                    it = drops.erase(it); // Remove drop from the array
+                } else {
                     ++it;
                 }
             }
@@ -222,6 +268,9 @@ int main() {
             }
             for (const auto& enemy : enemies) {
                 enemy->draw(window);
+            }
+            for (auto& drop : drops) {
+                drop.showDrop(window);
             }
             base.getBaseHealthBar().showBar(window);
             window.display();
