@@ -4,7 +4,7 @@
 #include <cmath>
 #include <iostream>
 
-Heroi::Heroi(sf::Font font) : HP(100), Municao(50), speed(200.0f) {
+Heroi::Heroi(sf::Font font) : HP(50), Municao(50), speed(200.0f) {
     // Texture
     if (!texture.loadFromFile("Assets/Texture/Heroes/personagem.png")) {
         std::cerr << "Erro ao carregar a imagem" << std::endl;
@@ -87,4 +87,10 @@ sf::Vector2f Heroi::getPosition() const { return sprite.getPosition(); }
 
 sf::Vector2f Heroi::getTargetPosition() { return this->targetPosition; }
 
+sf::Sprite Heroi::getSprite() { return this->sprite; }
+
 void Heroi::setTargetPosition(sf::Vector2f target) { this->targetPosition = target; }
+
+void Heroi::setMunicao(int municao) { this->Municao = municao; }
+
+void Heroi::setHP(int life) { this->HP = life; }

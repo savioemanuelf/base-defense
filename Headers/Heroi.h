@@ -39,7 +39,10 @@ class Heroi {
     int getMunicao() const;
     sf::Vector2f getPosition() const;
     sf::Vector2f getTargetPosition();
+    sf::Sprite getSprite();
     // Setters
     void setTargetPosition(sf::Vector2f target);
+    void setMunicao(int municao);
+    void setHP(int life);
 };
 #endif
