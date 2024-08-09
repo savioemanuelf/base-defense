@@ -8,6 +8,7 @@
 #include "Headers/Heroi.h"
 #include "Headers/Menu.h"
 #include "Headers/Projectile.h"
+#include "Headers/Drop.h"
 
 int main() {
     // Window
