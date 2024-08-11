@@ -20,6 +20,7 @@ class Enemy {
     void draw(sf::RenderWindow& window);
     void move(sf::RenderWindow& window, sf::Vector2f player_position);
     bool checkHit(std::vector<Projectile>& projectiles);
+    void rotate(const sf::Vector2f& targetPosition);
     // Getters
     bool isDead();
     float shootTime();

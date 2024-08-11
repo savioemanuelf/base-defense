@@ -232,6 +232,11 @@ int main() {
                 projectile.update(dt);
             }
 
+            //Enemy rotation
+            for (auto& enemy : enemies) {
+                enemy->rotate(heroi.getPosition());
+            }
+
             // Enemy Projectiles Moving
             for (auto& projectile : enemiesProjectiles) {
                 projectile.update(dt);

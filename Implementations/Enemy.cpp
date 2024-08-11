@@ -47,6 +47,13 @@ Enemy::Enemy() : speed(1.0f), dead(false), size(50) {
     shootClock.restart();
 }
 
+void Enemy::rotate(const sf::Vector2f& targetPosition) {
+    float dx = targetPosition.x - rect.getPosition().x;
+    float dy = targetPosition.y - rect.getPosition().y;
+    float angle = std::atan2(dy, dx) * 180 / M_PI;
+    rect.setRotation(angle);
+}
+
 void Enemy::draw(sf::RenderWindow& window) { window.draw(rect); }
 
 void Enemy::move(sf::RenderWindow& window, sf::Vector2f player_position) {
