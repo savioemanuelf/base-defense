@@ -42,7 +42,7 @@ void Base::initializeHealthBar(sf::Window& window) {
 
 
 Base::~Base() {
-    // destrutor vazio
+    delete this->baseHealthBar;
 }
 
 void Base::showBase(sf::RenderWindow& window) const {
