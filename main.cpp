@@ -64,6 +64,8 @@ int main() {
     Heroi heroi(font);
     std::vector<Projectile> projectiles;
     sf::Vector2f targetPosition = heroi.getPosition();
+    heroi.initializeHealthBar(window);
+    heroi.initializeAmmoBar(window);
 
     // Enemy
     std::vector<std::unique_ptr<Enemy>> enemies;
@@ -281,6 +283,8 @@ int main() {
                 drop.showDrop(window);
             }
             base.getBaseHealthBar().showBar(window);
+            heroi.getBarHealth().showBar(window);
+            heroi.getBarAmmo().showBar(window);
             window.display();
         }
     }

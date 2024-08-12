@@ -36,6 +36,45 @@ Heroi::Heroi(sf::Font font) : HP(100), Municao(50), speed(200.0f) {
     ammoText.setPosition(10, 30);
 }
 
+Heroi::~Heroi() {
+    delete this->healthBar;
+    delete this->ammoBar;
+}
+
+void Heroi::initializeHealthBar(sf::Window& window){
+    int barHeight = 8;
+
+    int maxHealth = this->getHP();
+    int currentHealth = this->getHP();
+    
+    sf::Vector2f windowSize = sf::Vector2f(window.getSize());
+    sf::Vector2f size = sf::Vector2f(windowSize.x * 0.3f, barHeight);
+    sf::Vector2f pos = sf::Vector2f(0, 0); //
+    
+    sf::Color backgroundColor = sf::Color::Transparent; 
+    sf::Color color = sf::Color::Red;
+    sf::Color outlineColor = sf::Color::Red;
+    int thickness = 2;
+
+    this->healthBar = new Bar(pos, size, backgroundColor, color, outlineColor, thickness, currentHealth, maxHealth);
+}
+
+void Heroi::initializeAmmoBar(sf::Window& window){
+    int barHeight = 8;
+    int maxAmmo = this->getMunicao();
+    int currentAmmo = this->getMunicao();
+    sf::Vector2f windowSize = sf::Vector2f(window.getSize());
+    sf::Vector2f size = sf::Vector2f(windowSize.x * 0.3f, barHeight);
+    sf::Vector2f pos = sf::Vector2f(0, barHeight + 5);
+
+    sf::Color backgroundColor = sf::Color::Transparent;
+    sf::Color color = sf::Color::Blue;
+    sf::Color outlineColor = sf::Color::Blue;
+    int thickness = 2;
+
+    this->ammoBar = new Bar(pos, size, backgroundColor, color, outlineColor, thickness, currentAmmo, maxAmmo);
+}
+
 void Heroi::draw(sf::RenderWindow& window) {
     window.draw(sprite);
     hpText.setString("HP: " + std::to_string(HP));           // Atualizar sempre na tela
@@ -63,6 +102,7 @@ void Heroi::atirar(std::vector<Projectile>& projectiles, sf::Texture& projectile
         sf::Vector2f position = sprite.getPosition();
         sf::Vector2f direction = target - position;
         projectiles.emplace_back(projectileTexture, position, direction);
+        ammoBar->updateBar(Municao, sf::Color::Blue);
     }
 }
 
@@ -72,11 +112,17 @@ void Heroi::dano_tomado(std::vector<Projectile>& projectiles) {
         if (it->getBounds().intersects(sprite.getGlobalBounds())) {
             it = projectiles.erase(it);
             HP -= dano;
+            healthBar->updateBar(HP, sf::Color::Red);
             if (HP < 0) {
                 HP = 0;
             }
+            else if (HP == 0) {
+                std::cout << "Você morreu!" << std::endl;
+                healthBar->updateBar(HP, sf::Color::Red);
+            }
         } else {
             it++;
+            healthBar->updateBar(HP, sf::Color::Red);
         }
     }
 }

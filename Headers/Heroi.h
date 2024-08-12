@@ -5,7 +5,8 @@
 #include <SFML/Audio.hpp>
 #include <vector>
 
-#include "Projectile.h"
+#include "../Headers/Bar.h"
+#include "../Headers/Projectile.h"
 
 class Heroi {
    private:
@@ -13,6 +14,8 @@ class Heroi {
     int HP;
     int Municao;
     float speed;
+    Bar* healthBar;
+    Bar* ammoBar;
     sf::Vector2f targetPosition;
     sf::Texture texture;
     sf::Sprite sprite;
@@ -28,7 +31,12 @@ class Heroi {
    public:
     // Constructor
     Heroi(sf::Font font);
+
+    // Destructor
+    ~Heroi();
     // Functions
+    void initializeHealthBar(sf::Window& window);
+    void initializeAmmoBar(sf::Window& window);
     void andar(const sf::Vector2f& direction);
     void atirar(std::vector<Projectile>& projectiles, sf::Texture& projectileTexture, sf::Vector2f target);
     void dano_tomado(std::vector<Projectile>& projectiles);
@@ -40,9 +48,13 @@ class Heroi {
     sf::Vector2f getPosition() const;
     sf::Vector2f getTargetPosition();
     sf::Sprite getSprite();
+    Bar getBarHealth(){return *this->healthBar;}
+    Bar getBarAmmo(){return *this->ammoBar;}
     // Setters
     void setTargetPosition(sf::Vector2f target);
     void setMunicao(int municao);
     void setHP(int life);
+    void setHealthBar(Bar barH){*this->healthBar = barH;}
+    void setAmmoBar(Bar barM){*this->ammoBar = barM;}
 };
 #endif
