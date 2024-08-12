@@ -19,9 +19,6 @@ class Heroi {
     sf::Vector2f targetPosition;
     sf::Texture texture;
     sf::Sprite sprite;
-    sf::Font font;
-    sf::Text hpText;
-    sf::Text ammoText;
     float currentAngle;
     void playFireballSound();
     sf::SoundBuffer fireBallBuffer;

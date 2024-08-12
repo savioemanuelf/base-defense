@@ -23,17 +23,6 @@ Heroi::Heroi(sf::Font font) : HP(100), Municao(50), speed(200.0f) {
     sprite.setPosition(sf::VideoMode::getDesktopMode().width / 2, sf::VideoMode::getDesktopMode().height / 2);
     targetPosition = sprite.getPosition();
     sprite.setOrigin(sprite.getGlobalBounds().width / 2, sprite.getGlobalBounds().height / 2);
-
-    // Attributes Text
-    this->font = font;
-    hpText.setFont(this->font);
-    hpText.setCharacterSize(12);
-    hpText.setFillColor(sf::Color::Red);
-    ammoText.setFont(this->font);
-    ammoText.setCharacterSize(12);
-    ammoText.setFillColor(sf::Color::White);
-    hpText.setPosition(10, 10);
-    ammoText.setPosition(10, 30);
 }
 
 Heroi::~Heroi() {
@@ -77,10 +66,6 @@ void Heroi::initializeAmmoBar(sf::Window& window){
 
 void Heroi::draw(sf::RenderWindow& window) {
     window.draw(sprite);
-    hpText.setString("HP: " + std::to_string(HP));           // Atualizar sempre na tela
-    ammoText.setString("Ammo: " + std::to_string(Municao));  // Atualizar sempre na tela
-    window.draw(hpText);
-    window.draw(ammoText);
 }
 
 void Heroi::andar(const sf::Vector2f& direction) {  // Direção x e y
