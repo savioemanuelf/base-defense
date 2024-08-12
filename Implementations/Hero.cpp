@@ -35,3 +35,7 @@ void Hero::rotate(sf::Vector2f targetPosition) {
     float angle = std::atan2(direction.y, direction.x) * 180 / 3.14159265;
     sprite.setRotation(angle);
 }
+
+void Hero::shoot(std::vector<Projectile>& projectiles, sf::Vector2f target) {
+    projectiles.emplace_back(resources, sprite.getPosition(), target);
+}

@@ -2,6 +2,7 @@
 #define HERO_H
 
 #include "GameContext.h"
+#include "Projectile.h"
 
 class Hero {
    private:
@@ -20,6 +21,7 @@ class Hero {
     sf::Vector2f getTargetPosition() { return targetPosition; }
     void setTargetPosition(sf::Vector2f target);
     void rotate(sf::Vector2f targetPosition);
+    void shoot(std::vector<Projectile>& projectiles, sf::Vector2f target);
 };
 
 #endif

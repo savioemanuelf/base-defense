@@ -24,6 +24,7 @@ void AssetsManager::addHeroTexture(int id, std::string fileName) {
     auto texture = std::make_unique<sf::Texture>();
 
     if (texture->loadFromFile("Assets/Texture/Heroes/" + fileName)) {
+        texture->setSmooth(true);
         heroTextures[id] = std::move(texture);
     }
 }
@@ -32,6 +33,7 @@ void AssetsManager::addProjectileTexture(int id, std::string fileName) {
     auto texture = std::make_unique<sf::Texture>();
 
     if (texture->loadFromFile("Assets/Texture/Projectiles/" + fileName)) {
+        texture->setSmooth(true);
         projectilesTexture[id] = std::move(texture);
     }
 }

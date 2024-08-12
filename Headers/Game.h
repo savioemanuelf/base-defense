@@ -2,12 +2,14 @@
 #define GAME_H
 
 #include "Hero.h"
+#include "Projectile.h"
 #include "State.h"
 
 class Game : public State {
    private:
     StateType next;
     Hero player;
+    std::vector<Projectile> heroProjectiles;
 
    public:
     Game(GameContext& resources) : State(resources), next(StateType::Game), player(resources) { init(); }

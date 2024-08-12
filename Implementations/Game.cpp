@@ -11,6 +11,7 @@ void Game::init() {
             resources.assets->addHeroTexture(Heroes::bard, "bard.png");
             break;
     }
+    resources.assets->addProjectileTexture(Projectiles::fireball, "fireball.png");
     resources.window->setMouseCursor(sf::Cursor());
 
     player.init();
@@ -22,7 +23,10 @@ void Game::handleEvents(sf::Event& event) {
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::M)) {
                 next = StateType::Menu;
             }
-
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) {
+                player.shoot(heroProjectiles,
+                             resources.window->mapPixelToCoords(sf::Mouse::getPosition(*resources.window)));
+            }
             break;
         case sf::Event::MouseButtonPressed:
             if (sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
@@ -46,5 +50,8 @@ void Game::update(float dt) {
 void Game::render() {
     resources.window->clear();
     player.render();
+    for (auto& projectile : heroProjectiles) {
+        projectile.render();
+    }
     resources.window->display();
 }
