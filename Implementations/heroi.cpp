@@ -4,7 +4,7 @@
 #include <cmath>
 #include <iostream>
 
-Heroi::Heroi(sf::Font font) : HP(50), Municao(50), speed(200.0f) {
+Heroi::Heroi(sf::Font font) : HP(100), Municao(50), speed(200.0f) {
     // Texture
     if (!texture.loadFromFile("Assets/Texture/Heroes/personagem.png")) {
         std::cerr << "Erro ao carregar a imagem" << std::endl;
@@ -66,10 +66,18 @@ void Heroi::atirar(std::vector<Projectile>& projectiles, sf::Texture& projectile
     }
 }
 
-void Heroi::dano_tomado(int dano) {
-    HP -= dano;
-    if (HP < 0) {
-        HP = 0;
+void Heroi::dano_tomado(std::vector<Projectile>& projectiles) {
+    int dano = 10;
+    for (auto it = projectiles.begin(); it != projectiles.end();) {
+        if (it->getBounds().intersects(sprite.getGlobalBounds())) {
+            it = projectiles.erase(it);
+            HP -= dano;
+            if (HP < 0) {
+                HP = 0;
+            }
+        } else {
+            it++;
+        }
     }
 }
 

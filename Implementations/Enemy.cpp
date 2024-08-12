@@ -84,13 +84,13 @@ void Enemy::move(sf::RenderWindow& window, sf::Vector2f player_position) {
     }
 }
 
-bool Enemy::checkHit(std::vector<Projectile>& projectiles) {
+bool Enemy::checkHit(std::vector<Projectile>& projectiles) { //
     for (auto it = projectiles.begin(); it != projectiles.end();) {
         if ((*it).getBounds().intersects(rect.getGlobalBounds())) {
             it = projectiles.erase(it);
             return true;
         }
-        it++;
+        it++; 
     }
     return false;
 }

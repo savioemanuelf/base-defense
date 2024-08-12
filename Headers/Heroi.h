@@ -31,7 +31,7 @@ class Heroi {
     // Functions
     void andar(const sf::Vector2f& direction);
     void atirar(std::vector<Projectile>& projectiles, sf::Texture& projectileTexture, sf::Vector2f target);
-    void dano_tomado(int dano);
+    void dano_tomado(std::vector<Projectile>& projectiles);
     void draw(sf::RenderWindow& window);
     void rotate(const sf::Vector2f& targetPosition);
     // Getters

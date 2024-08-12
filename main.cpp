@@ -219,6 +219,9 @@ int main() {
             sf::Vector2f mousePostion = window.mapPixelToCoords(sf::Mouse::getPosition(window));
             heroi.rotate(mousePostion);
 
+            //Hero Damage Taken
+            heroi.dano_tomado(enemiesProjectiles);
+
             // Hero Moving
             sf::Vector2f direction = targetPosition - heroi.getPosition();
             float distance = std::sqrt(direction.x * direction.x + direction.y * direction.y);
