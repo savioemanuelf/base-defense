@@ -28,8 +28,18 @@ void AssetsManager::addHeroTexture(int id, std::string fileName) {
     }
 }
 
+void AssetsManager::addProjectileTexture(int id, std::string fileName) {
+    auto texture = std::make_unique<sf::Texture>();
+
+    if (texture->loadFromFile("Assets/Texture/Projectiles/" + fileName)) {
+        projectilesTexture[id] = std::move(texture);
+    }
+}
+
 sf::Font& AssetsManager::getFont(int id) { return *(fonts.at(id).get()); }
 
 sf::Cursor& AssetsManager::getCursor(int id) { return *(cursors.at(id).get()); }
 
 sf::Texture& AssetsManager::getHeroTexture(int id) { return *(heroTextures.at(id).get()); }
+
+sf::Texture& AssetsManager::getProjectileTexture(int id) { return *(projectilesTexture.at(id).get()); }
