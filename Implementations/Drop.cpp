@@ -4,7 +4,6 @@
 
 
 Drop::Drop(const sf::Sprite& dropSprite, const sf::Vector2f& position, Heroi *heroi, DropType type) : dropSprite(dropSprite), position(position), type(type) {    
-    this->dropSprite.setScale(0.2f, 0.2f);
     sf::FloatRect bounds = this->dropSprite.getLocalBounds();
     this->dropSprite.setOrigin(bounds.width / 2.0f, bounds.height / 2.0f);
     this->dropSprite.setPosition(position);
