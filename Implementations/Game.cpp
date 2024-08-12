@@ -45,6 +45,10 @@ void Game::update(float dt) {
     }
 
     player.rotate(resources.window->mapPixelToCoords(sf::Mouse::getPosition(*resources.window)));
+
+    for (auto& projectile : heroProjectiles) {
+        projectile.update(dt);
+    }
 }
 
 void Game::render() {

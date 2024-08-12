@@ -3,19 +3,19 @@
 #include <cmath>
 
 void Hero::init() {
-    sf::Texture& texture = resources.assets->getHeroTexture(Heroes::mage);
+    sf::Texture* texture = nullptr;
 
     switch (resources.heroType) {
         case Heroes::mage:
-            texture = resources.assets->getHeroTexture(Heroes::mage);
+            texture = &resources.assets->getHeroTexture(Heroes::mage);
             break;
         case Heroes::bard:
-            texture = resources.assets->getHeroTexture(Heroes::bard);
+            texture = &resources.assets->getHeroTexture(Heroes::bard);
             break;
     }
 
-    sprite.setTexture(texture);
-    sprite.setOrigin(texture.getSize().x / 2.0f, texture.getSize().y / 2.0f);
+    sprite.setTexture(*texture);
+    sprite.setOrigin((*texture).getSize().x / 2.0f, (*texture).getSize().y / 2.0f);
     sprite.setPosition(resources.window->getSize().x / 2.0f, resources.window->getSize().y / 2.0f);
 
     targetPosition = sprite.getPosition();
@@ -37,5 +37,7 @@ void Hero::rotate(sf::Vector2f targetPosition) {
 }
 
 void Hero::shoot(std::vector<Projectile>& projectiles, sf::Vector2f target) {
-    projectiles.emplace_back(resources, sprite.getPosition(), target);
+    sf::Vector2f spawnPosition = sprite.getPosition();
+    sf::Vector2f direction = target - spawnPosition;
+    projectiles.emplace_back(resources, spawnPosition, direction);
 }
