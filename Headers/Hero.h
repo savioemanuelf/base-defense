@@ -21,7 +21,7 @@ class Hero {
     sf::Vector2f getTargetPosition() { return targetPosition; }
     void setTargetPosition(sf::Vector2f target);
     void rotate(sf::Vector2f targetPosition);
-    void shoot(std::vector<Projectile>& projectiles, sf::Vector2f target);
+    void shoot(std::vector<std::unique_ptr<Projectile>>& projectiles, sf::Vector2f target);
 };
 
 #endif

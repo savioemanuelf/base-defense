@@ -36,8 +36,8 @@ void Hero::rotate(sf::Vector2f targetPosition) {
     sprite.setRotation(angle);
 }
 
-void Hero::shoot(std::vector<Projectile>& projectiles, sf::Vector2f target) {
+void Hero::shoot(std::vector<std::unique_ptr<Projectile>>& projectiles, sf::Vector2f target) {
     sf::Vector2f spawnPosition = sprite.getPosition();
     sf::Vector2f direction = target - spawnPosition;
-    projectiles.emplace_back(resources, spawnPosition, direction);
+    projectiles.emplace_back(std::make_unique<Projectile>(resources, spawnPosition, direction));
 }

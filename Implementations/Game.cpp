@@ -46,8 +46,13 @@ void Game::update(float dt) {
 
     player.rotate(resources.window->mapPixelToCoords(sf::Mouse::getPosition(*resources.window)));
 
-    for (auto& projectile : heroProjectiles) {
-        projectile.update(dt);
+    for (auto it = heroProjectiles.begin(); it != heroProjectiles.end();) {
+        if ((*it)->isOutOfRange()) {
+            it = heroProjectiles.erase(it);
+        } else {
+            (*it)->update(dt);
+            ++it;
+        }
     }
 }
 
@@ -55,7 +60,7 @@ void Game::render() {
     resources.window->clear();
     player.render();
     for (auto& projectile : heroProjectiles) {
-        projectile.render();
+        projectile->render();
     }
     resources.window->display();
 }

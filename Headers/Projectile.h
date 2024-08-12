@@ -11,6 +11,9 @@ class Projectile {
     sf::Sprite sprite;
     float speed;
     sf::Vector2f velocity;
+    bool outOfRange;
+    float maxRange;
+    sf::Vector2f initialPosition;
 
    public:
     Projectile(GameContext& r, sf::Vector2f sp, sf::Vector2f t) : resources(r) { init(sp, t); }
@@ -18,6 +21,7 @@ class Projectile {
     void render();
     void update(float dt);
     void rotate(sf::Vector2f direction);
+    bool isOutOfRange();
 };
 
 #endif

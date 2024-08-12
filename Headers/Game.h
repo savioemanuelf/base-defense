@@ -9,7 +9,7 @@ class Game : public State {
    private:
     StateType next;
     Hero player;
-    std::vector<Projectile> heroProjectiles;
+    std::vector<std::unique_ptr<Projectile>> heroProjectiles;
 
    public:
     Game(GameContext& resources) : State(resources), next(StateType::Game), player(resources) { init(); }
