@@ -15,6 +15,7 @@ class Menu : public State {
    public:
     // Constructor
     Menu(GameContext& resources) : State(resources), next(StateType::Menu) { init(); }
+    ~Menu() override {}
     // Virtual Methods
     void init() override;
     void handleEvents(sf::Event& event) override;

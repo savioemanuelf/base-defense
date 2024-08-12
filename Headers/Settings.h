@@ -13,6 +13,7 @@ class Settings : public State {
 
    public:
     Settings(GameContext& resources) : State(resources), next(StateType::Settings) { init(); }
+    ~Settings() override {}
     void init() override;
     void handleEvents(sf::Event& event) override;
     void update(float dt) override;

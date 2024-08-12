@@ -13,6 +13,7 @@ class Game : public State {
 
    public:
     Game(GameContext& resources) : State(resources), next(StateType::Game), player(resources) { init(); }
+    ~Game() override {}
     void init() override;
     void handleEvents(sf::Event& event) override;
     void update(float dt) override;

@@ -11,6 +11,7 @@ class State {
 
    public:
     State(GameContext& r) : resources(r) {}
+    virtual ~State() = default;
     virtual void init() = 0;
     virtual void handleEvents(sf::Event& event) = 0;
     virtual void update(float dt) = 0;
