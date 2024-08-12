@@ -1,24 +1,29 @@
-#include <SFML/Graphics.hpp>
+#ifndef MENU_H
+#define MENU_H
 
-class Menu {
+#include "State.h"
+
+class Menu : public State {
    private:
-    // Attributes
-    sf::Text title, play, exit;
-    sf::Font font;
-    bool visible;
-    // Functions
-    void initMenu();
+    // Text Attributes
+    sf::Text title, play, settings, exit;
+    sf::Color primary, secondary;
+    int outlineSize;
+    // Next State Selected
+    StateType next;
 
    public:
     // Constructor
-    Menu(sf::Font font);
-    // Functions
-    void draw(sf::RenderWindow& window);
-    void resize(sf::RenderWindow& window);
-    // Getters
-    bool isVisible();
-    sf::FloatRect getExitBounds();
-    sf::FloatRect getPlayBounds();
-    // Setters
-    void setInvisible();
+    Menu(GameContext& resources) : State(resources), next(StateType::Menu) { init(); }
+    // Virtual Methods
+    void init() override;
+    void handleEvents(sf::Event& event) override;
+    void update(float dt) override;
+    void render() override;
+    virtual StateType getType() { return StateType::Menu; }
+    virtual StateType nextState() { return next; }
+    // Funcions
+    void resize();
 };
+
+#endif

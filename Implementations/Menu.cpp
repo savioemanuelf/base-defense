@@ -1,73 +1,93 @@
 #include "../Headers/Menu.h"
 
-#include <iostream>
+void Menu::init() {
+    primary = sf::Color(166, 166, 166);
+    secondary = sf::Color::White;
+    outlineSize = 2;
+    // Title
+    title.setFont(resources.assets->getFont(arial));
+    title.setString("Base Defense");
+    title.setFillColor(primary);
+    title.setOutlineThickness(outlineSize);
+    title.setOutlineColor(secondary);
+    // Play
+    play.setFont(resources.assets->getFont(arial));
+    play.setString("Jogar");
+    play.setFillColor(primary);
+    play.setOutlineThickness(outlineSize);
+    play.setOutlineColor(secondary);
+    // Settings
+    settings.setFont(resources.assets->getFont(arial));
+    settings.setString("Opcoes");
+    settings.setFillColor(primary);
+    settings.setOutlineThickness(outlineSize);
+    settings.setOutlineColor(secondary);
+    // Exit
+    exit.setFont(resources.assets->getFont(arial));
+    exit.setString("Sair");
+    exit.setFillColor(primary);
+    exit.setOutlineThickness(outlineSize);
+    exit.setOutlineColor(secondary);
 
-void Menu::initMenu() {
-    this->visible = true;
-
-    // Colors
-    sf::Color primaryColor(166, 166, 166);
-    sf::Color secondaryColor(sf::Color::White);
-
-    // Sizes
-    int outlineSize = 2;
-    int windowWidth = sf::VideoMode::getDesktopMode().width;
-
-    // Texts
-    this->title.setFont(font);
-    this->title.setString("Base Defense");
-    this->title.setCharacterSize(100);
-    this->title.setOutlineThickness(outlineSize);
-    this->title.setFillColor(primaryColor);
-    this->title.setOutlineColor(secondaryColor);
-    this->title.setPosition((windowWidth - this->title.getGlobalBounds().width) / 2, 50);
-    this->play.setFont(font);
-    this->play.setString("Jogar");
-    this->play.setCharacterSize(60);
-    this->play.setOutlineThickness(outlineSize);
-    this->play.setFillColor(primaryColor);
-    this->play.setOutlineColor(secondaryColor);
-    this->play.setPosition((windowWidth - this->play.getGlobalBounds().width) / 2, 300);
-    this->exit.setFont(font);
-    this->exit.setString("Sair");
-    this->exit.setCharacterSize(60);
-    this->exit.setOutlineThickness(outlineSize);
-    this->exit.setFillColor(primaryColor);
-    this->exit.setOutlineColor(secondaryColor);
-    this->exit.setPosition((windowWidth - this->exit.getGlobalBounds().width) / 2, 450);
+    resize();
 }
 
-void Menu::draw(sf::RenderWindow& window) {
-    window.draw(this->title);
-    window.draw(this->play);
-    window.draw(this->exit);
+void Menu::handleEvents(sf::Event& event) {
+    switch (event.type) {
+        case sf::Event::MouseButtonPressed:
+            switch (event.mouseButton.button) {
+                case sf::Mouse::Left:
+                    if (play.getGlobalBounds().contains(
+                            static_cast<sf::Vector2f>(sf::Mouse::getPosition(*resources.window)))) {
+                        next = StateType::Game;
+                    }
+                    if (settings.getGlobalBounds().contains(
+                            static_cast<sf::Vector2f>(sf::Mouse::getPosition(*resources.window)))) {
+                        next = StateType::Settings;
+                    }
+                    if (exit.getGlobalBounds().contains(
+                            static_cast<sf::Vector2f>(sf::Mouse::getPosition(*resources.window)))) {
+                        resources.window->close();
+                    }
+                    break;
+            }
+            break;
+    }
 }
 
-void Menu::resize(sf::RenderWindow& window) {
-    // Title Resize
-    this->title.setCharacterSize(window.getSize().y / 10);
-    this->title.setPosition((window.getSize().x - this->title.getGlobalBounds().width) / 2,
-                            (window.getSize().y - this->title.getGlobalBounds().height) / 50);
-
-    // Play Resize
-    this->play.setCharacterSize(window.getSize().y / 16);
-    this->play.setPosition((window.getSize().x - this->play.getGlobalBounds().width) / 2,
-                           (window.getSize().y - this->play.getGlobalBounds().height) / 3.5f);
-    // Exit Resize
-    this->exit.setCharacterSize(window.getSize().y / 16);
-    this->exit.setPosition((window.getSize().x - this->exit.getGlobalBounds().width) / 2,
-                           (window.getSize().y - this->exit.getGlobalBounds().height) / 2.3f);
+void Menu::update(float dt) {
+    if (play.getGlobalBounds().contains(static_cast<sf::Vector2f>(sf::Mouse::getPosition(*resources.window))) ||
+        settings.getGlobalBounds().contains(static_cast<sf::Vector2f>(sf::Mouse::getPosition(*resources.window))) ||
+        exit.getGlobalBounds().contains(static_cast<sf::Vector2f>(sf::Mouse::getPosition(*resources.window)))) {
+        resources.window->setMouseCursor(resources.assets->getCursor(Cursors::hand));
+    } else {
+        resources.window->setMouseCursor(sf::Cursor());
+    }
 }
 
-Menu::Menu(sf::Font font) {
-    this->font = font;
-    this->initMenu();
+void Menu::render() {
+    resources.window->clear();
+    resources.window->draw(title);
+    resources.window->draw(play);
+    resources.window->draw(settings);
+    resources.window->draw(exit);
+    resources.window->display();
 }
 
-bool Menu::isVisible() { return visible; }
+void Menu::resize() {
+    float width = resources.window->getSize().x;
+    float height = resources.window->getSize().y;
 
-sf::FloatRect Menu::getPlayBounds() { return this->play.getGlobalBounds(); }
+    title.setCharacterSize(height / 10);
+    title.setPosition((width - title.getGlobalBounds().width) / 2, (height - title.getGlobalBounds().height) / 15);
 
-sf::FloatRect Menu::getExitBounds() { return this->exit.getGlobalBounds(); }
+    play.setCharacterSize(height / 14);
+    play.setPosition((width - play.getGlobalBounds().width) / 2, (height - play.getGlobalBounds().height) / 3);
 
-void Menu::setInvisible() { this->visible = false; }
+    settings.setCharacterSize(height / 14);
+    settings.setPosition((width - settings.getGlobalBounds().width) / 2,
+                         (height - settings.getGlobalBounds().height) / 2);
+
+    exit.setCharacterSize(height / 14);
+    exit.setPosition((width - exit.getGlobalBounds().width) / 2, (height - exit.getGlobalBounds().height) / 1.5);
+}
