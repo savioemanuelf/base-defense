@@ -24,7 +24,14 @@ void Hero::init() {
     ammo = 50;
 }
 
-void Hero::walk(const sf::Vector2f& direction) { sprite.move(direction * speed); }
+void Hero::walk(float dt) {
+    sf::Vector2f direction = targetPosition - sprite.getPosition();
+    float distance = std::sqrt(direction.x * direction.x + direction.y * direction.y);
+    if (distance > 1.0f) {
+        direction /= distance;
+        sprite.move(direction * speed * dt);
+    }
+}
 
 void Hero::render() { resources.window->draw(sprite); }
 

@@ -15,7 +15,7 @@ class Hero {
    public:
     Hero(GameContext& r) : resources(r) {}
     void init();
-    void walk(const sf::Vector2f& direction);
+    void walk(float dt);
     void render();
     sf::Vector2f getPosition() { return sprite.getPosition(); }
     sf::Vector2f getTargetPosition() { return targetPosition; }

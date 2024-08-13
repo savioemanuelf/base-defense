@@ -38,18 +38,12 @@ void Game::handleEvents(sf::Event& event) {
 }
 
 void Game::update(float dt) {
-    if (enemySpawnClock.getElapsedTime().asSeconds() >= 2) {
+    if (enemySpawnClock.getElapsedTime().asSeconds() >= 5) {
         enemies.push_back(std::make_unique<Enemy>(resources));
         enemySpawnClock.restart();
     }
 
-    sf::Vector2f direction = player.getTargetPosition() - player.getPosition();
-    float distance = std::sqrt(direction.x * direction.x + direction.y * direction.y);
-    if (distance > 1.0f) {
-        direction /= distance;
-        player.walk(direction * dt);
-    }
-
+    player.walk(dt);
     player.rotate(resources.window->mapPixelToCoords(sf::Mouse::getPosition(*resources.window)));
 
     for (auto it = heroProjectiles.begin(); it != heroProjectiles.end();) {

@@ -45,7 +45,7 @@ void Enemy::init() {
     sprite.setTexture(texture);
     sprite.setOrigin(texture.getSize().x / 2.0f, texture.getSize().y / 2.0f);
     sprite.setPosition(randomPositionOutside());
-    speed = 150.0f;
+    speed = 130.0f;
 }
 
 void Enemy::move(sf::Vector2f targetPosition, float dt) {
