@@ -18,8 +18,13 @@ int main() {
 
     // Assets Loading
     sf::Texture projectileTexture;
-    if (!projectileTexture.loadFromFile("Assets/Texture/Projectiles/projetil.png")) {
-        std::cerr << "Erro ao abrir a textura do projétil" << std::endl;
+    if (!projectileTexture.loadFromFile("Assets/Texture/Projectiles/bluefireball.png")) {
+        std::cerr << "Erro ao abrir a textura do projétil do mago" << std::endl;
+        return -1;
+    }
+    sf::Texture enemyProjectileTexture;
+    if (!enemyProjectileTexture.loadFromFile("Assets/Texture/Projectiles/fireball.png")) {
+        std::cerr << "Erro ao abrir a textura do projétil do inimigo" << std::endl;
         return -1;
     }
     sf::Texture lifePotionTexture;
@@ -165,7 +170,7 @@ int main() {
                     sf::Vector2f position = (*it)->getPosition();
                     sf::Vector2f direction =
                         window.mapPixelToCoords(static_cast<sf::Vector2i>(heroi.getPosition())) - position;
-                    enemiesProjectiles.emplace_back(projectileTexture, position, direction);
+                    enemiesProjectiles.emplace_back(enemyProjectileTexture, position, direction);
                     (*it)->resetShootTime();
                 }
             }

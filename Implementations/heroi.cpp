@@ -6,7 +6,7 @@
 
 Heroi::Heroi(sf::Font font) : HP(100), Municao(50), speed(200.0f) {
     // Texture
-    if (!texture.loadFromFile("Assets/Texture/Heroes/personagem.png")) {
+    if (!texture.loadFromFile("Assets/Texture/Heroes/mage.png")) {
         std::cerr << "Erro ao carregar a imagem" << std::endl;
     }
     // Sound
