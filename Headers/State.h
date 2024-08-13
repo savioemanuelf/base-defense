@@ -3,7 +3,7 @@
 
 #include "GameContext.h"
 
-enum class StateType { Menu, Settings, Game };
+enum class StateType { Menu, Settings, Game, Restart };
 
 class State {
    protected:

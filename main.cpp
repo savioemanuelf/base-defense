@@ -38,6 +38,9 @@ int main() {
                     case StateType::Game:
                         StateManager.changeState(std::make_unique<Game>(resources));
                         break;
+                    case StateType::Restart:
+                        StateManager.changeState(std::make_unique<Game>(resources));
+                        break;
                 }
             }
         }
