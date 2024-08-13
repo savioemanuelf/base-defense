@@ -22,6 +22,7 @@ void Hero::init() {
 
     speed = 200.0f;
     ammo = 50;
+    hp = 100;
 }
 
 void Hero::walk(float dt) {
@@ -44,11 +45,33 @@ void Hero::rotate(sf::Vector2f targetPosition) {
 }
 
 void Hero::shoot(std::vector<std::unique_ptr<Projectile>>& projectiles, sf::Vector2f target) {
-    if (ammo) {
-        ammo--;
-
-        sf::Vector2f spawnPosition = sprite.getPosition();
-        sf::Vector2f direction = target - spawnPosition;
-        projectiles.emplace_back(std::make_unique<Projectile>(resources, spawnPosition, direction));
+    if (hp) {
+        if (ammo) {
+            ammo--;
+            sf::Vector2f spawnPosition = sprite.getPosition();
+            sf::Vector2f direction = target - spawnPosition;
+            projectiles.emplace_back(std::make_unique<Projectile>(resources, spawnPosition, direction));
+        }
     }
+}
+
+void Hero::checkHit(std::vector<std::unique_ptr<Projectile>>& projectiles) {
+    for (auto it = projectiles.begin(); it != projectiles.end();) {
+        if ((*it)->getBounds().intersects(sprite.getGlobalBounds())) {
+            it = projectiles.erase(it);
+            if (hp) {
+                hp -= 50;
+            }
+
+        } else {
+            ++it;
+        }
+    }
+}
+
+bool Hero::isDead() {
+    if (hp) {
+        return false;
+    }
+    return true;
 }

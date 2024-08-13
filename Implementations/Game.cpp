@@ -99,8 +99,11 @@ void Game::update(float dt) {
             enemySpawnClock.restart();
         }
 
-        player.walk(dt);
-        player.rotate(resources.window->mapPixelToCoords(sf::Mouse::getPosition(*resources.window)));
+        if (!player.isDead()) {
+            player.walk(dt);
+            player.rotate(resources.window->mapPixelToCoords(sf::Mouse::getPosition(*resources.window)));
+            player.checkHit(enemiesProjectiles);
+        }
 
         for (auto it = enemiesProjectiles.begin(); it != enemiesProjectiles.end();) {
             if ((*it)->isOutOfRange()) {
@@ -131,6 +134,7 @@ void Game::update(float dt) {
                 ++it;
             }
         }
+
     } else {
         if (back.getGlobalBounds().contains(static_cast<sf::Vector2f>(sf::Mouse::getPosition(*resources.window))) ||
             restart.getGlobalBounds().contains(static_cast<sf::Vector2f>(sf::Mouse::getPosition(*resources.window))) ||
