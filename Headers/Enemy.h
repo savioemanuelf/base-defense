@@ -4,12 +4,14 @@
 #include <SFML/Graphics.hpp>
 
 #include "GameContext.h"
+#include "Projectile.h"
 
 class Enemy {
    private:
     GameContext& resources;
     sf::Sprite sprite;
     float speed;
+    int hp;
 
     sf::Vector2f randomPositionOutside();
 
@@ -19,6 +21,8 @@ class Enemy {
     void move(sf::Vector2f targetPosition, float dt);
     void render();
     void rotate(sf::Vector2f targetPosition);
+    void checkHit(std::vector<std::unique_ptr<Projectile>>& projectiles);
+    bool isDead();
 };
 
 #endif

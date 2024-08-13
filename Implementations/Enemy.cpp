@@ -46,6 +46,7 @@ void Enemy::init() {
     sprite.setOrigin(texture.getSize().x / 2.0f, texture.getSize().y / 2.0f);
     sprite.setPosition(randomPositionOutside());
     speed = 130.0f;
+    hp = 10;
 }
 
 void Enemy::move(sf::Vector2f targetPosition, float dt) {
@@ -78,4 +79,22 @@ void Enemy::rotate(sf::Vector2f targetPosition) {
     float dy = targetPosition.y - sprite.getPosition().y;
     float angle = std::atan2(dy, dx) * 180 / M_PI;
     sprite.setRotation(angle);
+}
+
+void Enemy::checkHit(std::vector<std::unique_ptr<Projectile>>& projectiles) {
+    for (auto it = projectiles.begin(); it != projectiles.end();) {
+        if ((*it)->getBounds().intersects(sprite.getGlobalBounds())) {
+            it = projectiles.erase(it);
+            hp = 0;
+        } else {
+            ++it;
+        }
+    }
+}
+
+bool Enemy::isDead() {
+    if (hp) {
+        return false;
+    }
+    return true;
 }

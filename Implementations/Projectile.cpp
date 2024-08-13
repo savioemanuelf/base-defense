@@ -39,3 +39,4 @@ void Projectile::rotate(sf::Vector2f direction) {
 }
 
 bool Projectile::isOutOfRange() { return outOfRange; }
+sf::FloatRect Projectile::getBounds() { return sprite.getGlobalBounds(); }

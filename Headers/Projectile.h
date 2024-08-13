@@ -22,6 +22,7 @@ class Projectile {
     void update(float dt);
     void rotate(sf::Vector2f direction);
     bool isOutOfRange();
+    sf::FloatRect getBounds();
 };
 
 #endif

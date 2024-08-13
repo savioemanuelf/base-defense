@@ -112,9 +112,14 @@ void Game::update(float dt) {
         }
 
         for (auto it = enemies.begin(); it != enemies.end();) {
-            (*it)->move(player.getPosition(), dt);
-            (*it)->rotate(player.getPosition());
-            ++it;
+            (*it)->checkHit(heroProjectiles);
+            if ((*it)->isDead()) {
+                it = enemies.erase(it);
+            } else {
+                (*it)->move(player.getPosition(), dt);
+                (*it)->rotate(player.getPosition());
+                ++it;
+            }
         }
     } else {
         if (back.getGlobalBounds().contains(static_cast<sf::Vector2f>(sf::Mouse::getPosition(*resources.window))) ||
