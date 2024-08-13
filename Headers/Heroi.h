@@ -23,12 +23,9 @@ class Heroi {
     void playFireballSound();
     sf::SoundBuffer fireBallBuffer;
     std::vector<sf::Sound> fireBallSounds;
-    
-
    public:
     // Constructor
     Heroi(sf::Font font);
-
     // Destructor
     ~Heroi();
     // Functions
@@ -38,6 +35,8 @@ class Heroi {
     void atirar(std::vector<Projectile>& projectiles, sf::Texture& projectileTexture, sf::Vector2f target);
     void dano_tomado(std::vector<Projectile>& projectiles);
     void draw(sf::RenderWindow& window);
+    void restoreAmmo(int ammo);
+    void heroRegen(int regen);
     void rotate(const sf::Vector2f& targetPosition);
     // Getters
     int getHP() const;

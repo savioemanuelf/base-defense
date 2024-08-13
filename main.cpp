@@ -195,19 +195,14 @@ int main() {
                 }
             }
 
-            // Drop collect and mana Update
+            // Drop collect and status update
             for (auto it = drops.begin(); it != drops.end();) {
                 if (it->checkCollision(heroi.getSprite())) {
                     if (it->getDropType() == DropType::manaPotion) {
-                        if (heroi.getMunicao() + 5 <= 50) {
-                            heroi.setMunicao(heroi.getMunicao() + 5); // Add 5 mana
-                        } else {
-                            heroi.setMunicao(50);
-                        }
+                        heroi.restoreAmmo(5);
+                        heroi.getBarAmmo().updateBar(heroi.getMunicao(), sf::Color::Blue);
                     } else {
-                        if (heroi.getHP() < 100) {
-                            heroi.setHP(heroi.getHP() + 1); // Add 1 HP
-                        }
+                        heroi.heroRegen(1);
                     }
                     it = drops.erase(it); // Remove drop from the array
                 } else {

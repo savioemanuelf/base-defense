@@ -112,6 +112,21 @@ void Heroi::dano_tomado(std::vector<Projectile>& projectiles) {
     }
 }
 
+void Heroi::heroRegen(int regen) {
+    if (this->getHP() < 100) {
+        this->setHP(this->getHP() + regen);
+    }
+}
+
+void Heroi::restoreAmmo(int ammo) {
+    if(this->getMunicao() + ammo <= 50) {
+        this->setMunicao(this->getMunicao() + ammo);
+    } else {
+        this->setMunicao(50);
+    }
+    this->ammoBar->updateBar(Municao, sf::Color::Blue);
+}
+
 void Heroi::rotate(const sf::Vector2f& targetPosition) {
     sf::Vector2f direction = targetPosition - sprite.getPosition();
     float angle = std::atan2(direction.y, direction.x) * 180 / 3.14159265;
