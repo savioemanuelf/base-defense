@@ -21,7 +21,7 @@ void Hero::init() {
     targetPosition = sprite.getPosition();
 
     speed = 200.0f;
-    mana = 50;
+    ammo = 50;
 }
 
 void Hero::walk(const sf::Vector2f& direction) { sprite.move(direction * speed); }
@@ -37,7 +37,11 @@ void Hero::rotate(sf::Vector2f targetPosition) {
 }
 
 void Hero::shoot(std::vector<std::unique_ptr<Projectile>>& projectiles, sf::Vector2f target) {
-    sf::Vector2f spawnPosition = sprite.getPosition();
-    sf::Vector2f direction = target - spawnPosition;
-    projectiles.emplace_back(std::make_unique<Projectile>(resources, spawnPosition, direction));
+    if (ammo) {
+        ammo--;
+
+        sf::Vector2f spawnPosition = sprite.getPosition();
+        sf::Vector2f direction = target - spawnPosition;
+        projectiles.emplace_back(std::make_unique<Projectile>(resources, spawnPosition, direction));
+    }
 }

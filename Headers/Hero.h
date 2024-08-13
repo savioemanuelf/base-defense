@@ -10,7 +10,7 @@ class Hero {
     sf::Sprite sprite;
     sf::Vector2f targetPosition;
     float speed;
-    int mana;
+    int ammo;
 
    public:
     Hero(GameContext& r) : resources(r) {}
