@@ -12,6 +12,7 @@ void Game::init() {
             break;
     }
     resources.assets->addProjectileTexture(Projectiles::fireball, "fireball.png");
+    resources.assets->addEnemyTexture(Enemies::goblin, "goblin.png");
     resources.window->setMouseCursor(sf::Cursor());
 
     player.init();
@@ -37,6 +38,11 @@ void Game::handleEvents(sf::Event& event) {
 }
 
 void Game::update(float dt) {
+    if (enemySpawnClock.getElapsedTime().asSeconds() >= 2) {
+        enemies.push_back(std::make_unique<Enemy>(resources));
+        enemySpawnClock.restart();
+    }
+
     sf::Vector2f direction = player.getTargetPosition() - player.getPosition();
     float distance = std::sqrt(direction.x * direction.x + direction.y * direction.y);
     if (distance > 1.0f) {
@@ -54,13 +60,24 @@ void Game::update(float dt) {
             ++it;
         }
     }
+
+    for (auto it = enemies.begin(); it != enemies.end();) {
+        (*it)->move(player.getPosition(), dt);
+        (*it)->rotate(player.getPosition());
+        ++it;
+    }
 }
 
 void Game::render() {
     resources.window->clear();
+
     player.render();
     for (auto& projectile : heroProjectiles) {
         projectile->render();
     }
+    for (auto& enemy : enemies) {
+        enemy->render();
+    }
+
     resources.window->display();
 }

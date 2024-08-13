@@ -10,6 +10,7 @@ enum Fonts { arial };
 enum Cursors { hand };
 enum Heroes { mage, ranger, bard };
 enum Projectiles { fireball };
+enum Enemies { goblin };
 
 struct GameContext {
     std::unique_ptr<sf::RenderWindow> window;
