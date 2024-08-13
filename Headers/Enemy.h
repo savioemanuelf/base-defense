@@ -12,6 +12,7 @@ class Enemy {
     sf::Sprite sprite;
     float speed;
     int hp;
+    sf::Clock shootCooldown;
 
     sf::Vector2f randomPositionOutside();
 
@@ -23,6 +24,7 @@ class Enemy {
     void rotate(sf::Vector2f targetPosition);
     void checkHit(std::vector<std::unique_ptr<Projectile>>& projectiles);
     bool isDead();
+    void shoot(std::vector<std::unique_ptr<Projectile>>& projectiles, sf::Vector2f target);
 };
 
 #endif

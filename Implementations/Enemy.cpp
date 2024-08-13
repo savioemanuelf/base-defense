@@ -98,3 +98,11 @@ bool Enemy::isDead() {
     }
     return true;
 }
+void Enemy::shoot(std::vector<std::unique_ptr<Projectile>>& projectiles, sf::Vector2f target) {
+    if (shootCooldown.getElapsedTime().asSeconds() >= 2) {
+        sf::Vector2f spawnPosition = sprite.getPosition();
+        sf::Vector2f direction = target - spawnPosition;
+        projectiles.emplace_back(std::make_unique<Projectile>(resources, spawnPosition, direction));
+        shootCooldown.restart();
+    }
+}

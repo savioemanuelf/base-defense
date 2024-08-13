@@ -11,6 +11,7 @@ class Game : public State {
     StateType next;
     Hero player;
     std::vector<std::unique_ptr<Projectile>> heroProjectiles;
+    std::vector<std::unique_ptr<Projectile>> enemiesProjectiles;
     std::vector<std::unique_ptr<Enemy>> enemies;
     sf::Clock enemySpawnClock;
     sf::Text pause, back, restart, menu;

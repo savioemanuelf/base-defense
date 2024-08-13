@@ -102,6 +102,15 @@ void Game::update(float dt) {
         player.walk(dt);
         player.rotate(resources.window->mapPixelToCoords(sf::Mouse::getPosition(*resources.window)));
 
+        for (auto it = enemiesProjectiles.begin(); it != enemiesProjectiles.end();) {
+            if ((*it)->isOutOfRange()) {
+                it = enemiesProjectiles.erase(it);
+            } else {
+                (*it)->update(dt);
+                ++it;
+            }
+        }
+
         for (auto it = heroProjectiles.begin(); it != heroProjectiles.end();) {
             if ((*it)->isOutOfRange()) {
                 it = heroProjectiles.erase(it);
@@ -118,6 +127,7 @@ void Game::update(float dt) {
             } else {
                 (*it)->move(player.getPosition(), dt);
                 (*it)->rotate(player.getPosition());
+                (*it)->shoot(enemiesProjectiles, player.getPosition());
                 ++it;
             }
         }
@@ -137,6 +147,9 @@ void Game::render() {
 
     player.render();
     for (auto& projectile : heroProjectiles) {
+        projectile->render();
+    }
+    for (auto& projectile : enemiesProjectiles) {
         projectile->render();
     }
     for (auto& enemy : enemies) {
