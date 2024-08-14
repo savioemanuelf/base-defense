@@ -27,6 +27,8 @@ int main() {
         std::cerr << "Erro ao abrir a textura do projétil do inimigo" << std::endl;
         return -1;
     }
+    sf::Sprite enemyProjectileSprite(enemyProjectileTexture);
+
     sf::Texture lifePotionTexture;
     if(!lifePotionTexture.loadFromFile("Assets/Texture/Drops/life-potion.png")) {
         std::cerr << "Erro ao carregar textura da poção de vida" << std::endl;
@@ -249,9 +251,12 @@ int main() {
 
             // Base Collision
             for (auto it = enemiesProjectiles.begin(); it != enemiesProjectiles.end();) {
-                // corrigir para tamanho do projétil (está em 25x25)
-                sf::FloatRect enemyProjectileBounds(it->getPosition(), sf::Vector2f(25, 25));
-                if (base.checkCollision(it->getPosition(), sf::Vector2f(25, 25))) {
+                sf::FloatRect enemyProjectileBoundsRect = enemyProjectileSprite.getGlobalBounds();
+                sf::Vector2f projectileSize = sf::Vector2f(enemyProjectileBoundsRect.width, enemyProjectileBoundsRect.height);
+
+                sf::FloatRect enemyProjectileBounds(it->getPosition(), projectileSize);
+
+                if (base.checkCollision(it->getPosition(), projectileSize)) {
                     base.damage(10);                    // aplicar dano à base
                     it = enemiesProjectiles.erase(it);  // remover projétil da lista
                 } else {
