@@ -37,8 +37,8 @@ void Heroi::initializeHealthBar(sf::Window& window){
     int currentHealth = this->getHP();
     
     sf::Vector2f windowSize = sf::Vector2f(window.getSize());
-    sf::Vector2f size = sf::Vector2f(windowSize.x * 0.3f, barHeight);
-    sf::Vector2f pos = sf::Vector2f(0, 0); //
+    sf::Vector2f size = sf::Vector2f(windowSize.x * 0.2f, barHeight);
+    sf::Vector2f pos = sf::Vector2f(0, 5); //
     
     sf::Color backgroundColor = sf::Color::Transparent; 
     sf::Color color = sf::Color::Red;
@@ -53,8 +53,8 @@ void Heroi::initializeAmmoBar(sf::Window& window){
     int maxAmmo = this->getMunicao();
     int currentAmmo = this->getMunicao();
     sf::Vector2f windowSize = sf::Vector2f(window.getSize());
-    sf::Vector2f size = sf::Vector2f(windowSize.x * 0.3f, barHeight);
-    sf::Vector2f pos = sf::Vector2f(0, barHeight + 5);
+    sf::Vector2f size = sf::Vector2f(windowSize.x * 0.2f, barHeight);
+    sf::Vector2f pos = sf::Vector2f(0, barHeight + 10);
 
     sf::Color backgroundColor = sf::Color::Transparent;
     sf::Color color = sf::Color::Blue;
@@ -69,7 +69,9 @@ void Heroi::draw(sf::RenderWindow& window) {
 }
 
 void Heroi::andar(const sf::Vector2f& direction) {  // Direção x e y
-    sprite.move(direction);
+    if(!this->isDead()) {
+        sprite.move(direction);
+    }
 }
 void Heroi::playFireballSound() {
     for (auto& sound : fireBallSounds) {
@@ -81,13 +83,15 @@ void Heroi::playFireballSound() {
 }
 
 void Heroi::atirar(std::vector<Projectile>& projectiles, sf::Texture& projectileTexture, sf::Vector2f target) {
-    if (Municao > 0) {
-        Municao--;
-        playFireballSound();
-        sf::Vector2f position = sprite.getPosition();
-        sf::Vector2f direction = target - position;
-        projectiles.emplace_back(projectileTexture, position, direction);
-        ammoBar->updateBar(Municao, sf::Color::Blue);
+    if(!this->isDead()) {
+        if (Municao > 0) {
+            Municao--;
+            playFireballSound();
+            sf::Vector2f position = sprite.getPosition();
+            sf::Vector2f direction = target - position;
+            projectiles.emplace_back(projectileTexture, position, direction);
+            ammoBar->updateBar(Municao, sf::Color::Blue);
+        }
     }
 }
 
@@ -96,13 +100,13 @@ void Heroi::dano_tomado(std::vector<Projectile>& projectiles) {
     for (auto it = projectiles.begin(); it != projectiles.end();) {
         if (it->getBounds().intersects(sprite.getGlobalBounds())) {
             it = projectiles.erase(it);
-            HP -= dano;
-            healthBar->updateBar(HP, sf::Color::Red);
-            if (HP < 0) {
-                HP = 0;
+            if(!this->isDead()) {
+                HP -= dano;
             }
-            else if (HP == 0) {
-                std::cout << "Você morreu!" << std::endl;
+            healthBar->updateBar(HP, sf::Color::Red);
+            if (HP == 0) {
+                this->setDead(true);
+                this->sprite.setColor(sf::Color(255,0,0,255));
                 healthBar->updateBar(HP, sf::Color::Red);
             }
         } else {
@@ -113,8 +117,10 @@ void Heroi::dano_tomado(std::vector<Projectile>& projectiles) {
 }
 
 void Heroi::heroRegen(int regen) {
-    if (this->getHP() < 100) {
-        this->setHP(this->getHP() + regen);
+    if(!this->isDead()) {
+        if (this->getHP() < 100) {
+            this->setHP(this->getHP() + regen);
+        }
     }
 }
 

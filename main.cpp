@@ -161,10 +161,13 @@ int main() {
             window.setMouseCursor(sf::Cursor());
 
             // Enemy Spawning
-            if (spawnClock.getElapsedTime().asSeconds() >= 5) {
-                enemies.push_back(std::make_unique<Enemy>());
-                spawnClock.restart();
+            if(!heroi.isDead()) {
+                if (spawnClock.getElapsedTime().asSeconds() >= 5) {
+                    enemies.push_back(std::make_unique<Enemy>());
+                    spawnClock.restart();
+                }
             }
+            
 
             // Enemy Shooting
             for (auto it = enemies.begin(); it != enemies.end(); it++) {

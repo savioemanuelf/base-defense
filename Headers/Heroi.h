@@ -13,6 +13,7 @@ class Heroi {
     // Attributes
     int HP;
     int Municao;
+    bool dead;
     float speed;
     Bar* healthBar;
     Bar* ammoBar;
@@ -46,10 +47,12 @@ class Heroi {
     sf::Sprite getSprite();
     Bar getBarHealth(){return *this->healthBar;}
     Bar getBarAmmo(){return *this->ammoBar;}
+    bool isDead() { return this->dead; }
     // Setters
     void setTargetPosition(sf::Vector2f target);
     void setMunicao(int municao);
     void setHP(int life);
+    void setDead(bool dead) { this->dead = dead; }
     void setHealthBar(Bar barH){*this->healthBar = barH;}
     void setAmmoBar(Bar barM){*this->ammoBar = barM;}
 };
