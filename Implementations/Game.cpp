@@ -125,6 +125,7 @@ void Game::update(float dt) {
 
         for (auto it = enemies.begin(); it != enemies.end();) {
             (*it)->checkHit(heroProjectiles);
+            (*it)->checkHit(enemiesProjectiles);
             if ((*it)->isDead()) {
                 it = enemies.erase(it);
             } else {

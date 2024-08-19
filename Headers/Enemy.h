@@ -6,6 +6,8 @@
 #include "GameContext.h"
 #include "Projectile.h"
 
+class Projectile;
+
 class Enemy {
    private:
     GameContext& resources;

@@ -4,7 +4,8 @@
 
 void Projectile::render() { resources.window->draw(sprite); }
 
-void Projectile::init(sf::Vector2f spawnPosition, sf::Vector2f direction) {
+void Projectile::init(sf::Vector2f spawnPosition, sf::Vector2f direction, Enemy* shooter) {
+    owner = shooter;
     sf::Texture& texture = resources.assets->getProjectileTexture(Projectiles::fireball);
     speed = 300.0f;
     outOfRange = false;
@@ -39,4 +40,7 @@ void Projectile::rotate(sf::Vector2f direction) {
 }
 
 bool Projectile::isOutOfRange() { return outOfRange; }
+
 sf::FloatRect Projectile::getBounds() { return sprite.getGlobalBounds(); }
+
+Enemy* Projectile::getOwner() { return owner; }

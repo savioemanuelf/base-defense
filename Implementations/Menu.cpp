@@ -12,19 +12,19 @@ void Menu::init() {
     title.setOutlineColor(secondary);
     // Play
     play.setFont(resources.assets->getFont(arial));
-    play.setString("Jogar");
+    play.setString("jogar");
     play.setFillColor(primary);
     play.setOutlineThickness(outlineSize);
     play.setOutlineColor(secondary);
     // Settings
     settings.setFont(resources.assets->getFont(arial));
-    settings.setString("Opcoes");
+    settings.setString("opcoes");
     settings.setFillColor(primary);
     settings.setOutlineThickness(outlineSize);
     settings.setOutlineColor(secondary);
     // Exit
     exit.setFont(resources.assets->getFont(arial));
-    exit.setString("Sair");
+    exit.setString("sair");
     exit.setFillColor(primary);
     exit.setOutlineThickness(outlineSize);
     exit.setOutlineColor(secondary);

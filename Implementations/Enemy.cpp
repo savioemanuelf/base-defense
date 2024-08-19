@@ -83,7 +83,7 @@ void Enemy::rotate(sf::Vector2f targetPosition) {
 
 void Enemy::checkHit(std::vector<std::unique_ptr<Projectile>>& projectiles) {
     for (auto it = projectiles.begin(); it != projectiles.end();) {
-        if ((*it)->getBounds().intersects(sprite.getGlobalBounds())) {
+        if ((*it)->getBounds().intersects(sprite.getGlobalBounds()) && (this != (*it)->getOwner())) {
             it = projectiles.erase(it);
             hp = 0;
         } else {
@@ -102,7 +102,7 @@ void Enemy::shoot(std::vector<std::unique_ptr<Projectile>>& projectiles, sf::Vec
     if (shootCooldown.getElapsedTime().asSeconds() >= 2) {
         sf::Vector2f spawnPosition = sprite.getPosition();
         sf::Vector2f direction = target - spawnPosition;
-        projectiles.emplace_back(std::make_unique<Projectile>(resources, spawnPosition, direction));
+        projectiles.emplace_back(std::make_unique<Projectile>(resources, spawnPosition, direction, this));
         shootCooldown.restart();
     }
 }
