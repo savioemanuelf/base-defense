@@ -13,7 +13,6 @@ void Projectile::init(sf::Vector2f spawnPosition, sf::Vector2f direction, Enemy*
     initialPosition = spawnPosition;
 
     sprite.setTexture(texture);
-    sprite.setScale(0.07f, 0.07f);
     sprite.setOrigin(texture.getSize().x / 2.0f, texture.getSize().y / 2.0f);
     sprite.setPosition(spawnPosition);
     direction /= std::sqrt(direction.x * direction.x + direction.y * direction.y);
