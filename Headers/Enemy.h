@@ -15,6 +15,7 @@ class Enemy {
     float speed;
     int hp;
     sf::Clock shootCooldown;
+    sf::RectangleShape hitbox;
 
     sf::Vector2f randomPositionOutside();
 

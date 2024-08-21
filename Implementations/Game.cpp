@@ -124,14 +124,14 @@ void Game::update(float dt) {
         }
 
         for (auto it = enemies.begin(); it != enemies.end();) {
-            (*it)->checkHit(heroProjectiles);
-            (*it)->checkHit(enemiesProjectiles);
             if ((*it)->isDead()) {
                 it = enemies.erase(it);
             } else {
                 (*it)->move(player.getPosition(), dt);
                 (*it)->rotate(player.getPosition());
                 (*it)->shoot(enemiesProjectiles, player.getPosition());
+                (*it)->checkHit(heroProjectiles);
+                (*it)->checkHit(enemiesProjectiles);
                 ++it;
             }
         }

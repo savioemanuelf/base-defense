@@ -18,6 +18,7 @@ class Projectile {
     float maxRange;
     sf::Vector2f initialPosition;
     Enemy *owner;
+    sf::RectangleShape hitbox;
 
    public:
     Projectile(GameContext& r, sf::Vector2f sp, sf::Vector2f t, Enemy *s = nullptr) : resources(r) { init(sp, t,s); }
@@ -26,7 +27,7 @@ class Projectile {
     void update(float dt);
     void rotate(sf::Vector2f direction);
     bool isOutOfRange();
-    sf::FloatRect getBounds();
+    sf::FloatRect getHitbox();
     Enemy *getOwner();
 };
 

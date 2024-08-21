@@ -16,6 +16,7 @@ struct GameContext {
     std::unique_ptr<sf::RenderWindow> window;
     std::unique_ptr<AssetsManager> assets;
     bool isFullscreen;
+    bool debug;
     Heroes heroType;
 
     GameContext() {

@@ -23,6 +23,17 @@ void Hero::init() {
     speed = 200.0f;
     ammo = 50;
     hp = 100;
+
+    hitbox.setSize(sf::Vector2f(texture->getSize().x - 35, texture->getSize().y - 35));
+    hitbox.setOrigin(hitbox.getSize().x / 2, hitbox.getSize().y / 2);
+    hitbox.setPosition(sprite.getPosition());
+    hitbox.setFillColor(sf::Color::Transparent);
+
+    if (resources.debug) {
+        hitbox.setOutlineThickness(1);
+        hitbox.setFillColor(sf::Color::Red);
+        hitbox.setOutlineColor(sf::Color::Red);
+    }
 }
 
 void Hero::walk(float dt) {
@@ -31,10 +42,14 @@ void Hero::walk(float dt) {
     if (distance > 1.0f) {
         direction /= distance;
         sprite.move(direction * speed * dt);
+        hitbox.move(direction * speed * dt);
     }
 }
 
-void Hero::render() { resources.window->draw(sprite); }
+void Hero::render() {
+    resources.window->draw(hitbox);
+    resources.window->draw(sprite);
+}
 
 void Hero::setTargetPosition(sf::Vector2f target) { targetPosition = target; }
 
@@ -42,6 +57,7 @@ void Hero::rotate(sf::Vector2f targetPosition) {
     sf::Vector2f direction = targetPosition - sprite.getPosition();
     float angle = std::atan2(direction.y, direction.x) * 180 / 3.14159265;
     sprite.setRotation(angle);
+    hitbox.setRotation(angle);
 }
 
 void Hero::shoot(std::vector<std::unique_ptr<Projectile>>& projectiles, sf::Vector2f target) {
@@ -57,7 +73,7 @@ void Hero::shoot(std::vector<std::unique_ptr<Projectile>>& projectiles, sf::Vect
 
 void Hero::checkHit(std::vector<std::unique_ptr<Projectile>>& projectiles) {
     for (auto it = projectiles.begin(); it != projectiles.end();) {
-        if ((*it)->getBounds().intersects(sprite.getGlobalBounds())) {
+        if ((*it)->getHitbox().intersects(hitbox.getGlobalBounds())) {
             it = projectiles.erase(it);
             if (hp) {
                 hp -= 50;

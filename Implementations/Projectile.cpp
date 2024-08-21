@@ -2,7 +2,10 @@
 
 #include <cmath>
 
-void Projectile::render() { resources.window->draw(sprite); }
+void Projectile::render() {
+    resources.window->draw(sprite);
+    resources.window->draw(hitbox);
+}
 
 void Projectile::init(sf::Vector2f spawnPosition, sf::Vector2f direction, Enemy* shooter) {
     owner = shooter;
@@ -19,10 +22,22 @@ void Projectile::init(sf::Vector2f spawnPosition, sf::Vector2f direction, Enemy*
     velocity = speed * direction;
 
     rotate(direction);
+
+    hitbox.setSize(sf::Vector2f(texture.getSize().x - 20, texture.getSize().y - 20));
+    hitbox.setOrigin(hitbox.getSize().x / 2, hitbox.getSize().y / 2);
+    hitbox.setPosition(sprite.getPosition());
+    hitbox.setFillColor(sf::Color::Transparent);
+
+    if (resources.debug) {
+        hitbox.setOutlineThickness(1);
+        hitbox.setFillColor(sf::Color::Red);
+        hitbox.setOutlineColor(sf::Color::Red);
+    }
 }
 
 void Projectile::update(float dt) {
     sprite.move(velocity * dt);
+    hitbox.move(velocity * dt);
 
     sf::Vector2f currentPosition = sprite.getPosition();
     float distance = std::sqrt(std::pow(currentPosition.x - initialPosition.x, 2) +
@@ -36,10 +51,11 @@ void Projectile::update(float dt) {
 void Projectile::rotate(sf::Vector2f direction) {
     float angle = std::atan2(direction.y, direction.x) * 180 / 3.14159265;
     sprite.setRotation(angle);
+    hitbox.setRotation(angle);
 }
 
 bool Projectile::isOutOfRange() { return outOfRange; }
 
-sf::FloatRect Projectile::getBounds() { return sprite.getGlobalBounds(); }
+sf::FloatRect Projectile::getHitbox() { return hitbox.getGlobalBounds(); }
 
 Enemy* Projectile::getOwner() { return owner; }

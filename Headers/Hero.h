@@ -12,6 +12,7 @@ class Hero {
     float speed;
     int ammo;
     int hp;
+    sf::RectangleShape hitbox;
 
    public:
     Hero(GameContext& r) : resources(r) {}

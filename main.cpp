@@ -14,6 +14,7 @@ int main() {
     resources.assets->addCursor(Cursors::hand, "hand");
     resources.isFullscreen = true;
     resources.heroType = Heroes::mage;
+    resources.debug = false;
 
     StateManager StateManager;
     StateManager.changeState(std::make_unique<Menu>(resources));
