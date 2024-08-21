@@ -20,6 +20,7 @@ class Base {
     void render();
     void checkHit(std::vector<std::unique_ptr<Projectile>>& projectiles);
     void baseDestroy();
+    sf::Vector2f getPosition();
 };
 
 #endif

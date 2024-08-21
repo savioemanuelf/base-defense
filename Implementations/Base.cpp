@@ -31,3 +31,5 @@ void Base::checkHit(std::vector<std::unique_ptr<Projectile>>& projectiles) {
 }
 
 void Base::baseDestroy() { shape.setOutlineColor(sf::Color::Red); }
+
+sf::Vector2f Base::getPosition() { return shape.getPosition(); }

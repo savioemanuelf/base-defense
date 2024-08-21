@@ -137,9 +137,15 @@ void Game::update(float dt) {
             if ((*it)->isDead()) {
                 it = enemies.erase(it);
             } else {
-                (*it)->move(player.getPosition(), dt);
-                (*it)->rotate(player.getPosition());
-                (*it)->shoot(enemiesProjectiles, player.getPosition());
+                if (player.isDead()) {
+                    (*it)->move(base.getPosition(), dt);
+                    (*it)->rotate(base.getPosition());
+                    (*it)->shoot(enemiesProjectiles, base.getPosition());
+                } else {
+                    (*it)->move(player.getPosition(), dt);
+                    (*it)->rotate(player.getPosition());
+                    (*it)->shoot(enemiesProjectiles, player.getPosition());
+                }
                 (*it)->checkHit(heroProjectiles);
                 (*it)->checkHit(enemiesProjectiles);
                 ++it;
