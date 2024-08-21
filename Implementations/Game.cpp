@@ -13,7 +13,15 @@ void Game::init() {
     }
     resources.assets->addProjectileTexture(Projectiles::fireball, "fireball.png");
     resources.assets->addEnemyTexture(Enemies::goblin, "goblin.png");
+    resources.assets->addBackgroundTexture(Backgrounds::rocks, "background-rocks.jpg");
     resources.window->setMouseCursor(sf::Cursor());
+
+    sf::Texture* backgroundTexture = &resources.assets->getBackgroundTexture(Backgrounds::rocks);
+
+    background.setTexture(*backgroundTexture);
+    background.setScale(1, 1);
+    // background.setScale(resources.window->getSize().x / backgroundTexture->getSize().x,
+    //                     resources.window->getSize().y / backgroundTexture->getSize().y);
 
     primary = sf::Color(166, 166, 166);
     secondary = sf::Color::White;
@@ -99,6 +107,8 @@ void Game::update(float dt) {
             enemySpawnClock.restart();
         }
 
+        base.checkHit(enemiesProjectiles);
+
         if (!player.isDead()) {
             player.walk(dt);
             player.rotate(resources.window->mapPixelToCoords(sf::Mouse::getPosition(*resources.window)));
@@ -150,7 +160,11 @@ void Game::update(float dt) {
 void Game::render() {
     resources.window->clear();
 
+    resources.window->draw(background);
+
     player.render();
+    base.render();
+
     for (auto& projectile : heroProjectiles) {
         projectile->render();
     }

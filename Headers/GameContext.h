@@ -11,6 +11,7 @@ enum Cursors { hand };
 enum Heroes { mage, ranger, bard };
 enum Projectiles { fireball };
 enum Enemies { goblin };
+enum Backgrounds { rocks };
 
 struct GameContext {
     std::unique_ptr<sf::RenderWindow> window;

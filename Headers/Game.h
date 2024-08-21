@@ -1,6 +1,7 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include "Base.h"
 #include "Enemy.h"
 #include "Hero.h"
 #include "Projectile.h"
@@ -19,9 +20,11 @@ class Game : public State {
     sf::RectangleShape darkOverlay;
     int outlineSize;
     bool isPaused;
+    Base base;
+    sf::Sprite background;
 
    public:
-    Game(GameContext& resources) : State(resources), next(StateType::Game), player(resources) { init(); }
+    Game(GameContext& resources) : State(resources), next(StateType::Game), player(resources), base(resources) { init(); }
     ~Game() override {}
     void init() override;
     void handleEvents(sf::Event& event) override;

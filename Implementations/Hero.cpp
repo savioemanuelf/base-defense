@@ -78,7 +78,6 @@ void Hero::checkHit(std::vector<std::unique_ptr<Projectile>>& projectiles) {
             if (hp) {
                 hp -= 50;
             }
-
         } else {
             ++it;
         }
