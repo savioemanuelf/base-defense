@@ -90,3 +90,6 @@ bool Hero::isDead() {
     }
     return true;
 }
+int Hero::getHP() { return hp; }
+
+int Hero::getAmmo() { return ammo; }

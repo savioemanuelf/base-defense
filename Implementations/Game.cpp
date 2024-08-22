@@ -65,7 +65,6 @@ void Game::update(float dt) {
             enemySpawnClock.restart();
         }
 
-        base.checkHit(enemiesProjectiles);
 
         if (!player.isDead()) {
             player.walk(dt);
@@ -109,6 +108,12 @@ void Game::update(float dt) {
                 ++it;
             }
         }
+        
+        base.checkHit(enemiesProjectiles);
+
+        gameHud.setHeroLife(player.getHP());
+        gameHud.setHeroAmmo(player.getAmmo());
+        gameHud.setBaseLife(base.getHP());
     }
 }
 
@@ -129,6 +134,8 @@ void Game::render() {
     for (auto& enemy : enemies) {
         enemy->render();
     }
+
+    gameHud.render();
 
     if (isPaused) {
         pauseMenu.render();

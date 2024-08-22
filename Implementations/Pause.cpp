@@ -31,6 +31,8 @@ void Pause::init() {
 
     darkOverlay.setSize(static_cast<sf::Vector2f>(resources.window->getSize()));
     darkOverlay.setFillColor(sf::Color(0, 0, 0, 128));
+
+    resize();
 }
 
 void Pause::handleEvents(sf::Event& event) {

@@ -19,11 +19,13 @@ void Base::checkHit(std::vector<std::unique_ptr<Projectile>>& projectiles) {
     for (auto it = projectiles.begin(); it != projectiles.end();) {
         if ((*it)->getHitbox().intersects(shape.getGlobalBounds())) {
             it = projectiles.erase(it);
-            if (hp) {
-                hp -= 50;
-            } else {
+            if (hp > 0) {
+                hp -= 10;
+            }
+            if (hp == 0) {
                 baseDestroy();
             }
+
         } else {
             ++it;
         }
@@ -33,3 +35,5 @@ void Base::checkHit(std::vector<std::unique_ptr<Projectile>>& projectiles) {
 void Base::baseDestroy() { shape.setOutlineColor(sf::Color::Red); }
 
 sf::Vector2f Base::getPosition() { return shape.getPosition(); }
+
+int Base::getHP() { return hp; }

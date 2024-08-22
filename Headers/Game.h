@@ -4,6 +4,7 @@
 #include "Base.h"
 #include "Enemy.h"
 #include "Hero.h"
+#include "Hud.h"
 #include "Pause.h"
 #include "Projectile.h"
 #include "State.h"
@@ -22,10 +23,16 @@ class Game : public State {
     Base base;
     Pause pauseMenu;
     sf::Sprite background;
+    Hud gameHud;
 
    public:
     Game(GameContext& resources)
-        : State(resources), next(StateType::Game), player(resources), base(resources), pauseMenu(resources) {
+        : State(resources),
+          next(StateType::Game),
+          player(resources),
+          base(resources),
+          pauseMenu(resources),
+          gameHud(resources) {
         init();
     }
     ~Game() override {}

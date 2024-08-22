@@ -14,10 +14,7 @@ class Pause {
     int optionSelected;
 
    public:
-    Pause(GameContext& r) : resources(r) {
-        init();
-        resize();
-    }
+    Pause(GameContext& r) : resources(r) { init(); }
     void init();
     void handleEvents(sf::Event& event);
     void update();

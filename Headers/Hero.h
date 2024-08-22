@@ -26,6 +26,8 @@ class Hero {
     void shoot(std::vector<std::unique_ptr<Projectile>>& projectiles, sf::Vector2f target);
     void checkHit(std::vector<std::unique_ptr<Projectile>>& projectiles);
     bool isDead();
+    int getHP();
+    int getAmmo();
 };
 
 #endif
