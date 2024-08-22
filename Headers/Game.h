@@ -4,6 +4,7 @@
 #include "Base.h"
 #include "Enemy.h"
 #include "Hero.h"
+#include "Pause.h"
 #include "Projectile.h"
 #include "State.h"
 
@@ -15,16 +16,18 @@ class Game : public State {
     std::vector<std::unique_ptr<Projectile>> enemiesProjectiles;
     std::vector<std::unique_ptr<Enemy>> enemies;
     sf::Clock enemySpawnClock;
-    sf::Text pause, back, restart, menu;
     sf::Color primary, secondary;
-    sf::RectangleShape darkOverlay;
     int outlineSize;
     bool isPaused;
     Base base;
+    Pause pauseMenu;
     sf::Sprite background;
 
    public:
-    Game(GameContext& resources) : State(resources), next(StateType::Game), player(resources), base(resources) { init(); }
+    Game(GameContext& resources)
+        : State(resources), next(StateType::Game), player(resources), base(resources), pauseMenu(resources) {
+        init();
+    }
     ~Game() override {}
     void init() override;
     void handleEvents(sf::Event& event) override;
@@ -32,7 +35,6 @@ class Game : public State {
     void render() override;
     virtual StateType getType() { return StateType::Game; }
     virtual StateType nextState() { return next; }
-    void resize();
 };
 
 #endif
