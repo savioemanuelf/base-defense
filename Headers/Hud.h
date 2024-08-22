@@ -3,15 +3,16 @@
 
 #include <SFML/Graphics.hpp>
 
+#include "Bar.h"
 #include "GameContext.h"
 
 class Hud {
    private:
     GameContext& resources;
-    sf::Text heroLife, heroAmmo, baseLife;
+    Bar heroLife, heroAmmo, baseLife;
 
    public:
-    Hud(GameContext& r) : resources(r) { init(); }
+    Hud(GameContext& r) : resources(r), heroLife(r), heroAmmo(r), baseLife(r) { init(); }
     void init();
     void update();
     void render();

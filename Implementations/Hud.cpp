@@ -1,32 +1,44 @@
 #include "../Headers/Hud.h"
 
 void Hud::init() {
-    heroLife.setFont(resources.assets->getFont(Fonts::arial));
-    heroLife.setCharacterSize(100);
-    heroLife.setColor(sf::Color::Red);
-    heroLife.setPosition(0, 0);
+    float width = resources.window->getSize().x;
+    float height = resources.window->getSize().y;
+    sf::Vector2f positions, size;
+    sf::Color barColor, outlineColor;
+    int maxValue, currentValue;
 
-    heroAmmo.setFont(resources.assets->getFont(Fonts::arial));
-    heroAmmo.setCharacterSize(100);
-    heroAmmo.setColor(sf::Color::Yellow);
-    heroAmmo.setPosition(0, 200);
+    positions = sf::Vector2f(width / 2, height / 1.030);
+    size = sf::Vector2f(width / 2.3, height / 30);
+    barColor = sf::Color(0, 138, 14);
+    outlineColor = sf::Color::Black;
+    maxValue = currentValue = 100;
 
-    baseLife.setFont(resources.assets->getFont(Fonts::arial));
-    baseLife.setCharacterSize(100);
-    baseLife.setColor(sf::Color::Green);
-    baseLife.setPosition(0, 400);
+    baseLife.init(positions, size, barColor, outlineColor, maxValue, currentValue);
+
+    positions = sf::Vector2f(width / 2.611, height / 1.075);
+    size = sf::Vector2f(width / 5, height / 30);
+    barColor = sf::Color(232, 19, 19);
+
+    heroLife.init(positions, size, barColor, outlineColor, maxValue, currentValue);
+
+    positions = sf::Vector2f(width / 1.578, height / 1.075);
+    size = sf::Vector2f(width / 6, height / 30);
+    barColor = sf::Color(252, 206, 20);
+    maxValue = currentValue = 50;
+
+    heroAmmo.init(positions, size, barColor, outlineColor, maxValue, currentValue);
 }
 
 void Hud::update() {}
 
 void Hud::render() {
-    resources.window->draw(heroLife);
-    resources.window->draw(heroAmmo);
-    resources.window->draw(baseLife);
+    baseLife.render();
+    heroLife.render();
+    heroAmmo.render();
 }
 
-void Hud::setHeroLife(int life) { heroLife.setString(std::to_string(life)); }
+void Hud::setHeroLife(int life) {}
 
-void Hud::setHeroAmmo(int ammo) { heroAmmo.setString(std::to_string(ammo)); }
+void Hud::setHeroAmmo(int ammo) {}
 
-void Hud::setBaseLife(int life) { baseLife.setString(std::to_string(life)); }
+void Hud::setBaseLife(int life) {}
