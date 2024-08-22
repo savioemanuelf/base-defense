@@ -3,23 +3,35 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
-Base::Base(sf::Window& window) : maxHealth(100), currentHealth(maxHealth), destroyed(false){
+Base::Base(sf::Window& window) : maxHealth(100), currentHealth(maxHealth), destroyed(false) {
+    // Texture
+    if (!this->baseTexture.loadFromFile("Assets/Texture/Base/base.png")) {
+        std::cerr << "Erro ao carregar a imagem da base" << std::endl;
+    }
+    if (!this->destroyedBaseTexture.loadFromFile("Assets/Texture/Base/destroyed-base.png")) {
+        std::cerr << "Erro ao carregar a imagem da base destruída" << std::endl;
+    }
     sf::Vector2u windowSize = window.getSize();
 
-    float width = windowSize.x * 0.3f;   // largura da base é 30% da tela
-    float height = windowSize.y * 0.3f;  // altura da base é 30% da tela
+    // Setting Up Sprite
+    this->baseSprite.setTexture(this->baseTexture);
+    this->baseSprite.setOrigin(baseTexture.getSize().x / 2.0f, baseTexture.getSize().y / 2.0f);
+    this->baseSprite.setPosition(windowSize.x / 2, windowSize.y / 2);
 
-    sf::Vector2f positions(((windowSize.x - width) / 2),
-                           (windowSize.y - height) / 2);  // posições da base
+    sf::Vector2u textureSize = baseTexture.getSize();
+    float radius = std::min(textureSize.x, textureSize.y) / 2.0f;  // Raio é metade do menor tamanho da textura
+    sf::Vector2f position((windowSize.x - 2 * radius) / 2,
+                          (windowSize.y - 2 * radius) / 2);  // posição centralizada do círculo
 
-    setPos(this->positions);
-
-    shape.setPosition(positions.x, positions.y);
-    shape.setSize(sf::Vector2f(width, height));
+    shape.setPosition(position.x, position.y);
+    shape.setRadius(radius);
     shape.setFillColor(sf::Color::Transparent);
-    shape.setOutlineThickness(5);
-    shape.setOutlineColor(sf::Color::Green);
 
+
+    if (!manaDrainBuffer.loadFromFile("Assets/SFX/mana-drain.ogg")) {
+        std::cerr << "Erro ao carregar o áudio mana-drain.ogg" << std::endl;
+    }
+    manaDrainSound.setBuffer(manaDrainBuffer);
 }
 
 void Base::initializeHealthBar(sf::Window& window) {
@@ -30,9 +42,9 @@ void Base::initializeHealthBar(sf::Window& window) {
     
     sf::Vector2f windowSize = sf::Vector2f(window.getSize());
     sf::Vector2f size = sf::Vector2f(windowSize.x * 0.3f, barHeight);
-    sf::Vector2f pos = sf::Vector2f((windowSize.x - size.x)/2, (windowSize.y - size.y) -7 ); // 7 pixels acima do canto inferior central
+    sf::Vector2f pos = sf::Vector2f((windowSize.x - size.x) / 2, (windowSize.y - size.y) - 7); // 7 pixels acima do canto inferior central
     
-    sf::Color backgroundColor = sf::Color::Transparent; 
+    sf::Color backgroundColor = sf::Color::Transparent;
     sf::Color color = sf::Color(0, 160, 0);
     sf::Color outlineColor = sf::Color::White;
     int thickness = 2;
@@ -40,13 +52,12 @@ void Base::initializeHealthBar(sf::Window& window) {
     this->baseHealthBar = new Bar(pos, size, backgroundColor, color, outlineColor, thickness, currentHealth, maxHealth);
 }
 
-
 Base::~Base() {
     delete this->baseHealthBar;
 }
 
 void Base::showBase(sf::RenderWindow& window) const {
-    window.draw(this->shape);
+    window.draw(this->baseSprite);
 }
 
 void Base::damage(int damage) {
@@ -56,15 +67,18 @@ void Base::damage(int damage) {
         this->setHealth(0);
     } 
     if (getHealth() == 0) {
+        if(!isDestroyed()) {
+            this->manaDrainSound.play();
+        }
         this->setDestroyed(true);
-        this->shape.setOutlineColor(sf::Color::Red);
         baseHealthBar->updateBar(this->getHealth(), sf::Color::Red);
-    } else if( getHealth() <= 10) {
+        this->baseSprite.setTexture(this->destroyedBaseTexture);
+    } else if (getHealth() <= 10) {
         baseHealthBar->updateBar(this->getHealth(), sf::Color::Red);
     } else if (getHealth() <= 50) {
         baseHealthBar->updateBar(this->getHealth(), sf::Color(255, 200, 0));
     } else {
-        baseHealthBar->updateBar(this->getHealth(), sf::Color(0, 160, 0)); // -> deve ser utilizado porque retorna um ponteiro
+        baseHealthBar->updateBar(this->getHealth(), sf::Color(0, 160, 0));
     }
 }
 
@@ -73,19 +87,20 @@ void Base::baseRegen(int regen) {
     sf::Time deltaTime = regenClock.restart();
     static float timePerFrame = 0;
     timePerFrame += deltaTime.asSeconds();
-    // Set da cor da barra de vida para a regeneração
-    if( getHealth() <= 10) {
+
+    if (getHealth() <= 10) {
         color = sf::Color::Red;
     } else if (getHealth() <= 50) {
-        color =  sf::Color(255, 200, 0);
+        color = sf::Color(255, 200, 0);
     } else {
-        color =  sf::Color(0, 160, 0);
+        color = sf::Color(0, 160, 0);
     }
+
     if (timePerFrame >= 3.0f) {
         if (this->getHealth() + regen <= this->getMaxHealth() && !(this->isDestroyed())) {
-            this->baseHealthBar->updateBar(this->getHealth(), color); // realizar última alteração da barra de vida
+            this->baseHealthBar->updateBar(this->getHealth(), color);
             this->setHealth(this->getHealth() + regen);
-            this->baseHealthBar->updateBar(this->getHealth(), color); // alterar pós cura
+            this->baseHealthBar->updateBar(this->getHealth(), color);
         }
         timePerFrame = 0;
     }
@@ -93,5 +108,5 @@ void Base::baseRegen(int regen) {
 
 bool Base::checkCollision(const sf::Vector2f& position, const sf::Vector2f& size) const {
     sf::FloatRect projectileRect(position, size);
-    return shape.getGlobalBounds().intersects(projectileRect); 
+    return shape.getGlobalBounds().intersects(projectileRect);
 }
