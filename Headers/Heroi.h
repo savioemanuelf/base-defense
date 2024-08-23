@@ -23,7 +23,7 @@ private:
     
     sf::Texture BordaMana;
     sf::Sprite spriteBordaMana;
-    sf::Texture Mana;
+    sf::Texture Mana; //Textura da barra de mana
     sf::Sprite spriteMana; //Sprite da barra de mana
 
     // Sons
