@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+#include "AssetsManager.h"
+
 void AssetsManager::addFont(int id, std::string fileName) {
     auto font = std::make_unique<sf::Font>();
 
@@ -74,6 +76,15 @@ void AssetsManager::addBaseTexture(int id, std::string fileName) {
     }
 }
 
+void AssetsManager::addBarTexture(int id, std::string fileName) {
+    auto texture = std::make_unique<sf::Texture>();
+
+    if (texture->loadFromFile("Assets/Texture/Base/" + fileName)) {
+        texture->setSmooth(true);
+        barTexture[id] = std::move(texture);
+    }
+}
+
 sf::Font& AssetsManager::getFont(int id) { return *(fonts.at(id).get()); }
 
 sf::Cursor& AssetsManager::getCursor(int id) { return *(cursors.at(id).get()); }
@@ -89,3 +100,5 @@ sf::Texture& AssetsManager::getBackgroundTexture(int id) { return *(backgroundTe
 sf::Texture& AssetsManager::getDropTexture(int id) { return *(dropTexture.at(id).get()); }
 
 sf::Texture& AssetsManager::getBaseTexture(int id) { return *(baseTexture.at(id).get()); }
+
+sf::Texture& AssetsManager::getBarTexture(int id) { return *(barTexture.at(id).get()); }

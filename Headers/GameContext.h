@@ -14,6 +14,7 @@ enum Enemies { goblin };
 enum Backgrounds { rocks };
 enum Drops { life, ammo };
 enum Bases { intact, destroyed };
+enum Bars { heroLifeBar, heroLifeBorder, heroManaBar, heroManaBorder, baseLifeBar, baseLifeBorder };
 
 struct GameContext {
     std::unique_ptr<sf::RenderWindow> window;
