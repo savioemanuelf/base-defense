@@ -24,7 +24,7 @@ private:
     sf::Texture BordaMana;
     sf::Sprite spriteBordaMana;
     sf::Texture Mana;
-    sf::Sprite spriteMana;
+    sf::Sprite spriteMana; //Sprite da barra de mana
 
     // Sons
     sf::SoundBuffer fireBallBuffer;
