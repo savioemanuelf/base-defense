@@ -4,56 +4,61 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <vector>
-
-#include "../Headers/Bar.h"
 #include "../Headers/Projectile.h"
 
 class Heroi {
-   private:
-    // Attributes
-    int HP;
-    int Municao;
-    bool dead;
-    float speed;
-    Bar* healthBar;
-    Bar* ammoBar;
-    sf::Vector2f targetPosition;
+private:
     sf::Texture texture;
     sf::Sprite sprite;
-    float currentAngle;
-    void playFireballSound();
+    int HP;
+    int Municao;
+    float speed;
+    bool dead = false;
+
+    // Barras de Vida e Mana
+    sf::Texture Borda;
+    sf::Sprite spriteBorda;
+    sf::Texture vida;
+    sf::Sprite spritevida;
+    
+    sf::Texture BordaMana;
+    sf::Sprite spriteBordaMana;
+    sf::Texture Mana;
+    sf::Sprite spriteMana;
+
+    // Sons
     sf::SoundBuffer fireBallBuffer;
     std::vector<sf::Sound> fireBallSounds;
-   public:
-    // Constructor
+
+    sf::Vector2f targetPosition;
+
+    
+
+public:
     Heroi(sf::Font font);
-    // Destructor
     ~Heroi();
-    // Functions
-    void initializeHealthBar(sf::Window& window);
-    void initializeAmmoBar(sf::Window& window);
+    void desenharBarras(sf::RenderWindow& window); 
+    void atualizarSpriteBarras();
+    void draw(sf::RenderWindow& window);    // Desenhar o herói e suas barras
     void andar(const sf::Vector2f& direction);
+    void rotate(const sf::Vector2f& targetPosition);
     void atirar(std::vector<Projectile>& projectiles, sf::Texture& projectileTexture, sf::Vector2f target);
     void dano_tomado(std::vector<Projectile>& projectiles);
-    void draw(sf::RenderWindow& window);
-    void restoreAmmo(int ammo);
     void heroRegen(int regen);
-    void rotate(const sf::Vector2f& targetPosition);
-    // Getters
+    void restoreAmmo(int ammo);
+    void playFireballSound();
+
+    // Getters e Setters
     int getHP() const;
     int getMunicao() const;
     sf::Vector2f getPosition() const;
     sf::Vector2f getTargetPosition();
     sf::Sprite getSprite();
-    Bar getBarHealth(){return *this->healthBar;}
-    Bar getBarAmmo(){return *this->ammoBar;}
-    bool isDead() { return this->dead; }
-    // Setters
     void setTargetPosition(sf::Vector2f target);
     void setMunicao(int municao);
     void setHP(int life);
-    void setDead(bool dead) { this->dead = dead; }
-    void setHealthBar(Bar barH){*this->healthBar = barH;}
-    void setAmmoBar(Bar barM){*this->ammoBar = barM;}
+    bool isDead() const { return dead; }
+    void setDead(bool status) { dead = status; }
 };
+
 #endif

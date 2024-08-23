@@ -1,5 +1,4 @@
 #include "../Headers/Heroi.h"
-
 #include <SFML/Graphics.hpp>
 #include <cmath>
 #include <iostream>
@@ -23,56 +22,72 @@ Heroi::Heroi(sf::Font font) : HP(100), Municao(50), speed(200.0f) {
     sprite.setPosition(sf::VideoMode::getDesktopMode().width / 2, sf::VideoMode::getDesktopMode().height / 2);
     targetPosition = sprite.getPosition();
     sprite.setOrigin(sprite.getGlobalBounds().width / 2, sprite.getGlobalBounds().height / 2);
+
+    // Load and Set Up Health Bar Textures
+
+    if(!vida.loadFromFile("Assets/Texture/Backgrounds/vida.png")) {
+        std::cerr << "Erro ao carregar a textura da máscara de vida" << std::endl;
+    }
+    spritevida.setTexture(vida);
+    spritevida.setPosition(-80, 0);
+
+    if (!Borda.loadFromFile("Assets/Texture/Backgrounds/Borda.png")) {
+        std::cerr << "Erro ao carregar a textura da barra de vida" << std::endl;
+    }
+    spriteBorda.setTexture(Borda);
+    spriteBorda.setPosition(-80, 0);
+
+    if(!BordaMana.loadFromFile("Assets/Texture/Backgrounds/BordaMana.png")) {
+        std::cerr << "Erro ao carregar a textura da barra de mana" << std::endl;
+    }
+    spriteBordaMana.setTexture(BordaMana);
+    spriteBordaMana.setPosition(0, 10);
+
+    if(!Mana.loadFromFile("Assets/Texture/Backgrounds/Mana.png")) {
+        std::cerr << "Erro ao carregar a textura da máscara de mana" << std::endl;
+    }
+    spriteMana.setTexture(Mana);
+    spriteMana.setPosition(0, 10);
+
+    spritevida.setTextureRect(sf::IntRect(0, 0, vida.getSize().x, vida.getSize().y));
+    spriteMana.setTextureRect(sf::IntRect(0, 0, Mana.getSize().x, Mana.getSize().y));
 }
 
 Heroi::~Heroi() {
-    delete this->healthBar;
-    delete this->ammoBar;
+    
 }
 
-void Heroi::initializeHealthBar(sf::Window& window){
-    int barHeight = 8;
-
-    int maxHealth = this->getHP();
-    int currentHealth = this->getHP();
+void Heroi::desenharBarras(sf::RenderWindow& window) {
+    window.draw(spriteBorda);
+    window.draw(spritevida);
+    window.draw(spriteBordaMana);
+    window.draw(spriteMana);
     
-    sf::Vector2f windowSize = sf::Vector2f(window.getSize());
-    sf::Vector2f size = sf::Vector2f(windowSize.x * 0.2f, barHeight);
-    sf::Vector2f pos = sf::Vector2f(0, 5); //
-    
-    sf::Color backgroundColor = sf::Color::Transparent; 
-    sf::Color color = sf::Color::Red;
-    sf::Color outlineColor = sf::Color::Red;
-    int thickness = 2;
-
-    this->healthBar = new Bar(pos, size, backgroundColor, color, outlineColor, thickness, currentHealth, maxHealth);
 }
 
-void Heroi::initializeAmmoBar(sf::Window& window){
-    int barHeight = 8;
-    int maxAmmo = this->getMunicao();
-    int currentAmmo = this->getMunicao();
-    sf::Vector2f windowSize = sf::Vector2f(window.getSize());
-    sf::Vector2f size = sf::Vector2f(windowSize.x * 0.2f, barHeight);
-    sf::Vector2f pos = sf::Vector2f(0, barHeight + 10);
+void Heroi::atualizarSpriteBarras() {
+    float percentVida = static_cast<float>(HP) / 100.0f;
+    sf::IntRect vidaRect = spritevida.getTextureRect();
+    vidaRect.width = static_cast<int>(vida.getSize().x * percentVida);
+    spritevida.setTextureRect(vidaRect);
 
-    sf::Color backgroundColor = sf::Color::Transparent;
-    sf::Color color = sf::Color::Blue;
-    sf::Color outlineColor = sf::Color::Blue;
-    int thickness = 2;
-
-    this->ammoBar = new Bar(pos, size, backgroundColor, color, outlineColor, thickness, currentAmmo, maxAmmo);
+    float percentMana = static_cast<float>(Municao) / 50.0f;
+    sf::IntRect manaRect = spriteMana.getTextureRect();
+    manaRect.width = static_cast<int>(Mana.getSize().x * percentMana);
+    spriteMana.setTextureRect(manaRect);
 }
 
 void Heroi::draw(sf::RenderWindow& window) {
     window.draw(sprite);
+    desenharBarras(window); // Draw the health and mana bars here
 }
 
-void Heroi::andar(const sf::Vector2f& direction) {  // Direção x e y
-    if(!this->isDead()) {
+void Heroi::andar(const sf::Vector2f& direction) {
+    if (!this->isDead()) {
         sprite.move(direction);
     }
 }
+
 void Heroi::playFireballSound() {
     for (auto& sound : fireBallSounds) {
         if (sound.getStatus() != sf::Sound::Playing) {
@@ -83,14 +98,14 @@ void Heroi::playFireballSound() {
 }
 
 void Heroi::atirar(std::vector<Projectile>& projectiles, sf::Texture& projectileTexture, sf::Vector2f target) {
-    if(!this->isDead()) {
+    if (!this->isDead()) {
         if (Municao > 0) {
             Municao--;
             playFireballSound();
             sf::Vector2f position = sprite.getPosition();
             sf::Vector2f direction = target - position;
             projectiles.emplace_back(projectileTexture, position, direction);
-            ammoBar->updateBar(Municao, sf::Color::Blue);
+            atualizarSpriteBarras(); // Update the ammo bar here
         }
     }
 }
@@ -100,37 +115,30 @@ void Heroi::dano_tomado(std::vector<Projectile>& projectiles) {
     for (auto it = projectiles.begin(); it != projectiles.end();) {
         if (it->getBounds().intersects(sprite.getGlobalBounds())) {
             it = projectiles.erase(it);
-            if(!this->isDead()) {
+            if (!this->isDead()) {
                 HP -= dano;
-            }
-            healthBar->updateBar(HP, sf::Color::Red);
-            if (HP == 0) {
-                this->setDead(true);
-                this->sprite.setColor(sf::Color(255,0,0,255));
-                healthBar->updateBar(HP, sf::Color::Red);
+                atualizarSpriteBarras(); // Update the health bar here
+                if (HP <= 0) {
+                    this->setDead(true);
+                    this->sprite.setColor(sf::Color(255, 0, 0, 255));
+                }
             }
         } else {
-            it++;
-            healthBar->updateBar(HP, sf::Color::Red);
+            ++it;
         }
     }
 }
 
 void Heroi::heroRegen(int regen) {
-    if(!this->isDead()) {
-        if (this->getHP() < 100) {
-            this->setHP(this->getHP() + regen);
-        }
+    if (!this->isDead() && HP < 100) {
+        HP = std::min(HP + regen, 100);
+        atualizarSpriteBarras(); // Update the health bar here
     }
 }
 
 void Heroi::restoreAmmo(int ammo) {
-    if(this->getMunicao() + ammo <= 50) {
-        this->setMunicao(this->getMunicao() + ammo);
-    } else {
-        this->setMunicao(50);
-    }
-    this->ammoBar->updateBar(Municao, sf::Color::Blue);
+    Municao = std::min(Municao + ammo, 50);
+    atualizarSpriteBarras(); // Update the ammo bar here
 }
 
 void Heroi::rotate(const sf::Vector2f& targetPosition) {

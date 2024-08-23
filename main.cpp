@@ -71,8 +71,6 @@ int main() {
     Heroi heroi(font);
     std::vector<Projectile> projectiles;
     sf::Vector2f targetPosition = heroi.getPosition();
-    heroi.initializeHealthBar(window);
-    heroi.initializeAmmoBar(window);
 
     // Enemy
     std::vector<std::unique_ptr<Enemy>> enemies;
@@ -154,6 +152,8 @@ int main() {
             }
 
             // Render
+            heroi.atualizarSpriteBarras();
+            heroi.desenharBarras(window);
             window.clear();
             menu.draw(window);
             window.display();
@@ -205,7 +205,6 @@ int main() {
                 if (it->checkCollision(heroi.getSprite())) {
                     if (it->getDropType() == DropType::manaPotion) {
                         heroi.restoreAmmo(5);
-                        heroi.getBarAmmo().updateBar(heroi.getMunicao(), sf::Color::Blue);
                     } else {
                         heroi.heroRegen(1);
                     }
@@ -291,8 +290,6 @@ int main() {
                 drop.showDrop(window);
             }
             base.getBaseHealthBar().showBar(window);
-            heroi.getBarHealth().showBar(window);
-            heroi.getBarAmmo().showBar(window);
             window.display();
         }
     }
