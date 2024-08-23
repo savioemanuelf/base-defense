@@ -1,5 +1,7 @@
 #include "../Headers/Bar.h"
 
+#include <iostream>
+
 void Bar::init(sf::Vector2f positions, sf::Vector2f size, sf::Color barColor, sf::Color outlineColor, int maxValue,
                int currentValue) {
     bar.setSize(size);
@@ -20,10 +22,23 @@ void Bar::init(sf::Vector2f positions, sf::Vector2f size, sf::Color barColor, sf
     content.setString(std::to_string(currentValue) + '/' + std::to_string(maxValue));
     content.setOrigin(content.getLocalBounds().width / 2, content.getLocalBounds().height / 2);
     content.setPosition(border.getPosition().x, border.getPosition().y - content.getGlobalBounds().height / 2);
+
+    maxContentValue = maxValue;
+    currentContentValue = currentValue;
 }
 
 void Bar::render() {
     resources.window->draw(bar);
     resources.window->draw(border);
     resources.window->draw(content);
+}
+
+void Bar::setContent(int value) {
+    currentContentValue = value;
+
+    float x = border.getSize().x * (currentContentValue / static_cast<float>(maxContentValue));
+    float y = bar.getSize().y;
+
+    bar.setSize(sf::Vector2f(x, y));
+    content.setString(std::to_string(currentContentValue) + "/" + std::to_string(maxContentValue));
 }

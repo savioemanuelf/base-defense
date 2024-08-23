@@ -20,6 +20,7 @@ class Bar {
               sf::Color barColor = sf::Color::White, sf::Color outlineColor = sf::Color::Black, int maxValue = 100,
               int currentValue = 100);
     void render();
+    void setContent(int value);
 };
 
 #endif

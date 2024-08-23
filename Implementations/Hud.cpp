@@ -37,8 +37,8 @@ void Hud::render() {
     heroAmmo.render();
 }
 
-void Hud::setHeroLife(int life) {}
+void Hud::setHeroLife(int life) { heroLife.setContent(life); }
 
-void Hud::setHeroAmmo(int ammo) {}
+void Hud::setHeroAmmo(int ammo) { heroAmmo.setContent(ammo); }
 
-void Hud::setBaseLife(int life) {}
+void Hud::setBaseLife(int life) { baseLife.setContent(life); }

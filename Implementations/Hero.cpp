@@ -76,7 +76,7 @@ void Hero::checkHit(std::vector<std::unique_ptr<Projectile>>& projectiles) {
         if ((*it)->getHitbox().intersects(hitbox.getGlobalBounds())) {
             it = projectiles.erase(it);
             if (hp) {
-                hp -= 50;
+                hp -= 10;
             }
         } else {
             ++it;
