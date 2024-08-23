@@ -9,13 +9,12 @@
 class Base {
    private:
     GameContext& resources;
-    sf::RectangleShape shape;
+    sf::Sprite sprite;
+    sf::CircleShape hitbox;
     int hp;
 
    public:
-    Base(GameContext& r) : resources(r) {
-        init();
-    }
+    Base(GameContext& r) : resources(r) {}
     void init();
     void render();
     void checkHit(std::vector<std::unique_ptr<Projectile>>& projectiles);

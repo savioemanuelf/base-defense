@@ -65,6 +65,15 @@ void AssetsManager::addDropTexture(int id, std::string fileName) {
     }
 }
 
+void AssetsManager::addBaseTexture(int id, std::string fileName) {
+    auto texture = std::make_unique<sf::Texture>();
+
+    if (texture->loadFromFile("Assets/Texture/Base/" + fileName)) {
+        texture->setSmooth(true);
+        baseTexture[id] = std::move(texture);
+    }
+}
+
 sf::Font& AssetsManager::getFont(int id) { return *(fonts.at(id).get()); }
 
 sf::Cursor& AssetsManager::getCursor(int id) { return *(cursors.at(id).get()); }
@@ -78,3 +87,5 @@ sf::Texture& AssetsManager::getEnemyTexture(int id) { return *(enemyTextures.at(
 sf::Texture& AssetsManager::getBackgroundTexture(int id) { return *(backgroundTexture.at(id).get()); }
 
 sf::Texture& AssetsManager::getDropTexture(int id) { return *(dropTexture.at(id).get()); }
+
+sf::Texture& AssetsManager::getBaseTexture(int id) { return *(baseTexture.at(id).get()); }

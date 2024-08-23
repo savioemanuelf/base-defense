@@ -1,39 +1,52 @@
 #include "../Headers/Base.h"
 
 void Base::init() {
-    hp = 100;
+    sf::Texture& texture = resources.assets->getBaseTexture(Bases::intact);
+    sf::Vector2f windowSize(resources.window->getSize());
 
-    sf::Vector2f size((resources.window->getSize().x) * 0.29f, (resources.window->getSize().y) * 0.29f);
-    shape.setSize(size);
-    shape.setOrigin(shape.getSize().x / 2, shape.getSize().y / 2);
-    sf::Vector2f positions((resources.window->getSize().x) / 2, (resources.window->getSize().y) / 2);
-    shape.setPosition(positions);
-    shape.setFillColor(sf::Color::Transparent);
-    shape.setOutlineThickness(5);
-    shape.setOutlineColor(sf::Color::Green);
+    sprite.setTexture(texture);
+    sprite.setOrigin(texture.getSize().x / 2.0f, texture.getSize().y / 2.0f);
+    sprite.setPosition(windowSize.x / 2.0f, windowSize.y / 2.0f);
+
+    hitbox.setRadius(texture.getSize().x / 2.01f);
+    hitbox.setOrigin(hitbox.getRadius(), hitbox.getRadius());
+    hitbox.setPosition(sprite.getPosition());
+    hitbox.setFillColor(sf::Color::Red);
+
+    hp = 100;
 }
 
-void Base::render() { resources.window->draw(shape); }
+void Base::render() {
+    if (resources.debug) {
+        resources.window->draw(hitbox);
+    }
+    resources.window->draw(sprite);
+}
 
 void Base::checkHit(std::vector<std::unique_ptr<Projectile>>& projectiles) {
     for (auto it = projectiles.begin(); it != projectiles.end();) {
-        if ((*it)->getHitbox().intersects(shape.getGlobalBounds())) {
-            it = projectiles.erase(it);
+        sf::FloatRect rect = (*it)->getHitbox();
+        float closestX = std::clamp(hitbox.getPosition().x, rect.left, rect.left + rect.width);
+        float closestY = std::clamp(hitbox.getPosition().y, rect.top, rect.top + rect.height);
+        float dx = hitbox.getPosition().x - closestX;
+        float dy = hitbox.getPosition().y - closestY;
+
+        if ((dx * dx + dy * dy) < (hitbox.getRadius() * hitbox.getRadius())) {
             if (hp > 0) {
                 hp -= 10;
             }
             if (hp == 0) {
                 baseDestroy();
             }
-
+            it = projectiles.erase(it);
         } else {
-            ++it;
+            it++;
         }
     }
 }
 
-void Base::baseDestroy() { shape.setOutlineColor(sf::Color::Red); }
+void Base::baseDestroy() { sprite.setTexture(resources.assets->getBaseTexture(Bases::destroyed)); }
 
-sf::Vector2f Base::getPosition() { return shape.getPosition(); }
+sf::Vector2f Base::getPosition() { return sprite.getPosition(); }
 
 int Base::getHP() { return hp; }

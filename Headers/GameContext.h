@@ -13,6 +13,7 @@ enum Projectiles { fireball };
 enum Enemies { goblin };
 enum Backgrounds { rocks };
 enum Drops { life, ammo };
+enum Bases { intact, destroyed };
 
 struct GameContext {
     std::unique_ptr<sf::RenderWindow> window;

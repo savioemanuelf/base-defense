@@ -16,6 +16,8 @@ void Game::init() {
     resources.assets->addBackgroundTexture(Backgrounds::rocks, "background-rocks.jpg");
     resources.assets->addDropTexture(Drops::ammo, "mana-potion.png");
     resources.assets->addDropTexture(Drops::life, "life-potion.png");
+    resources.assets->addBaseTexture(Bases::intact, "base.png");
+    resources.assets->addBaseTexture(Bases::destroyed, "destroyed-base.png");
     resources.window->setMouseCursor(sf::Cursor());
 
     sf::Texture* backgroundTexture = &resources.assets->getBackgroundTexture(Backgrounds::rocks);
@@ -26,6 +28,7 @@ void Game::init() {
     isPaused = false;
 
     player.init();
+    base.init();
 }
 
 void Game::handleEvents(sf::Event& event) {
