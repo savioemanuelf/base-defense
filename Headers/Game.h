@@ -2,6 +2,7 @@
 #define GAME_H
 
 #include "Base.h"
+#include "Drop.h"
 #include "Enemy.h"
 #include "Hero.h"
 #include "Hud.h"
@@ -24,6 +25,7 @@ class Game : public State {
     Pause pauseMenu;
     sf::Sprite background;
     Hud gameHud;
+    std::vector<std::unique_ptr<Drop>> drops;
 
    public:
     Game(GameContext& resources)

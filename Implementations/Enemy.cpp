@@ -122,3 +122,5 @@ void Enemy::shoot(std::vector<std::unique_ptr<Projectile>>& projectiles, sf::Vec
         shootCooldown.restart();
     }
 }
+
+sf::Vector2f Enemy::getPosition() { return sprite.getPosition(); }

@@ -12,6 +12,7 @@ enum Heroes { mage, ranger, bard };
 enum Projectiles { fireball };
 enum Enemies { goblin };
 enum Backgrounds { rocks };
+enum Drops { life, ammo };
 
 struct GameContext {
     std::unique_ptr<sf::RenderWindow> window;

@@ -6,7 +6,7 @@ EXEC = programa
 SFML = -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
 CXXFLAGS = -Wall -fsanitize=address
 
-SRCS = main.cpp $(IMPL_DIR)/AssetsManager.cpp $(IMPL_DIR)/StateManager.cpp $(IMPL_DIR)/Menu.cpp $(IMPL_DIR)/Settings.cpp $(IMPL_DIR)/Game.cpp $(IMPL_DIR)/Hero.cpp $(IMPL_DIR)/Projectile.cpp $(IMPL_DIR)/Enemy.cpp $(IMPL_DIR)/Base.cpp $(IMPL_DIR)/Pause.cpp $(IMPL_DIR)/Hud.cpp $(IMPL_DIR)/Bar.cpp
+SRCS = main.cpp $(IMPL_DIR)/AssetsManager.cpp $(IMPL_DIR)/StateManager.cpp $(IMPL_DIR)/Menu.cpp $(IMPL_DIR)/Settings.cpp $(IMPL_DIR)/Game.cpp $(IMPL_DIR)/Hero.cpp $(IMPL_DIR)/Projectile.cpp $(IMPL_DIR)/Enemy.cpp $(IMPL_DIR)/Base.cpp $(IMPL_DIR)/Pause.cpp $(IMPL_DIR)/Hud.cpp $(IMPL_DIR)/Bar.cpp $(IMPL_DIR)/Drop.cpp
 OBJS = $(SRCS:$(IMPL_DIR)/%.cpp=$(OBJ_DIR)/%.o)
 
 all: $(EXEC)

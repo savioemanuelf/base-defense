@@ -14,6 +14,8 @@ void Game::init() {
     resources.assets->addProjectileTexture(Projectiles::fireball, "fireball.png");
     resources.assets->addEnemyTexture(Enemies::goblin, "goblin.png");
     resources.assets->addBackgroundTexture(Backgrounds::rocks, "background-rocks.jpg");
+    resources.assets->addDropTexture(Drops::ammo, "mana-potion.png");
+    resources.assets->addDropTexture(Drops::life, "life-potion.png");
     resources.window->setMouseCursor(sf::Cursor());
 
     sf::Texture* backgroundTexture = &resources.assets->getBackgroundTexture(Backgrounds::rocks);
@@ -65,11 +67,25 @@ void Game::update(float dt) {
             enemySpawnClock.restart();
         }
 
-
         if (!player.isDead()) {
             player.walk(dt);
             player.rotate(resources.window->mapPixelToCoords(sf::Mouse::getPosition(*resources.window)));
             player.checkHit(enemiesProjectiles);
+        }
+
+        for (auto it = drops.begin(); it != drops.end();) {
+            if ((*it)->getHitbox().intersects(player.getHitbox())) {
+                if ((*it)->getType() == Drops::life) {
+                    player.increaseHP(5);
+                } else {
+                    player.increaseAmmo(5);
+                }
+                it = drops.erase(it);
+            } else if ((*it)->getDespawnTime() >= 10) {
+                it = drops.erase(it);
+            } else {
+                it++;
+            }
         }
 
         for (auto it = enemiesProjectiles.begin(); it != enemiesProjectiles.end();) {
@@ -92,6 +108,13 @@ void Game::update(float dt) {
 
         for (auto it = enemies.begin(); it != enemies.end();) {
             if ((*it)->isDead()) {
+                if (rand() % 2 == 1) {
+                    if (rand() % 2 == 1) {
+                        drops.push_back(std::make_unique<Drop>(resources, Drops::ammo, (*it)->getPosition()));
+                    } else {
+                        drops.push_back(std::make_unique<Drop>(resources, Drops::life, (*it)->getPosition()));
+                    }
+                }
                 it = enemies.erase(it);
             } else {
                 if (player.isDead()) {
@@ -108,7 +131,7 @@ void Game::update(float dt) {
                 ++it;
             }
         }
-        
+
         base.checkHit(enemiesProjectiles);
 
         gameHud.setHeroLife(player.getHP());
@@ -122,8 +145,12 @@ void Game::render() {
 
     resources.window->draw(background);
 
-    player.render();
+    for (auto& drop : drops) {
+        drop->render();
+    }
+
     base.render();
+    player.render();
 
     for (auto& projectile : heroProjectiles) {
         projectile->render();

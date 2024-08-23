@@ -21,8 +21,8 @@ void Hero::init() {
     targetPosition = sprite.getPosition();
 
     speed = 200.0f;
-    ammo = 50;
-    hp = 100;
+    ammo = maxAmmo = 50;
+    hp = maxHp = 100;
 
     hitbox.setSize(sf::Vector2f(texture->getSize().x - 35, texture->getSize().y - 35));
     hitbox.setOrigin(hitbox.getSize().x / 2, hitbox.getSize().y / 2);
@@ -93,3 +93,21 @@ bool Hero::isDead() {
 int Hero::getHP() { return hp; }
 
 int Hero::getAmmo() { return ammo; }
+
+sf::FloatRect Hero::getHitbox() { return hitbox.getGlobalBounds(); }
+
+void Hero::increaseHP(int value) {
+    if (hp + value > maxHp) {
+        hp = maxHp;
+    } else {
+        hp += value;
+    }
+}
+
+void Hero::increaseAmmo(int value) {
+    if (ammo + value > maxAmmo) {
+        ammo = maxAmmo;
+    } else {
+        ammo += value;
+    }
+}

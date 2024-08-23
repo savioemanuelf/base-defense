@@ -13,6 +13,8 @@ class Hero {
     int ammo;
     int hp;
     sf::RectangleShape hitbox;
+    int maxHp;
+    int maxAmmo;
 
    public:
     Hero(GameContext& r) : resources(r) {}
@@ -28,6 +30,9 @@ class Hero {
     bool isDead();
     int getHP();
     int getAmmo();
+    sf::FloatRect getHitbox();
+    void increaseHP(int value);
+    void increaseAmmo(int value);
 };
 
 #endif

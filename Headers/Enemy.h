@@ -28,6 +28,7 @@ class Enemy {
     void checkHit(std::vector<std::unique_ptr<Projectile>>& projectiles);
     bool isDead();
     void shoot(std::vector<std::unique_ptr<Projectile>>& projectiles, sf::Vector2f target);
+    sf::Vector2f getPosition();
 };
 
 #endif
