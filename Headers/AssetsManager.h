@@ -15,6 +15,7 @@ class AssetsManager {
     std::map<int, std::unique_ptr<sf::Texture>> enemyTextures;
     std::map<int, std::unique_ptr<sf::Texture>> projectilesTexture;
     std::map<int, std::unique_ptr<sf::Texture>> backgroundTexture;
+    std::map<int, std::unique_ptr<sf::Texture>> dropTexture;
 
    public:
     AssetsManager() {}
@@ -24,6 +25,7 @@ class AssetsManager {
     void addProjectileTexture(int id, std::string fileName);
     void addEnemyTexture(int id, std::string fileName);
     void addBackgroundTexture(int id, std::string fileName);
+    void addDropTexture(int id, std::string fileName);
 
     sf::Font& getFont(int id);
     sf::Cursor& getCursor(int id);
@@ -31,6 +33,7 @@ class AssetsManager {
     sf::Texture& getProjectileTexture(int id);
     sf::Texture& getEnemyTexture(int id);
     sf::Texture& getBackgroundTexture(int id);
+    sf::Texture& getDropTexture(int id);
 };
 
 #endif
