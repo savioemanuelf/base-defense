@@ -11,16 +11,21 @@ class Base {
     GameContext& resources;
     sf::Sprite sprite;
     sf::CircleShape hitbox;
+    sf::Clock regenTimer;
     int hp;
+    int maxHp;
+    bool destroyed;
 
    public:
     Base(GameContext& r) : resources(r) {}
     void init();
     void render();
+    void update();
     void checkHit(std::vector<std::unique_ptr<Projectile>>& projectiles);
     void baseDestroy();
     sf::Vector2f getPosition();
     int getHP();
+    bool isDestroyed();
 };
 
 #endif

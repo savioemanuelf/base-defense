@@ -70,6 +70,10 @@ void Game::update(float dt) {
             enemySpawnClock.restart();
         }
 
+        if (!base.isDestroyed()) {
+            base.update();
+        }
+
         if (!player.isDead()) {
             player.walk(dt);
             player.rotate(resources.window->mapPixelToCoords(sf::Mouse::getPosition(*resources.window)));

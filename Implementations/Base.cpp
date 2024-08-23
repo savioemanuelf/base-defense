@@ -1,5 +1,6 @@
 #include "../Headers/Base.h"
 
+
 void Base::init() {
     sf::Texture& texture = resources.assets->getBaseTexture(Bases::intact);
     sf::Vector2f windowSize(resources.window->getSize());
@@ -13,7 +14,7 @@ void Base::init() {
     hitbox.setPosition(sprite.getPosition());
     hitbox.setFillColor(sf::Color::Red);
 
-    hp = 100;
+    hp = maxHp = 100;
 }
 
 void Base::render() {
@@ -21,6 +22,15 @@ void Base::render() {
         resources.window->draw(hitbox);
     }
     resources.window->draw(sprite);
+}
+
+void Base::update() {
+    if (regenTimer.getElapsedTime().asSeconds() >= 1) {
+        if (hp < maxHp) {
+            hp += 1;
+        }
+        regenTimer.restart();
+    }
 }
 
 void Base::checkHit(std::vector<std::unique_ptr<Projectile>>& projectiles) {
@@ -45,8 +55,13 @@ void Base::checkHit(std::vector<std::unique_ptr<Projectile>>& projectiles) {
     }
 }
 
-void Base::baseDestroy() { sprite.setTexture(resources.assets->getBaseTexture(Bases::destroyed)); }
+void Base::baseDestroy() {
+    sprite.setTexture(resources.assets->getBaseTexture(Bases::destroyed));
+    destroyed = true;
+}
 
 sf::Vector2f Base::getPosition() { return sprite.getPosition(); }
 
 int Base::getHP() { return hp; }
+
+bool Base::isDestroyed() { return destroyed; }
