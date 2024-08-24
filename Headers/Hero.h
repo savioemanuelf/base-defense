@@ -19,6 +19,9 @@ class Hero {
     int ammo;
     int hp;
 
+    void playProjectileSound();
+    sf::SoundBuffer projectileSoundBuffer;
+    std::vector<sf::Sound> projectileSouds;
    public:
     // constructor
     Hero(GameContext& r) : resources(r) {}

@@ -1,5 +1,5 @@
 #include "../Headers/Hero.h"
-
+#include <iostream>
 #include <cmath>
 
 void Hero::init() {
@@ -8,12 +8,26 @@ void Hero::init() {
     switch (resources.heroType) {
         case Heroes::mage:
             texture = &resources.assets->getHeroTexture(Heroes::mage);
+            if (!projectileSoundBuffer.loadFromFile("Assets/SFX/fireball.wav")) {
+                std::cerr << "Erro ao carregar o som da bola de fogo" << std::endl;
+            }
             break;
         case Heroes::bard:
             texture = &resources.assets->getHeroTexture(Heroes::bard);
+            if (!projectileSoundBuffer.loadFromFile("Assets/SFX/banjo.wav")) {
+                std::cerr << "Erro ao carregar o som do banjo" << std::endl;
+            }
             break;
     }
 
+    int maxSounds = 25;
+    if (projectileSoundBuffer.getSampleCount() > 0) {
+        for (int i = 0; i < maxSounds; ++i) {
+            projectileSouds.emplace_back(projectileSoundBuffer);
+        } 
+    } else {
+    std::cerr << "Erro ao carregar o som da bola de fogo" << std::endl;
+    }
     // sprite settings
     sprite.setTexture(*texture);
     sprite.setOrigin((*texture).getSize().x / 2.0f, (*texture).getSize().y / 2.0f);
@@ -57,6 +71,7 @@ void Hero::rotate(sf::Vector2f targetPosition) {
 void Hero::shoot(std::vector<std::unique_ptr<Projectile>>& projectiles, sf::Vector2f target) {
     if (hp) {
         if (ammo) {
+            playProjectileSound();
             ammo--;
             sf::Vector2f spawnPosition = sprite.getPosition();
             sf::Vector2f direction = target - spawnPosition;
@@ -105,6 +120,15 @@ void Hero::increaseAmmo(int value) {
         ammo = maxAmmo;
     } else {
         ammo += value;
+    }
+}
+
+void Hero::playProjectileSound() {
+    for (auto& sound : projectileSouds) {
+        if (sound.getStatus() != sf::Sound::Playing) {
+            sound.play();
+            break;
+        }
     }
 }
 void Hero::setHp(int value) { maxHp = hp = value; }
