@@ -31,6 +31,9 @@ class Game : public State {
     bool endGame;
     float enemyCooldown;
     float enemySpeed;
+    int dropCooldown;
+    int droppedLifeAmount;
+    int droppedAmmoAmount;
 
    public:
     Game(GameContext& resources)

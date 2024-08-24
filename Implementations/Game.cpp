@@ -43,6 +43,10 @@ void Game::init() {
             // enemy settings
             enemyCooldown = 5;
             enemySpeed = 130;
+            // drop settings
+            dropCooldown = 8;
+            droppedLifeAmount = 3;
+            droppedAmmoAmount = 5;
             break;
         case Difficulties::normal:
             // player settings
@@ -55,6 +59,10 @@ void Game::init() {
             // enemy settings
             enemyCooldown = 3.5;
             enemySpeed = 120;
+            // drop settings
+            dropCooldown = 8;
+            droppedLifeAmount = 2;
+            droppedAmmoAmount = 3;
             break;
         case Difficulties::hard:
             // player settings
@@ -67,6 +75,10 @@ void Game::init() {
             // enemy settings
             enemyCooldown = 2.5;
             enemySpeed = 110;
+            // drop settings
+            dropCooldown = 8;
+            droppedLifeAmount = 1;
+            droppedAmmoAmount = 2;
             break;
     }
 
@@ -143,12 +155,12 @@ void Game::update(float dt) {
         for (auto it = drops.begin(); it != drops.end();) {
             if ((*it)->getHitbox().intersects(player.getHitbox())) {
                 if ((*it)->getType() == Drops::life) {
-                    player.increaseHP(5);
+                    player.increaseHP(droppedLifeAmount);
                 } else {
-                    player.increaseAmmo(5);
+                    player.increaseAmmo(droppedAmmoAmount);
                 }
                 it = drops.erase(it);
-            } else if ((*it)->getDespawnTime() >= 10) {
+            } else if ((*it)->getDespawnTime() >= dropCooldown) {
                 it = drops.erase(it);
             } else {
                 it++;

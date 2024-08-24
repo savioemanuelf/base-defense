@@ -75,8 +75,10 @@ void Hero::checkHit(std::vector<std::unique_ptr<Projectile>>& projectiles) {
     for (auto it = projectiles.begin(); it != projectiles.end();) {
         if ((*it)->getHitbox().intersects(hitbox.getGlobalBounds())) {
             it = projectiles.erase(it);
-            if (hp) {
+            if (hp - 10 >= 0) {
                 hp -= 10;
+            } else {
+                hp = 0;
             }
         } else {
             ++it;
