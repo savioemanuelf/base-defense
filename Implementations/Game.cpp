@@ -26,36 +26,50 @@ void Game::init() {
     background.setScale(1, 1);
 
     isPaused = false;
+    endGame = false;
 
     player.init();
     base.init();
 }
 
 void Game::handleEvents(sf::Event& event) {
-    if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
-        isPaused = !isPaused;
-    }
-    if (isPaused) {
-        pauseMenu.handleEvents(event);
-        switch (pauseMenu.getSelectedOption()) {
+    if (endGame) {
+        gameover.handleEvents(event);
+        switch (gameover.getSelectedOption()) {
             case 0:
-                isPaused = !isPaused;
-                break;
-            case 1:
                 next = StateType::Restart;
                 break;
-            case 2:
+            case 1:
                 next = StateType::Menu;
                 break;
         }
     } else {
-        if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) {
-            player.shoot(heroProjectiles,
-                         resources.window->mapPixelToCoords(sf::Mouse::getPosition(*resources.window)));
+        if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+            isPaused = !isPaused;
         }
-        if (event.type == sf::Event::MouseButtonPressed) {
-            if (sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
-                player.setTargetPosition(resources.window->mapPixelToCoords(sf::Mouse::getPosition(*resources.window)));
+        if (isPaused) {
+            pauseMenu.handleEvents(event);
+            switch (pauseMenu.getSelectedOption()) {
+                case 0:
+                    isPaused = !isPaused;
+                    break;
+                case 1:
+                    next = StateType::Restart;
+                    break;
+                case 2:
+                    next = StateType::Menu;
+                    break;
+            }
+        } else {
+            if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) {
+                player.shoot(heroProjectiles,
+                             resources.window->mapPixelToCoords(sf::Mouse::getPosition(*resources.window)));
+            }
+            if (event.type == sf::Event::MouseButtonPressed) {
+                if (sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
+                    player.setTargetPosition(
+                        resources.window->mapPixelToCoords(sf::Mouse::getPosition(*resources.window)));
+                }
             }
         }
     }
@@ -64,6 +78,8 @@ void Game::handleEvents(sf::Event& event) {
 void Game::update(float dt) {
     if (isPaused) {
         pauseMenu.update();
+    } else if (endGame) {
+        gameover.update();
     } else {
         if (enemySpawnClock.getElapsedTime().asSeconds() >= 5) {
             enemies.push_back(std::make_unique<Enemy>(resources));
@@ -72,6 +88,8 @@ void Game::update(float dt) {
 
         if (!base.isDestroyed()) {
             base.update();
+        } else {
+            endGame = true;
         }
 
         if (!player.isDead()) {
@@ -173,6 +191,9 @@ void Game::render() {
 
     if (isPaused) {
         pauseMenu.render();
+    }
+    if (endGame) {
+        gameover.render();
     }
 
     resources.window->display();

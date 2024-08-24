@@ -1,6 +1,5 @@
 #include "../Headers/Base.h"
 
-
 void Base::init() {
     sf::Texture& texture = resources.assets->getBaseTexture(Bases::intact);
     sf::Vector2f windowSize(resources.window->getSize());
@@ -42,8 +41,10 @@ void Base::checkHit(std::vector<std::unique_ptr<Projectile>>& projectiles) {
         float dy = hitbox.getPosition().y - closestY;
 
         if ((dx * dx + dy * dy) < (hitbox.getRadius() * hitbox.getRadius())) {
-            if (hp > 0) {
+            if (hp - 10 >= 0) {
                 hp -= 10;
+            } else {
+                hp = 0;
             }
             if (hp == 0) {
                 baseDestroy();

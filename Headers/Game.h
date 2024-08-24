@@ -4,6 +4,7 @@
 #include "Base.h"
 #include "Drop.h"
 #include "Enemy.h"
+#include "Gameover.h"
 #include "Hero.h"
 #include "Hud.h"
 #include "Pause.h"
@@ -26,6 +27,8 @@ class Game : public State {
     sf::Sprite background;
     Hud gameHud;
     std::vector<std::unique_ptr<Drop>> drops;
+    Gameover gameover;
+    bool endGame;
 
    public:
     Game(GameContext& resources)
@@ -34,7 +37,8 @@ class Game : public State {
           player(resources),
           base(resources),
           pauseMenu(resources),
-          gameHud(resources) {
+          gameHud(resources),
+          gameover(resources) {
         init();
     }
     ~Game() override {}
