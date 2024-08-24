@@ -29,6 +29,7 @@ class Enemy {
     bool isDead();
     void shoot(std::vector<std::unique_ptr<Projectile>>& projectiles, sf::Vector2f target);
     sf::Vector2f getPosition();
+    void setSpeed(int value);
 };
 
 #endif

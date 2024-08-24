@@ -45,7 +45,6 @@ void Enemy::init() {
     sprite.setTexture(texture);
     sprite.setOrigin(texture.getSize().x / 2.0f, texture.getSize().y / 2.0f);
     sprite.setPosition(randomPositionOutside());
-    speed = 130.0f;
     hp = 10;
 
     hitbox.setSize(sf::Vector2f(texture.getSize().x - 40, texture.getSize().y - 40));
@@ -124,3 +123,5 @@ void Enemy::shoot(std::vector<std::unique_ptr<Projectile>>& projectiles, sf::Vec
 }
 
 sf::Vector2f Enemy::getPosition() { return sprite.getPosition(); }
+
+void Enemy::setSpeed(int value) { speed = value; }

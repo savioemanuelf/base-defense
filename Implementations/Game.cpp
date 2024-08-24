@@ -40,6 +40,9 @@ void Game::init() {
             // base settings
             base.setHp(100);
             base.setRegenCooldown(1);
+            // enemy settings
+            enemyCooldown = 5;
+            enemySpeed = 130;
             break;
         case Difficulties::normal:
             // player settings
@@ -49,6 +52,9 @@ void Game::init() {
             // base settings
             base.setHp(100);
             base.setRegenCooldown(3);
+            // enemy settings
+            enemyCooldown = 3.5;
+            enemySpeed = 120;
             break;
         case Difficulties::hard:
             // player settings
@@ -58,6 +64,9 @@ void Game::init() {
             // base settings
             base.setHp(50);
             base.setRegenCooldown(5);
+            // enemy settings
+            enemyCooldown = 2.5;
+            enemySpeed = 110;
             break;
     }
 
@@ -113,8 +122,9 @@ void Game::update(float dt) {
     } else if (endGame) {
         gameover.update();
     } else {
-        if (enemySpawnClock.getElapsedTime().asSeconds() >= 5) {
+        if (enemySpawnClock.getElapsedTime().asSeconds() >= enemyCooldown) {
             enemies.push_back(std::make_unique<Enemy>(resources));
+            enemies.back()->setSpeed(enemySpeed);
             enemySpawnClock.restart();
         }
 

@@ -29,6 +29,8 @@ class Game : public State {
     std::vector<std::unique_ptr<Drop>> drops;
     Gameover gameover;
     bool endGame;
+    float enemyCooldown;
+    float enemySpeed;
 
    public:
     Game(GameContext& resources)
