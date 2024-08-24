@@ -9,7 +9,7 @@
 // global enums
 enum Fonts { arial };
 enum Cursors { hand };
-enum Heroes { mage, ranger, bard };
+enum Heroes { mage, bard };
 enum Projectiles { fireball, note };
 enum Enemies { goblin };
 enum Backgrounds { rocks };

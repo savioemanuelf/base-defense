@@ -7,13 +7,13 @@ void Game::init() {
     switch (resources.heroType) {
         case Heroes::mage:
             resources.assets->addHeroTexture(Heroes::mage, "mage.png");
-            resources.assets->addProjectileTexture(Projectiles::fireball, "fireball.png");
             break;
         case Heroes::bard:
             resources.assets->addHeroTexture(Heroes::bard, "bard.png");
             resources.assets->addProjectileTexture(Projectiles::note, "note.png");
             break;
     }
+    resources.assets->addProjectileTexture(Projectiles::fireball, "fireball.png");
     resources.assets->addEnemyTexture(Enemies::goblin, "goblin.png");
     resources.assets->addBackgroundTexture(Backgrounds::rocks, "background-rocks.jpg");
     resources.assets->addDropTexture(Drops::ammo, "mana-potion.png");
@@ -282,10 +282,10 @@ void Game::render() {
     resources.window->clear();
 
     resources.window->draw(background);
+    base.render();
     for (auto& drop : drops) {
         drop->render();
     }
-    base.render();
     player.render();
     for (auto& projectile : heroProjectiles) {
         projectile->render();

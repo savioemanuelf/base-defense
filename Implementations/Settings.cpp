@@ -23,9 +23,6 @@ void Settings::init() {
         case Heroes::mage:
             heroType.setString("Heroi: mago");
             break;
-        case Heroes::ranger:
-            heroType.setString("Heroi: arqueiro");
-            break;
         case Heroes::bard:
             heroType.setString("Heroi: bardo");
             break;
@@ -87,10 +84,6 @@ void Settings::handleEvents(sf::Event& event) {
                         static_cast<sf::Vector2f>(sf::Mouse::getPosition(*resources.window)))) {
                     switch (resources.heroType) {
                         case Heroes::mage:
-                            heroType.setString("Heroi: arqueiro");
-                            resources.heroType = Heroes::ranger;
-                            break;
-                        case Heroes::ranger:
                             heroType.setString("Heroi: bardo");
                             resources.heroType = Heroes::bard;
                             break;
