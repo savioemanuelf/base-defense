@@ -27,6 +27,7 @@ void Game::init() {
 
     isPaused = false;
     endGame = false;
+    victory = false;
 
     player.init();
     base.init();
@@ -102,6 +103,13 @@ void Game::handleEvents(sf::Event& event) {
                 next = StateType::Menu;
                 break;
         }
+    } else if (victory) {
+        gamewin.handleEvents(event);
+        switch (gamewin.getSelectedOption()) {
+            case 0:
+                next = StateType::Menu;
+                break;
+        }
     } else {
         if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
             isPaused = !isPaused;
@@ -139,6 +147,8 @@ void Game::update(float dt) {
         pauseMenu.update();
     } else if (endGame) {
         gameover.update();
+    } else if (victory) {
+        gamewin.update();
     } else {
         if (enemySpawnClock.getElapsedTime().asSeconds() >= enemyCooldown) {
             enemies.push_back(std::make_unique<Enemy>(resources));
@@ -225,7 +235,7 @@ void Game::update(float dt) {
         gameHud.setBaseLife(base.getHP());
 
         if (killCount == enemiesToKill) {
-            endGame = true;
+            victory = true;
         }
     }
 }
@@ -259,6 +269,9 @@ void Game::render() {
     }
     if (endGame) {
         gameover.render();
+    }
+    if (victory) {
+        gamewin.render();
     }
 
     resources.window->display();

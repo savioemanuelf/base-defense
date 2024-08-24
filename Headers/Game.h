@@ -10,6 +10,7 @@
 #include "Pause.h"
 #include "Projectile.h"
 #include "State.h"
+#include "Victory.h"
 
 class Game : public State {
    private:
@@ -36,6 +37,8 @@ class Game : public State {
     int droppedAmmoAmount;
     int enemiesToKill;
     int killCount;
+    Victory gamewin;
+    bool victory;
 
    public:
     Game(GameContext& resources)
@@ -45,7 +48,8 @@ class Game : public State {
           base(resources),
           pauseMenu(resources),
           gameHud(resources),
-          gameover(resources) {
+          gameover(resources),
+          gamewin(resources) {
         init();
     }
     ~Game() override {}
