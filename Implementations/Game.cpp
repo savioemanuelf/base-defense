@@ -3,6 +3,9 @@
 #include <cmath>
 
 void Game::init() {
+    // reset kill count
+    killCount = 0;
+
     // textures loading
     switch (resources.heroType) {
         case Heroes::mage:
