@@ -4,35 +4,35 @@
 
 void Projectile::render() {
     resources.window->draw(sprite);
-    resources.window->draw(hitbox);
+    if (resources.debug) {
+        resources.window->draw(hitbox);
+    }
 }
 
 void Projectile::init(sf::Vector2f spawnPosition, sf::Vector2f direction, Enemy* shooter) {
-    owner = shooter;
+    // assets
     sf::Texture& texture = resources.assets->getProjectileTexture(Projectiles::fireball);
+
+    // default settings
     speed = 300.0f;
+    owner = shooter;
     outOfRange = false;
     maxRange = 500.0f;
     initialPosition = spawnPosition;
 
+    // sprite settnigs
     sprite.setTexture(texture);
     sprite.setOrigin(texture.getSize().x / 2.0f, texture.getSize().y / 2.0f);
     sprite.setPosition(spawnPosition);
     direction /= std::sqrt(direction.x * direction.x + direction.y * direction.y);
     velocity = speed * direction;
-
     rotate(direction);
 
+    // hitbox settings
     hitbox.setSize(sf::Vector2f(texture.getSize().x - 20, texture.getSize().y - 20));
     hitbox.setOrigin(hitbox.getSize().x / 2, hitbox.getSize().y / 2);
     hitbox.setPosition(sprite.getPosition());
-    hitbox.setFillColor(sf::Color::Transparent);
-
-    if (resources.debug) {
-        hitbox.setOutlineThickness(1);
-        hitbox.setFillColor(sf::Color::Red);
-        hitbox.setOutlineColor(sf::Color::Red);
-    }
+    hitbox.setFillColor(sf::Color::Red);
 }
 
 void Projectile::update(float dt) {

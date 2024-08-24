@@ -9,6 +9,7 @@
 
 class AssetsManager {
    private:
+    // textures
     std::map<int, std::unique_ptr<sf::Font>> fonts;
     std::map<int, std::unique_ptr<sf::Cursor>> cursors;
     std::map<int, std::unique_ptr<sf::Texture>> heroTextures;
@@ -20,7 +21,10 @@ class AssetsManager {
     std::map<int, std::unique_ptr<sf::Texture>> barTexture;
 
    public:
+    // constructor
     AssetsManager() {}
+
+    // add textures
     void addFont(int id, std::string fileName);
     void addCursor(int id, std::string fileName);
     void addHeroTexture(int id, std::string fileName);
@@ -31,6 +35,7 @@ class AssetsManager {
     void addBaseTexture(int id, std::string fileName);
     void addBarTexture(int id, std::string fileName);
 
+    // get textures
     sf::Font& getFont(int id);
     sf::Cursor& getCursor(int id);
     sf::Texture& getHeroTexture(int id);

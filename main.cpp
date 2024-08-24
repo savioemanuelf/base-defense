@@ -7,6 +7,7 @@
 #include "Headers/StateManager.h"
 
 int main() {
+    // global resources
     GameContext resources;
     resources.window->create(sf::VideoMode::getDesktopMode(), "Base Defense", sf::Style::Fullscreen);
     resources.window->setFramerateLimit(60);
@@ -17,10 +18,12 @@ int main() {
     resources.debug = false;
     resources.difficult = Difficulties::normal;
 
+    // game states manager
     StateManager StateManager;
     StateManager.changeState(std::make_unique<Menu>(resources));
 
     sf::Clock clock;
+    // state events, update and render
     while (resources.window->isOpen()) {
         sf::Event event;
         while (resources.window->pollEvent(event)) {

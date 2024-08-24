@@ -1,34 +1,40 @@
 #include "../Headers/Pause.h"
 
 void Pause::init() {
+    // assets
     int outlineSize = 2;
     primary = sf::Color(166, 166, 166);
     secondary = sf::Color::White;
 
+    // pause title settings
     pauseTitle.setFont(resources.assets->getFont(arial));
     pauseTitle.setString("Pause");
     pauseTitle.setFillColor(primary);
     pauseTitle.setOutlineThickness(outlineSize);
     pauseTitle.setOutlineColor(secondary);
 
+    // back to game settings
     backToGame.setFont(resources.assets->getFont(arial));
     backToGame.setString("continuar");
     backToGame.setFillColor(primary);
     backToGame.setOutlineThickness(outlineSize);
     backToGame.setOutlineColor(secondary);
 
+    // restart game settings
     restartGame.setFont(resources.assets->getFont(arial));
     restartGame.setString("reiniciar");
     restartGame.setFillColor(primary);
     restartGame.setOutlineThickness(outlineSize);
     restartGame.setOutlineColor(secondary);
 
+    // back to menu settings
     backToMenu.setFont(resources.assets->getFont(arial));
     backToMenu.setString("sair");
     backToMenu.setFillColor(primary);
     backToMenu.setOutlineThickness(outlineSize);
     backToMenu.setOutlineColor(secondary);
 
+    // dark overlay settings
     darkOverlay.setSize(static_cast<sf::Vector2f>(resources.window->getSize()));
     darkOverlay.setFillColor(sf::Color(0, 0, 0, 128));
 
@@ -54,6 +60,7 @@ void Pause::handleEvents(sf::Event& event) {
 }
 
 void Pause::update() {
+    // change mouse cursor
     if (backToGame.getGlobalBounds().contains(static_cast<sf::Vector2f>(sf::Mouse::getPosition(*resources.window))) ||
         restartGame.getGlobalBounds().contains(static_cast<sf::Vector2f>(sf::Mouse::getPosition(*resources.window))) ||
         backToMenu.getGlobalBounds().contains(static_cast<sf::Vector2f>(sf::Mouse::getPosition(*resources.window)))) {

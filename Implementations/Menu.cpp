@@ -1,6 +1,7 @@
 #include "../Headers/Menu.h"
 
 void Menu::init() {
+    // asstes
     primary = sf::Color(166, 166, 166);
     secondary = sf::Color::White;
     outlineSize = 2;
@@ -37,6 +38,7 @@ void Menu::handleEvents(sf::Event& event) {
         case sf::Event::MouseButtonPressed:
             switch (event.mouseButton.button) {
                 case sf::Mouse::Left:
+                    // change state on click
                     if (play.getGlobalBounds().contains(
                             static_cast<sf::Vector2f>(sf::Mouse::getPosition(*resources.window)))) {
                         next = StateType::Game;
@@ -56,6 +58,7 @@ void Menu::handleEvents(sf::Event& event) {
 }
 
 void Menu::update(float dt) {
+    // change mouse cursor
     if (play.getGlobalBounds().contains(static_cast<sf::Vector2f>(sf::Mouse::getPosition(*resources.window))) ||
         settings.getGlobalBounds().contains(static_cast<sf::Vector2f>(sf::Mouse::getPosition(*resources.window))) ||
         exit.getGlobalBounds().contains(static_cast<sf::Vector2f>(sf::Mouse::getPosition(*resources.window)))) {

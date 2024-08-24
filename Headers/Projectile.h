@@ -3,29 +3,35 @@
 
 #include <SFML/Graphics.hpp>
 
-#include "GameContext.h"
 #include "Enemy.h"
+#include "GameContext.h"
 
 class Enemy;
 
 class Projectile {
    private:
-    GameContext& resources;
+    // global resources
+    GameContext &resources;
+    // components
+    sf::RectangleShape hitbox;
     sf::Sprite sprite;
-    float speed;
+    // attributes
+    sf::Vector2f initialPosition;
     sf::Vector2f velocity;
     bool outOfRange;
     float maxRange;
-    sf::Vector2f initialPosition;
     Enemy *owner;
-    sf::RectangleShape hitbox;
+    float speed;
 
    public:
-    Projectile(GameContext& r, sf::Vector2f sp, sf::Vector2f t, Enemy *s = nullptr) : resources(r) { init(sp, t,s); }
-    void init(sf::Vector2f spawnPosition, sf::Vector2f direction,Enemy *shooter);
+    // constructor
+    Projectile(GameContext &r, sf::Vector2f sp, sf::Vector2f t, Enemy *s = nullptr) : resources(r) { init(sp, t, s); }
+    // functions
+    void init(sf::Vector2f spawnPosition, sf::Vector2f direction, Enemy *shooter);
     void render();
     void update(float dt);
     void rotate(sf::Vector2f direction);
+    // getters
     bool isOutOfRange();
     sf::FloatRect getHitbox();
     Enemy *getOwner();

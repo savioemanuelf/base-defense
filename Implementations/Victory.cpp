@@ -1,22 +1,26 @@
 #include "../Headers/Victory.h"
 
 void Victory::init() {
+    // assets
     int outlineSize = 2;
     primary = sf::Color(166, 166, 166);
     secondary = sf::Color::White;
 
+    // you win settings
     youWin.setFont(resources.assets->getFont(arial));
     youWin.setString("Voce Ganhou!!!!");
     youWin.setFillColor(primary);
     youWin.setOutlineThickness(outlineSize);
     youWin.setOutlineColor(secondary);
 
+    // back to menu settings
     backToMenu.setFont(resources.assets->getFont(arial));
     backToMenu.setString("voltar pro menu");
     backToMenu.setFillColor(primary);
     backToMenu.setOutlineThickness(outlineSize);
     backToMenu.setOutlineColor(secondary);
 
+    // dark overlay settings
     darkOverlay.setSize(static_cast<sf::Vector2f>(resources.window->getSize()));
     darkOverlay.setFillColor(sf::Color(0, 0, 0, 128));
 
@@ -34,6 +38,7 @@ void Victory::handleEvents(sf::Event& event) {
 }
 
 void Victory::update() {
+    // change mouse cursor
     if (backToMenu.getGlobalBounds().contains(static_cast<sf::Vector2f>(sf::Mouse::getPosition(*resources.window)))) {
         resources.window->setMouseCursor(resources.assets->getCursor(Cursors::hand));
     } else {

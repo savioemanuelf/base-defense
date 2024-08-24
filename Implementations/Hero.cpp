@@ -3,8 +3,8 @@
 #include <cmath>
 
 void Hero::init() {
+    // texture acess
     sf::Texture* texture = nullptr;
-
     switch (resources.heroType) {
         case Heroes::mage:
             texture = &resources.assets->getHeroTexture(Heroes::mage);
@@ -14,26 +14,17 @@ void Hero::init() {
             break;
     }
 
+    // sprite settings
     sprite.setTexture(*texture);
     sprite.setOrigin((*texture).getSize().x / 2.0f, (*texture).getSize().y / 2.0f);
     sprite.setPosition(resources.window->getSize().x / 2.0f, resources.window->getSize().y / 2.0f);
-
     targetPosition = sprite.getPosition();
 
-    speed = 200.0f;
-    ammo = maxAmmo = 50;
-    hp = maxHp = 100;
-
+    // hitobx settings
     hitbox.setSize(sf::Vector2f(texture->getSize().x - 35, texture->getSize().y - 35));
     hitbox.setOrigin(hitbox.getSize().x / 2, hitbox.getSize().y / 2);
     hitbox.setPosition(sprite.getPosition());
-    hitbox.setFillColor(sf::Color::Transparent);
-
-    if (resources.debug) {
-        hitbox.setOutlineThickness(1);
-        hitbox.setFillColor(sf::Color::Red);
-        hitbox.setOutlineColor(sf::Color::Red);
-    }
+    hitbox.setFillColor(sf::Color::Red);
 }
 
 void Hero::walk(float dt) {
@@ -47,7 +38,10 @@ void Hero::walk(float dt) {
 }
 
 void Hero::render() {
-    resources.window->draw(hitbox);
+    // render hitbox if debug on
+    if (resources.debug) {
+        resources.window->draw(hitbox);
+    }
     resources.window->draw(sprite);
 }
 

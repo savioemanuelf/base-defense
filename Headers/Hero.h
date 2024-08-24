@@ -6,31 +6,38 @@
 
 class Hero {
    private:
+    // global resources
     GameContext& resources;
-    sf::Sprite sprite;
+    // components
     sf::Vector2f targetPosition;
+    sf::RectangleShape hitbox;
+    sf::Sprite sprite;
+    // attributes
     float speed;
+    int maxAmmo;
+    int maxHp;
     int ammo;
     int hp;
-    sf::RectangleShape hitbox;
-    int maxHp;
-    int maxAmmo;
 
    public:
+    // constructor
     Hero(GameContext& r) : resources(r) {}
+    // functions
     void init();
     void walk(float dt);
     void render();
-    sf::Vector2f getPosition() { return sprite.getPosition(); }
-    sf::Vector2f getTargetPosition() { return targetPosition; }
-    void setTargetPosition(sf::Vector2f target);
     void rotate(sf::Vector2f targetPosition);
     void shoot(std::vector<std::unique_ptr<Projectile>>& projectiles, sf::Vector2f target);
     void checkHit(std::vector<std::unique_ptr<Projectile>>& projectiles);
+    // getters
+    sf::Vector2f getPosition() { return sprite.getPosition(); }
+    sf::Vector2f getTargetPosition() { return targetPosition; }
     bool isDead();
     int getHP();
     int getAmmo();
     sf::FloatRect getHitbox();
+    // setters
+    void setTargetPosition(sf::Vector2f target);
     void increaseHP(int value);
     void increaseAmmo(int value);
     void setHp(int value);

@@ -3,6 +3,7 @@
 #include <cmath>
 
 void Game::init() {
+    // textures loading
     switch (resources.heroType) {
         case Heroes::mage:
             resources.assets->addHeroTexture(Heroes::mage, "mage.png");
@@ -19,19 +20,22 @@ void Game::init() {
     resources.assets->addBaseTexture(Bases::intact, "base.png");
     resources.assets->addBaseTexture(Bases::destroyed, "destroyed-base.png");
     resources.window->setMouseCursor(sf::Cursor());
-
     sf::Texture* backgroundTexture = &resources.assets->getBackgroundTexture(Backgrounds::rocks);
 
+    // background settings
     background.setTexture(*backgroundTexture);
     background.setScale(1, 1);
 
+    // game conditions
     isPaused = false;
     endGame = false;
     victory = false;
 
+    // player and base initialize
     player.init();
     base.init();
 
+    // difficulties configs
     switch (resources.difficult) {
         case Difficulties::easy:
             // player settings
@@ -89,10 +93,12 @@ void Game::init() {
             break;
     }
 
+    // hud initialize
     gameHud.init(player.getHP(), player.getAmmo(), base.getHP());
 }
 
 void Game::handleEvents(sf::Event& event) {
+    // only gameover events
     if (endGame) {
         gameover.handleEvents(event);
         switch (gameover.getSelectedOption()) {
@@ -103,17 +109,22 @@ void Game::handleEvents(sf::Event& event) {
                 next = StateType::Menu;
                 break;
         }
-    } else if (victory) {
+    }
+    // only gamewin events
+    else if (victory) {
         gamewin.handleEvents(event);
         switch (gamewin.getSelectedOption()) {
             case 0:
                 next = StateType::Menu;
                 break;
         }
-    } else {
+    }
+    // other events
+    else {
         if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
             isPaused = !isPaused;
         }
+        // only pause screen events
         if (isPaused) {
             pauseMenu.handleEvents(event);
             switch (pauseMenu.getSelectedOption()) {
@@ -127,11 +138,15 @@ void Game::handleEvents(sf::Event& event) {
                     next = StateType::Menu;
                     break;
             }
-        } else {
+        }
+        // only playing events
+        else {
+            // shoot
             if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) {
                 player.shoot(heroProjectiles,
                              resources.window->mapPixelToCoords(sf::Mouse::getPosition(*resources.window)));
             }
+            // move
             if (event.type == sf::Event::MouseButtonPressed) {
                 if (sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
                     player.setTargetPosition(
@@ -143,31 +158,42 @@ void Game::handleEvents(sf::Event& event) {
 }
 
 void Game::update(float dt) {
+    // only update pause
     if (isPaused) {
         pauseMenu.update();
-    } else if (endGame) {
+    }
+    // only update gamveover
+    else if (endGame) {
         gameover.update();
-    } else if (victory) {
+    }
+    // only update gamewin
+    else if (victory) {
         gamewin.update();
-    } else {
+    }
+    // only update ingame
+    else {
+        // enemies spawn and set speed
         if (enemySpawnClock.getElapsedTime().asSeconds() >= enemyCooldown) {
             enemies.push_back(std::make_unique<Enemy>(resources));
             enemies.back()->setSpeed(enemySpeed);
             enemySpawnClock.restart();
         }
 
+        // base update if base is up
         if (!base.isDestroyed()) {
             base.update();
         } else {
             endGame = true;
         }
 
+        // player update if player is alive
         if (!player.isDead()) {
             player.walk(dt);
             player.rotate(resources.window->mapPixelToCoords(sf::Mouse::getPosition(*resources.window)));
             player.checkHit(enemiesProjectiles);
         }
 
+        // drops update and player collect
         for (auto it = drops.begin(); it != drops.end();) {
             if ((*it)->getHitbox().intersects(player.getHitbox())) {
                 if ((*it)->getType() == Drops::life) {
@@ -183,6 +209,7 @@ void Game::update(float dt) {
             }
         }
 
+        // enemies projectiles update
         for (auto it = enemiesProjectiles.begin(); it != enemiesProjectiles.end();) {
             if ((*it)->isOutOfRange()) {
                 it = enemiesProjectiles.erase(it);
@@ -192,6 +219,7 @@ void Game::update(float dt) {
             }
         }
 
+        // hero projectiles update
         for (auto it = heroProjectiles.begin(); it != heroProjectiles.end();) {
             if ((*it)->isOutOfRange()) {
                 it = heroProjectiles.erase(it);
@@ -201,8 +229,10 @@ void Game::update(float dt) {
             }
         }
 
+        // enemies update
         for (auto it = enemies.begin(); it != enemies.end();) {
             if ((*it)->isDead()) {
+                // sorting drop type
                 if (rand() % 2 == 1) {
                     if (rand() % 2 == 1) {
                         drops.push_back(std::make_unique<Drop>(resources, Drops::ammo, (*it)->getPosition()));
@@ -213,27 +243,34 @@ void Game::update(float dt) {
                 it = enemies.erase(it);
                 killCount += 1;
             } else {
+                // target player if alive
                 if (player.isDead()) {
                     (*it)->move(base.getPosition(), dt);
                     (*it)->rotate(base.getPosition());
                     (*it)->shoot(enemiesProjectiles, base.getPosition());
-                } else {
+                }
+                // target base on player death
+                else {
                     (*it)->move(player.getPosition(), dt);
                     (*it)->rotate(player.getPosition());
                     (*it)->shoot(enemiesProjectiles, player.getPosition());
                 }
+                // verify projectiles hit
                 (*it)->checkHit(heroProjectiles);
                 (*it)->checkHit(enemiesProjectiles);
                 ++it;
             }
         }
 
+        // base verify projectiles
         base.checkHit(enemiesProjectiles);
 
+        // game hud update
         gameHud.setHeroLife(player.getHP());
         gameHud.setHeroAmmo(player.getAmmo());
         gameHud.setBaseLife(base.getHP());
 
+        // win condition
         if (killCount == enemiesToKill) {
             victory = true;
         }
@@ -244,14 +281,11 @@ void Game::render() {
     resources.window->clear();
 
     resources.window->draw(background);
-
     for (auto& drop : drops) {
         drop->render();
     }
-
     base.render();
     player.render();
-
     for (auto& projectile : heroProjectiles) {
         projectile->render();
     }
@@ -261,9 +295,7 @@ void Game::render() {
     for (auto& enemy : enemies) {
         enemy->render();
     }
-
     gameHud.render();
-
     if (isPaused) {
         pauseMenu.render();
     }

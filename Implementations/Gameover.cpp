@@ -1,28 +1,33 @@
 #include "../Headers/Gameover.h"
 
 void Gameover::init() {
+    // assets
     int outlineSize = 2;
     primary = sf::Color(166, 166, 166);
     secondary = sf::Color::White;
 
+    // you lose settings
     youLose.setFont(resources.assets->getFont(arial));
     youLose.setString("Voce Perdeu!");
     youLose.setFillColor(primary);
     youLose.setOutlineThickness(outlineSize);
     youLose.setOutlineColor(secondary);
 
+    // play again settings
     playAgain.setFont(resources.assets->getFont(arial));
     playAgain.setString("jogar novamente");
     playAgain.setFillColor(primary);
     playAgain.setOutlineThickness(outlineSize);
     playAgain.setOutlineColor(secondary);
 
+    // back to menu settings
     backToMenu.setFont(resources.assets->getFont(arial));
     backToMenu.setString("voltar pro menu");
     backToMenu.setFillColor(primary);
     backToMenu.setOutlineThickness(outlineSize);
     backToMenu.setOutlineColor(secondary);
 
+    // dark overlay settings
     darkOverlay.setSize(static_cast<sf::Vector2f>(resources.window->getSize()));
     darkOverlay.setFillColor(sf::Color(0, 0, 0, 128));
 
@@ -44,6 +49,7 @@ void Gameover::handleEvents(sf::Event& event) {
 }
 
 void Gameover::update() {
+    // change mouse cursor
     if (playAgain.getGlobalBounds().contains(static_cast<sf::Vector2f>(sf::Mouse::getPosition(*resources.window))) ||
         backToMenu.getGlobalBounds().contains(static_cast<sf::Vector2f>(sf::Mouse::getPosition(*resources.window)))) {
         resources.window->setMouseCursor(resources.assets->getCursor(Cursors::hand));

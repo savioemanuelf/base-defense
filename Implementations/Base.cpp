@@ -1,29 +1,33 @@
 #include "../Headers/Base.h"
 
 void Base::init() {
+    // assets
     sf::Texture& texture = resources.assets->getBaseTexture(Bases::intact);
     sf::Vector2f windowSize(resources.window->getSize());
 
+    // sprite settings
     sprite.setTexture(texture);
     sprite.setOrigin(texture.getSize().x / 2.0f, texture.getSize().y / 2.0f);
     sprite.setPosition(windowSize.x / 2.0f, windowSize.y / 2.0f);
 
+    // hitbox settings
     hitbox.setRadius(texture.getSize().x / 2.01f);
     hitbox.setOrigin(hitbox.getRadius(), hitbox.getRadius());
     hitbox.setPosition(sprite.getPosition());
     hitbox.setFillColor(sf::Color::Red);
-
-    hp = maxHp = 100;
 }
 
 void Base::render() {
+    // show hitbox if debug is on
     if (resources.debug) {
         resources.window->draw(hitbox);
     }
+
     resources.window->draw(sprite);
 }
 
 void Base::update() {
+    // base life regen
     if (regenTimer.getElapsedTime().asSeconds() >= regenCooldown) {
         if (hp < maxHp) {
             hp += 1;
@@ -33,6 +37,7 @@ void Base::update() {
 }
 
 void Base::checkHit(std::vector<std::unique_ptr<Projectile>>& projectiles) {
+    // check if projectiles collides base hitbox
     for (auto it = projectiles.begin(); it != projectiles.end();) {
         sf::FloatRect rect = (*it)->getHitbox();
         float closestX = std::clamp(hitbox.getPosition().x, rect.left, rect.left + rect.width);
@@ -57,6 +62,7 @@ void Base::checkHit(std::vector<std::unique_ptr<Projectile>>& projectiles) {
 }
 
 void Base::baseDestroy() {
+    // update sprite to destroyed
     sprite.setTexture(resources.assets->getBaseTexture(Bases::destroyed));
     destroyed = true;
 }

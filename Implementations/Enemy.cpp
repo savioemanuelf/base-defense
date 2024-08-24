@@ -41,22 +41,22 @@ sf::Vector2f Enemy::randomPositionOutside() {
 }
 
 void Enemy::init() {
+    // texture acess
     sf::Texture& texture = resources.assets->getEnemyTexture(Enemies::goblin);
+
+    // sprite settings
     sprite.setTexture(texture);
     sprite.setOrigin(texture.getSize().x / 2.0f, texture.getSize().y / 2.0f);
     sprite.setPosition(randomPositionOutside());
-    hp = 10;
 
+    // hitbox settings
     hitbox.setSize(sf::Vector2f(texture.getSize().x - 40, texture.getSize().y - 40));
     hitbox.setOrigin(hitbox.getSize().x / 2, hitbox.getSize().y / 2);
     hitbox.setPosition(sprite.getPosition());
-    hitbox.setFillColor(sf::Color::Transparent);
+    hitbox.setFillColor(sf::Color::Red);
 
-    if (resources.debug) {
-        hitbox.setOutlineThickness(1);
-        hitbox.setFillColor(sf::Color::Red);
-        hitbox.setOutlineColor(sf::Color::Red);
-    }
+    // default hp
+    hp = 10;
 }
 
 void Enemy::move(sf::Vector2f targetPosition, float dt) {
@@ -84,11 +84,16 @@ void Enemy::move(sf::Vector2f targetPosition, float dt) {
 }
 
 void Enemy::render() {
-    resources.window->draw(hitbox);
+    // render hitbox if debug on
+    if (resources.debug) {
+        resources.window->draw(hitbox);
+    }
+
     resources.window->draw(sprite);
 }
 
 void Enemy::rotate(sf::Vector2f targetPosition) {
+    // sprite rotate
     float dx = targetPosition.x - sprite.getPosition().x;
     float dy = targetPosition.y - sprite.getPosition().y;
     float angle = std::atan2(dy, dx) * 180 / M_PI;
@@ -97,6 +102,7 @@ void Enemy::rotate(sf::Vector2f targetPosition) {
 }
 
 void Enemy::checkHit(std::vector<std::unique_ptr<Projectile>>& projectiles) {
+    // check if projectiles collides enemy hitbox
     for (auto it = projectiles.begin(); it != projectiles.end();) {
         if ((*it)->getHitbox().intersects(hitbox.getGlobalBounds()) && (this != (*it)->getOwner())) {
             it = projectiles.erase(it);
@@ -114,6 +120,7 @@ bool Enemy::isDead() {
     return true;
 }
 void Enemy::shoot(std::vector<std::unique_ptr<Projectile>>& projectiles, sf::Vector2f target) {
+    // enemy shoot
     if (shootCooldown.getElapsedTime().asSeconds() >= 2) {
         sf::Vector2f spawnPosition = sprite.getPosition();
         sf::Vector2f direction = target - spawnPosition;

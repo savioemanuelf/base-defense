@@ -8,12 +8,16 @@
 
 class StateManager {
    private:
+    // attributes
     std::stack<std::unique_ptr<State>> states;
 
    public:
+    // constructor
     StateManager() {}
-    void changeState(std::unique_ptr<State> state);
+    // getters
     std::unique_ptr<State>& getState();
+    // setters
+    void changeState(std::unique_ptr<State> state);
 };
 
 #endif

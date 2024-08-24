@@ -6,6 +6,7 @@
 
 #include "AssetsManager.h"
 
+// global enums
 enum Fonts { arial };
 enum Cursors { hand };
 enum Heroes { mage, ranger, bard };
@@ -18,6 +19,7 @@ enum Bars { heroLifeBar, heroLifeBorder, heroManaBar, heroManaBorder, baseLifeBa
 enum Difficulties { easy, normal, hard };
 
 struct GameContext {
+    // global assets
     std::unique_ptr<sf::RenderWindow> window;
     std::unique_ptr<AssetsManager> assets;
     bool isFullscreen;
@@ -25,6 +27,7 @@ struct GameContext {
     Heroes heroType;
     Difficulties difficult;
 
+    // constructor
     GameContext() {
         assets = std::make_unique<AssetsManager>();
         window = std::make_unique<sf::RenderWindow>();

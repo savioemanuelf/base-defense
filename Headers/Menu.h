@@ -5,26 +5,26 @@
 
 class Menu : public State {
    private:
-    // Text Attributes
+    // components
     sf::Text title, play, settings, exit;
     sf::Color primary, secondary;
-    int outlineSize;
-    // Next State Selected
+    // attributes
     StateType next;
+    int outlineSize;
 
    public:
-    // Constructor
+    // constructor
     Menu(GameContext& resources) : State(resources), next(StateType::Menu) { init(); }
     ~Menu() override {}
-    // Virtual Methods
+    // functions
     void init() override;
     void handleEvents(sf::Event& event) override;
     void update(float dt) override;
     void render() override;
+    void resize();
+    // getters
     virtual StateType getType() { return StateType::Menu; }
     virtual StateType nextState() { return next; }
-    // Funcions
-    void resize();
 };
 
 #endif

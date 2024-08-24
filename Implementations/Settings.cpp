@@ -1,10 +1,12 @@
 #include "../Headers/Settings.h"
 
 void Settings::init() {
+    // assets
     primary = sf::Color(166, 166, 166);
     secondary = sf::Color::White;
     outlineSize = 2;
 
+    // fullscreen option
     fullscreen.setFont(resources.assets->getFont(Fonts::arial));
     if (resources.isFullscreen) {
         fullscreen.setString("Tela Cheia: Sim");
@@ -15,6 +17,7 @@ void Settings::init() {
     fullscreen.setOutlineThickness(outlineSize);
     fullscreen.setOutlineColor(secondary);
 
+    // hero type option
     heroType.setFont(resources.assets->getFont(Fonts::arial));
     switch (resources.heroType) {
         case Heroes::mage:
@@ -31,6 +34,7 @@ void Settings::init() {
     heroType.setOutlineThickness(outlineSize);
     heroType.setOutlineColor(secondary);
 
+    // difficult option
     difficulty.setFont(resources.assets->getFont(Fonts::arial));
     switch (resources.difficult) {
         case Difficulties::easy:
@@ -48,6 +52,7 @@ void Settings::init() {
     difficulty.setOutlineThickness(outlineSize);
     difficulty.setOutlineColor(secondary);
 
+    // back to main menu option
     back.setFont(resources.assets->getFont(Fonts::arial));
     back.setString("Voltar");
     back.setFillColor(primary);
@@ -61,6 +66,7 @@ void Settings::handleEvents(sf::Event& event) {
     switch (event.type) {
         case sf::Event::MouseButtonPressed:
             if (event.mouseButton.button == sf::Mouse::Left) {
+                // change screen size
                 if (fullscreen.getGlobalBounds().contains(
                         static_cast<sf::Vector2f>(sf::Mouse::getPosition(*resources.window)))) {
                     if (resources.isFullscreen) {
@@ -76,6 +82,7 @@ void Settings::handleEvents(sf::Event& event) {
                     resources.isFullscreen = !resources.isFullscreen;
                     resize();
                 }
+                // change hero type
                 if (heroType.getGlobalBounds().contains(
                         static_cast<sf::Vector2f>(sf::Mouse::getPosition(*resources.window)))) {
                     switch (resources.heroType) {
@@ -93,6 +100,7 @@ void Settings::handleEvents(sf::Event& event) {
                             break;
                     }
                 }
+                // change difficult
                 if (difficulty.getGlobalBounds().contains(
                         static_cast<sf::Vector2f>(sf::Mouse::getPosition(*resources.window)))) {
                     switch (resources.difficult) {
@@ -111,7 +119,7 @@ void Settings::handleEvents(sf::Event& event) {
                     }
                     resize();
                 }
-
+                // back to main menu
                 if (back.getGlobalBounds().contains(
                         static_cast<sf::Vector2f>(sf::Mouse::getPosition(*resources.window)))) {
                     next = StateType::Menu;
@@ -121,6 +129,7 @@ void Settings::handleEvents(sf::Event& event) {
 }
 
 void Settings::update(float dt) {
+    // change mouse cursor
     if (back.getGlobalBounds().contains(static_cast<sf::Vector2f>(sf::Mouse::getPosition(*resources.window))) ||
         fullscreen.getGlobalBounds().contains(static_cast<sf::Vector2f>(sf::Mouse::getPosition(*resources.window))) ||
         heroType.getGlobalBounds().contains(static_cast<sf::Vector2f>(sf::Mouse::getPosition(*resources.window))) ||

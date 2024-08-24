@@ -1,13 +1,14 @@
 #include "../Headers/Hud.h"
 
 void Hud::init(int heroMaxHP, int heroMaxAmmo, int baseMaxHP) {
+    // assets
     float width = resources.window->getSize().x;
     float height = resources.window->getSize().y;
-
     sf::Vector2f positions, size;
     sf::Color barColor, outlineColor;
     int maxValue, currentValue;
 
+    // base life bar settings
     positions = sf::Vector2f(width / 2, height / 1.030);
     size = sf::Vector2f(width / 2.3, height / 30);
     barColor = sf::Color(0, 138, 14);
@@ -16,6 +17,7 @@ void Hud::init(int heroMaxHP, int heroMaxAmmo, int baseMaxHP) {
 
     baseLife.init(positions, size, barColor, outlineColor, maxValue, currentValue);
 
+    // hero life bar settings
     positions = sf::Vector2f(width / 2.611, height / 1.075);
     size = sf::Vector2f(width / 5, height / 30);
     barColor = sf::Color(232, 19, 19);
@@ -23,6 +25,7 @@ void Hud::init(int heroMaxHP, int heroMaxAmmo, int baseMaxHP) {
 
     heroLife.init(positions, size, barColor, outlineColor, maxValue, currentValue);
 
+    // hero mana bar settings
     positions = sf::Vector2f(width / 1.578, height / 1.075);
     size = sf::Vector2f(width / 6, height / 30);
     barColor = sf::Color(252, 206, 20);
