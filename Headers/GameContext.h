@@ -12,7 +12,7 @@ enum Cursors { hand };
 enum Heroes { mage, bard };
 enum Projectiles { fireball, note };
 enum Enemies { goblin };
-enum Backgrounds { rocks };
+enum Backgrounds { menu, rocks };
 enum Drops { life, ammo };
 enum Bases { intact, destroyed };
 enum Bars { heroLifeBar, heroLifeBorder, heroManaBar, heroManaBorder, baseLifeBar, baseLifeBorder };

@@ -8,6 +8,7 @@ class Menu : public State {
     // components
     sf::Text title, play, settings, exit;
     sf::Color primary, secondary;
+    sf::Sprite background;
     // attributes
     StateType next;
     int outlineSize;

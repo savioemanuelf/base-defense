@@ -2,6 +2,7 @@
 
 void Menu::init() {
     // asstes
+    resources.assets->addBackgroundTexture(Backgrounds::menu, "menu-background.jpg");
     primary = sf::Color(166, 166, 166);
     secondary = sf::Color::White;
     outlineSize = 2;
@@ -29,6 +30,14 @@ void Menu::init() {
     exit.setFillColor(primary);
     exit.setOutlineThickness(outlineSize);
     exit.setOutlineColor(secondary);
+
+    // background settings
+    sf::Texture* backgroundTexture = &resources.assets->getBackgroundTexture(Backgrounds::menu);
+    background.setTexture(*backgroundTexture);
+    sf::Vector2f windowSize(resources.window->getSize());
+    sf::FloatRect textureRect = background.getLocalBounds();
+
+    background.setScale(windowSize.x / textureRect.width, windowSize.y / textureRect.height);
 
     resize();
 }
@@ -70,6 +79,7 @@ void Menu::update(float dt) {
 
 void Menu::render() {
     resources.window->clear();
+    resources.window->draw(background);
     resources.window->draw(title);
     resources.window->draw(play);
     resources.window->draw(settings);
