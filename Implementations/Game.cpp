@@ -95,7 +95,7 @@ void Game::init() {
     }
 
     // hud initialize
-    gameHud.init(player.getHP(), player.getAmmo(), base.getHP());
+    gameHud.init(player.getHP(), player.getAmmo(), base.getHP(), enemiesToKill);
 }
 
 void Game::handleEvents(sf::Event& event) {
@@ -270,6 +270,7 @@ void Game::update(float dt) {
         gameHud.setHeroLife(player.getHP());
         gameHud.setHeroAmmo(player.getAmmo());
         gameHud.setBaseLife(base.getHP());
+        gameHud.setProgress(killCount);
 
         // win condition
         if (killCount == enemiesToKill) {

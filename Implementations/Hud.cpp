@@ -1,6 +1,6 @@
 #include "../Headers/Hud.h"
 
-void Hud::init(int heroMaxHP, int heroMaxAmmo, int baseMaxHP) {
+void Hud::init(int heroMaxHP, int heroMaxAmmo, int baseMaxHP, int progressValue) {
     // assets
     float width = resources.window->getSize().x;
     float height = resources.window->getSize().y;
@@ -32,6 +32,15 @@ void Hud::init(int heroMaxHP, int heroMaxAmmo, int baseMaxHP) {
     maxValue = currentValue = heroMaxAmmo;
 
     heroAmmo.init(positions, size, barColor, outlineColor, maxValue, currentValue);
+
+    // progress bar settings
+    positions = sf::Vector2f(width / 2, height / 30);
+    size = sf::Vector2f(width / 2, height / 30);
+    barColor = sf::Color::White;
+    maxValue = progressValue;
+    currentValue = 0;
+
+    progress.init(positions, size, barColor, outlineColor, maxValue, currentValue);
 }
 
 void Hud::update() {}
@@ -40,6 +49,7 @@ void Hud::render() {
     baseLife.render();
     heroLife.render();
     heroAmmo.render();
+    progress.render();
 }
 
 void Hud::setHeroLife(int life) { heroLife.setContent(life); }
@@ -47,3 +57,5 @@ void Hud::setHeroLife(int life) { heroLife.setContent(life); }
 void Hud::setHeroAmmo(int ammo) { heroAmmo.setContent(ammo); }
 
 void Hud::setBaseLife(int life) { baseLife.setContent(life); }
+
+void Hud::setProgress(int kills) { progress.setContent(kills); }
