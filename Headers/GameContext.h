@@ -2,6 +2,7 @@
 #define GAME_CONTEXT_H
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <memory>
 
 #include "AssetsManager.h"

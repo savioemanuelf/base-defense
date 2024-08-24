@@ -1,5 +1,5 @@
 #include "../Headers/Base.h"
-
+#include <iostream>
 void Base::init() {
     // assets
     sf::Texture& texture = resources.assets->getBaseTexture(Bases::intact);
@@ -15,6 +15,13 @@ void Base::init() {
     hitbox.setOrigin(hitbox.getRadius(), hitbox.getRadius());
     hitbox.setPosition(sprite.getPosition());
     hitbox.setFillColor(sf::Color::Red);
+
+    // load mana drain sound
+    if (!manaDrainBuffer.loadFromFile("Assets/SFX/mana-drain.ogg")) {
+        //
+    } else {
+       manaDrainSound.setBuffer(manaDrainBuffer);
+    }
 }
 
 void Base::render() {
@@ -71,12 +78,6 @@ void Base::baseDestroy() {
     destroyed = true;
 }
 
-sf::Vector2f Base::getPosition() { return sprite.getPosition(); }
-
-int Base::getHP() { return hp; }
-
-bool Base::isDestroyed() { return destroyed; }
-
-void Base::setHp(int value) { maxHp = hp = value; }
-
-void Base::setRegenCooldown(int value) { regenCooldown = value; }
+Base::~Base() {
+    
+}
