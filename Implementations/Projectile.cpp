@@ -11,7 +11,22 @@ void Projectile::render() {
 
 void Projectile::init(sf::Vector2f spawnPosition, sf::Vector2f direction, Enemy* shooter) {
     // assets
-    sf::Texture& texture = resources.assets->getProjectileTexture(Projectiles::fireball);
+    sf::Texture* texture;
+    if (shooter == nullptr) {
+        switch (resources.heroType) {
+            case Heroes::mage:
+                texture = &resources.assets->getProjectileTexture(Projectiles::fireball);
+                break;
+            case Heroes::bard:
+                texture = &resources.assets->getProjectileTexture(Projectiles::note);
+                break;
+        }
+    }
+    else
+    {
+        texture = &resources.assets->getProjectileTexture(Projectiles::fireball);
+    }
+    
 
     // default settings
     speed = 300.0f;
@@ -21,15 +36,15 @@ void Projectile::init(sf::Vector2f spawnPosition, sf::Vector2f direction, Enemy*
     initialPosition = spawnPosition;
 
     // sprite settnigs
-    sprite.setTexture(texture);
-    sprite.setOrigin(texture.getSize().x / 2.0f, texture.getSize().y / 2.0f);
+    sprite.setTexture(*texture);
+    sprite.setOrigin((*texture).getSize().x / 2.0f, (*texture).getSize().y / 2.0f);
     sprite.setPosition(spawnPosition);
     direction /= std::sqrt(direction.x * direction.x + direction.y * direction.y);
     velocity = speed * direction;
     rotate(direction);
 
     // hitbox settings
-    hitbox.setSize(sf::Vector2f(texture.getSize().x - 20, texture.getSize().y - 20));
+    hitbox.setSize(sf::Vector2f((*texture).getSize().x - 20, (*texture).getSize().y - 20));
     hitbox.setOrigin(hitbox.getSize().x / 2, hitbox.getSize().y / 2);
     hitbox.setPosition(sprite.getPosition());
     hitbox.setFillColor(sf::Color::Red);

@@ -45,13 +45,13 @@ class Game : public State {
     // constructor
     Game(GameContext& resources)
         : State(resources),
+          gameover(resources),
+          gamewin(resources),
+          pauseMenu(resources),
           next(StateType::Game),
           player(resources),
-          base(resources),
-          pauseMenu(resources),
           gameHud(resources),
-          gameover(resources),
-          gamewin(resources) {
+          base(resources) {
         init();
     }
     // destructor
