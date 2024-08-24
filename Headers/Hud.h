@@ -12,8 +12,8 @@ class Hud {
     Bar heroLife, heroAmmo, baseLife;
 
    public:
-    Hud(GameContext& r) : resources(r), heroLife(r), heroAmmo(r), baseLife(r) { init(); }
-    void init();
+    Hud(GameContext& r) : resources(r), heroLife(r), heroAmmo(r), baseLife(r) {}
+    void init(int heroMaxHP, int heroMaxAmmo, int baseMaxHP);
     void update();
     void render();
 

@@ -33,6 +33,9 @@ class Hero {
     sf::FloatRect getHitbox();
     void increaseHP(int value);
     void increaseAmmo(int value);
+    void setHp(int value);
+    void setAmmo(int value);
+    void setSpeed(int value);
 };
 
 #endif

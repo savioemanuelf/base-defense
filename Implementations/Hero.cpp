@@ -111,3 +111,8 @@ void Hero::increaseAmmo(int value) {
         ammo += value;
     }
 }
+void Hero::setHp(int value) { maxHp = hp = value; }
+
+void Hero::setAmmo(int value) { maxAmmo = ammo = value; }
+
+void Hero::setSpeed(int value) { speed = value; }

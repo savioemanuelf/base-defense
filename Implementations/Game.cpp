@@ -30,6 +30,29 @@ void Game::init() {
 
     player.init();
     base.init();
+
+    switch (resources.difficult) {
+        case Difficulties::easy:
+            // player settings
+            player.setHp(100);
+            player.setAmmo(50);
+            player.setSpeed(200);
+            break;
+        case Difficulties::normal:
+            // player settings
+            player.setHp(100);
+            player.setAmmo(50);
+            player.setSpeed(200);
+            break;
+        case Difficulties::hard:
+            // player settings
+            player.setHp(50);
+            player.setAmmo(30);
+            player.setSpeed(200);
+            break;
+    }
+
+    gameHud.init(player.getHP(), player.getAmmo(), base.getHP());
 }
 
 void Game::handleEvents(sf::Event& event) {

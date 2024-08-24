@@ -97,15 +97,15 @@ void Settings::handleEvents(sf::Event& event) {
                         static_cast<sf::Vector2f>(sf::Mouse::getPosition(*resources.window)))) {
                     switch (resources.difficult) {
                         case Difficulties::easy:
-                            difficulty.setString("Dificuldade: facil");
+                            difficulty.setString("Dificuldade: normal");
                             resources.difficult = Difficulties::normal;
                             break;
                         case Difficulties::normal:
-                            difficulty.setString("Dificuldade: normal");
+                            difficulty.setString("Dificuldade: dificil");
                             resources.difficult = Difficulties::hard;
                             break;
                         case Difficulties::hard:
-                            difficulty.setString("Dificuldade: dificil");
+                            difficulty.setString("Dificuldade: facil");
                             resources.difficult = Difficulties::easy;
                             break;
                     }
