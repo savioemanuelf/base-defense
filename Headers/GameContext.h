@@ -10,7 +10,7 @@
 enum Fonts { arial };
 enum Cursors { hand };
 enum Heroes { mage, bard };
-enum Projectiles { fireball, note };
+enum Projectiles { fireball, note, bluefireball };
 enum Enemies { goblin };
 enum Backgrounds { menu, rocks };
 enum Drops { life, ammo };

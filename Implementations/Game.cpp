@@ -7,6 +7,7 @@ void Game::init() {
     switch (resources.heroType) {
         case Heroes::mage:
             resources.assets->addHeroTexture(Heroes::mage, "mage.png");
+            resources.assets->addProjectileTexture(Projectiles::bluefireball, "bluefireball.png");
             break;
         case Heroes::bard:
             resources.assets->addHeroTexture(Heroes::bard, "bard.png");

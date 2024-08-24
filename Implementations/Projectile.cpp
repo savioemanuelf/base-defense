@@ -16,7 +16,7 @@ void Projectile::init(sf::Vector2f spawnPosition, sf::Vector2f direction, Enemy*
     if (shooter == nullptr) {
         switch (resources.heroType) {
             case Heroes::mage:
-                texture = &resources.assets->getProjectileTexture(Projectiles::fireball);
+                texture = &resources.assets->getProjectileTexture(Projectiles::bluefireball);
                 break;
             case Heroes::bard:
                 texture = &resources.assets->getProjectileTexture(Projectiles::note);
