@@ -12,6 +12,7 @@ void Projectile::render() {
 void Projectile::init(sf::Vector2f spawnPosition, sf::Vector2f direction, Enemy* shooter) {
     // assets
     sf::Texture* texture;
+    // hero projectile texture
     if (shooter == nullptr) {
         switch (resources.heroType) {
             case Heroes::mage:
@@ -22,11 +23,10 @@ void Projectile::init(sf::Vector2f spawnPosition, sf::Vector2f direction, Enemy*
                 break;
         }
     }
-    else
-    {
+    // enemy projectile texture
+    else {
         texture = &resources.assets->getProjectileTexture(Projectiles::fireball);
     }
-    
 
     // default settings
     speed = 300.0f;
