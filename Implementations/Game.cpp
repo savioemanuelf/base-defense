@@ -37,18 +37,27 @@ void Game::init() {
             player.setHp(100);
             player.setAmmo(50);
             player.setSpeed(200);
+            // base settings
+            base.setHp(100);
+            base.setRegenCooldown(1);
             break;
         case Difficulties::normal:
             // player settings
             player.setHp(100);
             player.setAmmo(50);
             player.setSpeed(200);
+            // base settings
+            base.setHp(100);
+            base.setRegenCooldown(3);
             break;
         case Difficulties::hard:
             // player settings
             player.setHp(50);
             player.setAmmo(30);
             player.setSpeed(200);
+            // base settings
+            base.setHp(50);
+            base.setRegenCooldown(5);
             break;
     }
 

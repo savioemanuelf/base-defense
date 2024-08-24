@@ -24,7 +24,7 @@ void Base::render() {
 }
 
 void Base::update() {
-    if (regenTimer.getElapsedTime().asSeconds() >= 1) {
+    if (regenTimer.getElapsedTime().asSeconds() >= regenCooldown) {
         if (hp < maxHp) {
             hp += 1;
         }
@@ -66,3 +66,7 @@ sf::Vector2f Base::getPosition() { return sprite.getPosition(); }
 int Base::getHP() { return hp; }
 
 bool Base::isDestroyed() { return destroyed; }
+
+void Base::setHp(int value) { maxHp = hp = value; }
+
+void Base::setRegenCooldown(int value) { regenCooldown = value; }

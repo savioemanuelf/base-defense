@@ -15,6 +15,7 @@ class Base {
     int hp;
     int maxHp;
     bool destroyed;
+    int regenCooldown;
 
    public:
     Base(GameContext& r) : resources(r) {}
@@ -26,6 +27,8 @@ class Base {
     sf::Vector2f getPosition();
     int getHP();
     bool isDestroyed();
+    void setHp(int value);
+    void setRegenCooldown(int value);
 };
 
 #endif
