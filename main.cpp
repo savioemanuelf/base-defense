@@ -15,6 +15,7 @@ int main() {
     resources.isFullscreen = true;
     resources.heroType = Heroes::mage;
     resources.debug = false;
+    resources.difficult = Difficulties::normal;
 
     StateManager StateManager;
     StateManager.changeState(std::make_unique<Menu>(resources));

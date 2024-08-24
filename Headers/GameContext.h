@@ -15,6 +15,7 @@ enum Backgrounds { rocks };
 enum Drops { life, ammo };
 enum Bases { intact, destroyed };
 enum Bars { heroLifeBar, heroLifeBorder, heroManaBar, heroManaBorder, baseLifeBar, baseLifeBorder };
+enum Difficulties { easy, normal, hard };
 
 struct GameContext {
     std::unique_ptr<sf::RenderWindow> window;
@@ -22,6 +23,7 @@ struct GameContext {
     bool isFullscreen;
     bool debug;
     Heroes heroType;
+    Difficulties difficult;
 
     GameContext() {
         assets = std::make_unique<AssetsManager>();

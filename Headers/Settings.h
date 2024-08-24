@@ -5,7 +5,7 @@
 
 class Settings : public State {
    private:
-    sf::Text fullscreen, heroType, back;
+    sf::Text fullscreen, heroType, difficulty, back;
     sf::Color primary, secondary;
     int outlineSize;
 
