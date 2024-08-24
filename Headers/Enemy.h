@@ -1,30 +1,42 @@
+#ifndef ENEMY_H
+#define ENEMY_H
+
 #include <SFML/Graphics.hpp>
 
+#include "GameContext.h"
 #include "Projectile.h"
+
+class Projectile;
 
 class Enemy {
    private:
-    // Attributes
-    sf::RectangleShape rect;
-    sf::Clock shootClock;
+    // global resources
+    GameContext& resources;
+    // components
+    sf::Sprite sprite;
+    sf::Clock shootCooldown;
+    sf::RectangleShape hitbox;
+    // attributes
     float speed;
-    float size;
-    bool dead;
-    // Functions
+    int hp;
+    // functions
     sf::Vector2f randomPositionOutside();
 
    public:
-    // Constructor
-    Enemy();
-    // Functions
-    void draw(sf::RenderWindow& window);
-    void move(sf::RenderWindow& window, sf::Vector2f player_position);
-    bool checkHit(std::vector<Projectile>& projectiles);
-    void rotate(const sf::Vector2f& targetPosition);
-    // Getters
+    // constructor
+    Enemy(GameContext& r) : resources(r) { init(); }
+    // functions
+    void init();
+    void move(sf::Vector2f targetPosition, float dt);
+    void render();
+    void rotate(sf::Vector2f targetPosition);
+    void checkHit(std::vector<std::unique_ptr<Projectile>>& projectiles);
+    void shoot(std::vector<std::unique_ptr<Projectile>>& projectiles, sf::Vector2f target);
+    // getters
     bool isDead();
-    float shootTime();
     sf::Vector2f getPosition();
-    // Setters
-    void resetShootTime();
+    // setters
+    void setSpeed(int value);
 };
+
+#endif

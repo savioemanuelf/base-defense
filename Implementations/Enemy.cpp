@@ -1,5 +1,7 @@
 #include "../Headers/Enemy.h"
 
+#include <stdlib.h>
+
 #include <cmath>
 
 sf::Vector2f Enemy::randomPositionOutside() {
@@ -38,67 +40,95 @@ sf::Vector2f Enemy::randomPositionOutside() {
     return sf::Vector2f(x, y);
 }
 
-Enemy::Enemy() : speed(1.0f), dead(false), size(50) {
-    // Size Origin Position Color
-    rect.setSize(sf::Vector2f(size, size));
-    rect.setOrigin(size / 2.f, size / 2.f);
-    rect.setPosition(randomPositionOutside());
-    rect.setFillColor(sf::Color::Red);
-    shootClock.restart();
+void Enemy::init() {
+    // texture acess
+    sf::Texture& texture = resources.assets->getEnemyTexture(Enemies::goblin);
+
+    // sprite settings
+    sprite.setTexture(texture);
+    sprite.setOrigin(texture.getSize().x / 2.0f, texture.getSize().y / 2.0f);
+    sprite.setPosition(randomPositionOutside());
+
+    // hitbox settings
+    hitbox.setSize(sf::Vector2f(texture.getSize().x - 40, texture.getSize().y - 40));
+    hitbox.setOrigin(hitbox.getSize().x / 2, hitbox.getSize().y / 2);
+    hitbox.setPosition(sprite.getPosition());
+    hitbox.setFillColor(sf::Color::Red);
+
+    // default hp
+    hp = 10;
 }
 
-void Enemy::rotate(const sf::Vector2f& targetPosition) {
-    float dx = targetPosition.x - rect.getPosition().x;
-    float dy = targetPosition.y - rect.getPosition().y;
+void Enemy::move(sf::Vector2f targetPosition, float dt) {
+    // Enemy position
+    float x = sprite.getPosition().x;
+    float y = sprite.getPosition().y;
+
+    // Direction to player
+    float direction_x = targetPosition.x - x;
+    float direction_y = targetPosition.y - y;
+
+    // Distance Normalized
+    float distance = std::sqrt(direction_x * direction_x + direction_y * direction_y);
+    if (distance > 0) {
+        direction_x /= distance;
+        direction_y /= distance;
+    }
+
+    // Enemy position incriase or decrease
+    x += direction_x * speed * dt;
+    y += direction_y * speed * dt;
+
+    sprite.setPosition(x, y);
+    hitbox.setPosition(sprite.getPosition());
+}
+
+void Enemy::render() {
+    // render hitbox if debug on
+    if (resources.debug) {
+        resources.window->draw(hitbox);
+    }
+
+    resources.window->draw(sprite);
+}
+
+void Enemy::rotate(sf::Vector2f targetPosition) {
+    // sprite rotate
+    float dx = targetPosition.x - sprite.getPosition().x;
+    float dy = targetPosition.y - sprite.getPosition().y;
     float angle = std::atan2(dy, dx) * 180 / M_PI;
-    rect.setRotation(angle);
+    sprite.setRotation(angle);
+    hitbox.setRotation(angle);
 }
 
-void Enemy::draw(sf::RenderWindow& window) { window.draw(rect); }
-
-void Enemy::move(sf::RenderWindow& window, sf::Vector2f player_position) {
-    // Move while not touching
-    if (rect.getGlobalBounds().contains(player_position)) {
-        dead = true;
-    } else {
-        // Enemy position
-        float x = rect.getPosition().x;
-        float y = rect.getPosition().y;
-
-        // Direction to player
-        float direction_x = player_position.x - x;
-        float direction_y = player_position.y - y;
-
-        // Distance Normalized
-        float distance = std::sqrt(direction_x * direction_x + direction_y * direction_y);
-        if (distance > 0) {
-            direction_x /= distance;
-            direction_y /= distance;
-        }
-
-        // Enemy position incriase or decrease
-        x += direction_x * speed;
-        y += direction_y * speed;
-
-        rect.setPosition(x, y);
-    }
-}
-
-bool Enemy::checkHit(std::vector<Projectile>& projectiles) { //
+void Enemy::checkHit(std::vector<std::unique_ptr<Projectile>>& projectiles) {
+    // check if projectiles collides enemy hitbox
     for (auto it = projectiles.begin(); it != projectiles.end();) {
-        if ((*it).getBounds().intersects(rect.getGlobalBounds())) {
+        if ((*it)->getHitbox().intersects(hitbox.getGlobalBounds()) && (this != (*it)->getOwner())) {
             it = projectiles.erase(it);
-            return true;
+            hp = 0;
+        } else {
+            ++it;
         }
-        it++; 
     }
-    return false;
 }
 
-bool Enemy::isDead() { return this->dead; }
+bool Enemy::isDead() {
+    if (hp) {
+        return false;
+    }
+    return true;
+}
+void Enemy::shoot(std::vector<std::unique_ptr<Projectile>>& projectiles, sf::Vector2f target) {
+    // enemy shoot
+    if (shootCooldown.getElapsedTime().asSeconds() >= 2) {
+        sf::Vector2f spawnPosition = sprite.getPosition();
+        sf::Vector2f direction = target - spawnPosition;
+        projectiles.emplace_back(std::make_unique<Projectile>(resources, spawnPosition, direction, this));
+        shootCooldown.restart();
+    }
+}
 
-float Enemy::shootTime() { return this->shootClock.getElapsedTime().asSeconds(); }
+sf::Vector2f Enemy::getPosition() { return sprite.getPosition(); }
 
-void Enemy::resetShootTime() { this->shootClock.restart(); }
-
-sf::Vector2f Enemy::getPosition() { return rect.getPosition(); }
+void Enemy::setSpeed(int value) { speed = value; }

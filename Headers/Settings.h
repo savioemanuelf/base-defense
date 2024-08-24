@@ -1,22 +1,22 @@
-#ifndef MENU_H
-#define MENU_H
+#ifndef SETTINGS_H
+#define SETTINGS_H
 
 #include "State.h"
 
-class Menu : public State {
+class Settings : public State {
    private:
     // components
-    sf::Text title, play, settings, exit;
+    sf::Text fullscreen, heroType, difficulty, back;
     sf::Color primary, secondary;
-    sf::Sprite background;
     // attributes
-    StateType next;
     int outlineSize;
+    StateType next;
 
    public:
     // constructor
-    Menu(GameContext& resources) : State(resources), next(StateType::Menu) { init(); }
-    ~Menu() override {}
+    Settings(GameContext& resources) : State(resources), next(StateType::Settings) { init(); }
+    // destructor
+    ~Settings() override {}
     // functions
     void init() override;
     void handleEvents(sf::Event& event) override;
@@ -24,7 +24,7 @@ class Menu : public State {
     void render() override;
     void resize();
     // getters
-    virtual StateType getType() { return StateType::Menu; }
+    virtual StateType getType() { return StateType::Settings; }
     virtual StateType nextState() { return next; }
 };
 

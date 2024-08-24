@@ -1,24 +1,32 @@
 #include "../Headers/Drop.h"
-#include <iostream>
-#include <SFML/Graphics.hpp>
 
+void Drop::init(int type, sf::Vector2f spawnPosition) {
+    // texture acess
+    dropType = type;
+    sf::Texture& texture = resources.assets->getDropTexture(dropType);
 
-Drop::Drop(const sf::Sprite& dropSprite, const sf::Vector2f& position, Heroi *heroi, DropType type) : dropSprite(dropSprite), position(position), type(type) {    
-    sf::FloatRect bounds = this->dropSprite.getLocalBounds();
-    this->dropSprite.setOrigin(bounds.width / 2.0f, bounds.height / 2.0f);
-    this->dropSprite.setPosition(position);
+    // sprite settings
+    sprite.setTexture(texture);
+    sprite.setOrigin(texture.getSize().x / 2.0f, texture.getSize().y / 2.0f);
+    sprite.setPosition(spawnPosition);
+
+    // hitbox settings
+    hitbox.setSize(sf::Vector2f(texture.getSize().x - 20, texture.getSize().y - 20));
+    hitbox.setOrigin(hitbox.getSize().x / 2, hitbox.getSize().y / 2);
+    hitbox.setPosition(sprite.getPosition());
+    hitbox.setFillColor(sf::Color::Red);
 }
 
-Drop::~Drop() {
-    // Empty destructor
+void Drop::render() {
+    // render hitbox if debug on
+    if (resources.debug) {
+        resources.window->draw(hitbox);
+    }
+    resources.window->draw(sprite);
 }
 
-bool Drop::checkCollision(const sf::Sprite& sprite) const{
-    sf::FloatRect dropBounds = this->dropSprite.getGlobalBounds();
-    sf::FloatRect spriteBounds = sprite.getGlobalBounds();
-    return dropBounds.intersects(spriteBounds);
-}
+sf::FloatRect Drop::getHitbox() { return hitbox.getGlobalBounds(); }
 
-void Drop::showDrop(sf::RenderWindow& window) {
-    window.draw(this->dropSprite);
-}
+int Drop::getType() { return dropType; }
+
+float Drop::getDespawnTime() { return despawnClock.getElapsedTime().asSeconds(); }

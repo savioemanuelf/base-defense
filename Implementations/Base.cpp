@@ -1,112 +1,82 @@
 #include "../Headers/Base.h"
 
-#include <SFML/Graphics.hpp>
-#include <iostream>
+void Base::init() {
+    // assets
+    sf::Texture& texture = resources.assets->getBaseTexture(Bases::intact);
+    sf::Vector2f windowSize(resources.window->getSize());
 
-Base::Base(sf::Window& window) : maxHealth(100), currentHealth(maxHealth), destroyed(false) {
-    // Texture
-    if (!this->baseTexture.loadFromFile("Assets/Texture/Base/base.png")) {
-        std::cerr << "Erro ao carregar a imagem da base" << std::endl;
+    // sprite settings
+    sprite.setTexture(texture);
+    sprite.setOrigin(texture.getSize().x / 2.0f, texture.getSize().y / 2.0f);
+    sprite.setPosition(windowSize.x / 2.0f, windowSize.y / 2.0f);
+
+    // hitbox settings
+    hitbox.setRadius(texture.getSize().x / 2.01f);
+    hitbox.setOrigin(hitbox.getRadius(), hitbox.getRadius());
+    hitbox.setPosition(sprite.getPosition());
+    hitbox.setFillColor(sf::Color::Red);
+}
+
+void Base::render() {
+    // show hitbox if debug is on
+    if (resources.debug) {
+        resources.window->draw(hitbox);
     }
-    if (!this->destroyedBaseTexture.loadFromFile("Assets/Texture/Base/destroyed-base.png")) {
-        std::cerr << "Erro ao carregar a imagem da base destruída" << std::endl;
-    }
-    sf::Vector2u windowSize = window.getSize();
 
-    // Setting Up Sprite
-    this->baseSprite.setTexture(this->baseTexture);
-    this->baseSprite.setOrigin(baseTexture.getSize().x / 2.0f, baseTexture.getSize().y / 2.0f);
-    this->baseSprite.setPosition(windowSize.x / 2, windowSize.y / 2);
-
-    sf::Vector2u textureSize = baseTexture.getSize();
-    float radius = std::min(textureSize.x, textureSize.y) / 2.0f;  // Raio é metade do menor tamanho da textura
-    sf::Vector2f position((windowSize.x - 2 * radius) / 2,
-                          (windowSize.y - 2 * radius) / 2);  // posição centralizada do círculo
-
-    shape.setPosition(position.x, position.y);
-    shape.setRadius(radius);
-    shape.setFillColor(sf::Color::Transparent);
-
-
-    if (!manaDrainBuffer.loadFromFile("Assets/SFX/mana-drain.ogg")) {
-        std::cerr << "Erro ao carregar o áudio mana-drain.ogg" << std::endl;
-    }
-    manaDrainSound.setBuffer(manaDrainBuffer);
+    resources.window->draw(sprite);
 }
 
-void Base::initializeHealthBar(sf::Window& window) {
-    int barHeight = 16;
-
-    int maxHealth = this->getMaxHealth();
-    int currentHealth = this->getHealth();
-    
-    sf::Vector2f windowSize = sf::Vector2f(window.getSize());
-    sf::Vector2f size = sf::Vector2f(windowSize.x * 0.3f, barHeight);
-    sf::Vector2f pos = sf::Vector2f((windowSize.x - size.x) / 2, (windowSize.y - size.y) - 7); // 7 pixels acima do canto inferior central
-    
-    sf::Color backgroundColor = sf::Color::Transparent;
-    sf::Color color = sf::Color(0, 160, 0);
-    sf::Color outlineColor = sf::Color::White;
-    int thickness = 2;
-
-    this->baseHealthBar = new Bar(pos, size, backgroundColor, color, outlineColor, thickness, currentHealth, maxHealth);
-}
-
-Base::~Base() {
-    delete this->baseHealthBar;
-}
-
-void Base::showBase(sf::RenderWindow& window) const {
-    window.draw(this->baseSprite);
-}
-
-void Base::damage(int damage) {
-    setHealth(this->getHealth() - damage);
-
-    if (getHealth() < 0) {
-        this->setHealth(0);
-    } 
-    if (getHealth() == 0) {
-        if(!isDestroyed()) {
-            this->manaDrainSound.play();
+void Base::update() {
+    // base life regen
+    if (regenTimer.getElapsedTime().asSeconds() >= regenCooldown) {
+        if (hp < maxHp) {
+            hp += 1;
         }
-        this->setDestroyed(true);
-        baseHealthBar->updateBar(this->getHealth(), sf::Color::Red);
-        this->baseSprite.setTexture(this->destroyedBaseTexture);
-    } else if (getHealth() <= 10) {
-        baseHealthBar->updateBar(this->getHealth(), sf::Color::Red);
-    } else if (getHealth() <= 50) {
-        baseHealthBar->updateBar(this->getHealth(), sf::Color(255, 200, 0));
-    } else {
-        baseHealthBar->updateBar(this->getHealth(), sf::Color(0, 160, 0));
+        regenTimer.restart();
     }
 }
 
-void Base::baseRegen(int regen) {
-    sf::Color color;
-    sf::Time deltaTime = regenClock.restart();
-    static float timePerFrame = 0;
-    timePerFrame += deltaTime.asSeconds();
+void Base::checkHit(std::vector<std::unique_ptr<Projectile>>& projectiles) {
+    // check if projectiles collides base hitbox
+    for (auto it = projectiles.begin(); it != projectiles.end();) {
+        sf::FloatRect rect = (*it)->getHitbox();
+        float closestX = std::clamp(hitbox.getPosition().x, rect.left, rect.left + rect.width);
+        float closestY = std::clamp(hitbox.getPosition().y, rect.top, rect.top + rect.height);
+        float dx = hitbox.getPosition().x - closestX;
+        float dy = hitbox.getPosition().y - closestY;
 
-    if (getHealth() <= 10) {
-        color = sf::Color::Red;
-    } else if (getHealth() <= 50) {
-        color = sf::Color(255, 200, 0);
-    } else {
-        color = sf::Color(0, 160, 0);
-    }
-
-    if (timePerFrame >= 3.0f) {
-        if (this->getHealth() + regen <= this->getMaxHealth() && !(this->isDestroyed())) {
-            this->baseHealthBar->updateBar(this->getHealth(), color);
-            this->setHealth(this->getHealth() + regen);
-            this->baseHealthBar->updateBar(this->getHealth(), color);
+        if ((dx * dx + dy * dy) < (hitbox.getRadius() * hitbox.getRadius())) {
+            if (hp - 10 >= 0) {
+                hp -= 10;
+            } else {
+                hp = 0;
+            }
+            if (hp == 0) {
+                if(!isDestroyed()) {
+                      this->manaDrainSound.play();
+                }
+                baseDestroy();
+            }
+            it = projectiles.erase(it);
+        } else {
+            it++;
         }
-        timePerFrame = 0;
     }
 }
 
-bool Base::checkCollision(const sf::Vector2f& position, const sf::Vector2f& size) const {
-    sf::FloatRect projectileRect(position, size);
-    return shape.getGlobalBounds().intersects(projectileRect);
+void Base::baseDestroy() {
+    // update sprite to destroyed
+    sprite.setTexture(resources.assets->getBaseTexture(Bases::destroyed));
+    
+    destroyed = true;
 }
+
+sf::Vector2f Base::getPosition() { return sprite.getPosition(); }
+
+int Base::getHP() { return hp; }
+
+bool Base::isDestroyed() { return destroyed; }
+
+void Base::setHp(int value) { maxHp = hp = value; }
+
+void Base::setRegenCooldown(int value) { regenCooldown = value; }
