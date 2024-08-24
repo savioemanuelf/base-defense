@@ -77,7 +77,7 @@ void AssetsManager::addBaseTexture(int id, std::string fileName) {
 void AssetsManager::addBarTexture(int id, std::string fileName) {
     auto texture = std::make_unique<sf::Texture>();
 
-    if (texture->loadFromFile("Assets/Texture/Base/" + fileName)) {
+    if (texture->loadFromFile("Assets/Texture/Bar/" + fileName)) {
         texture->setSmooth(true);
         barTexture[id] = std::move(texture);
     }
