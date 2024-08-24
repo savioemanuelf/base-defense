@@ -2,8 +2,6 @@
 
 #include <iostream>
 
-#include "AssetsManager.h"
-
 void AssetsManager::addFont(int id, std::string fileName) {
     auto font = std::make_unique<sf::Font>();
 
