@@ -34,6 +34,8 @@ class Game : public State {
     int dropCooldown;
     int droppedLifeAmount;
     int droppedAmmoAmount;
+    int enemiesToKill;
+    int killCount;
 
    public:
     Game(GameContext& resources)

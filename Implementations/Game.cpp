@@ -47,6 +47,8 @@ void Game::init() {
             dropCooldown = 8;
             droppedLifeAmount = 3;
             droppedAmmoAmount = 5;
+            // game settings
+            enemiesToKill = 15;
             break;
         case Difficulties::normal:
             // player settings
@@ -63,6 +65,8 @@ void Game::init() {
             dropCooldown = 8;
             droppedLifeAmount = 2;
             droppedAmmoAmount = 3;
+            // game settings
+            enemiesToKill = 25;
             break;
         case Difficulties::hard:
             // player settings
@@ -79,6 +83,8 @@ void Game::init() {
             dropCooldown = 8;
             droppedLifeAmount = 1;
             droppedAmmoAmount = 2;
+            // game settings
+            enemiesToKill = 50;
             break;
     }
 
@@ -195,6 +201,7 @@ void Game::update(float dt) {
                     }
                 }
                 it = enemies.erase(it);
+                killCount += 1;
             } else {
                 if (player.isDead()) {
                     (*it)->move(base.getPosition(), dt);
@@ -216,6 +223,10 @@ void Game::update(float dt) {
         gameHud.setHeroLife(player.getHP());
         gameHud.setHeroAmmo(player.getAmmo());
         gameHud.setBaseLife(base.getHP());
+
+        if (killCount == enemiesToKill) {
+            endGame = true;
+        }
     }
 }
 
