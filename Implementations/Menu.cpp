@@ -3,8 +3,8 @@
 void Menu::init() {
     // asstes
     resources.assets->addBackgroundTexture(Backgrounds::menu, "menu-background.jpg");
-    primary = sf::Color(166, 166, 166);
-    secondary = sf::Color::White;
+    primary = sf::Color(0, 0, 140);
+    secondary = sf::Color(173, 216, 230);
     outlineSize = 2;
     // Title
     title.setFont(resources.assets->getFont(arial));
